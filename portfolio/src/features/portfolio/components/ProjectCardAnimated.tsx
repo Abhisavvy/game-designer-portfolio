@@ -45,21 +45,42 @@ function getProjectIcon(slug: string) {
 function getMetricIcon(metric: string) {
   const lowerMetric = metric.toLowerCase();
   
+  // Revenue/monetization metrics
   if (lowerMetric.includes('arpdau') || lowerMetric.includes('ltv') || lowerMetric.includes('lift')) {
     return DollarSign;
   }
+  
+  // Retention/comeback metrics
   if (lowerMetric.includes('retention') || lowerMetric.includes('bps')) {
     return RefreshCcw;
   }
-  if (lowerMetric.includes('engagement') || lowerMetric.includes('dau')) {
+  
+  // Social/engagement metrics
+  if (lowerMetric.includes('engagement') || lowerMetric.includes('dau') || lowerMetric.includes('social') || lowerMetric.includes('collaboration')) {
     return Users;
   }
-  if (lowerMetric.includes('efficiency') || lowerMetric.includes('faster') || lowerMetric.includes('planning')) {
+  
+  // Performance/productivity metrics
+  if (lowerMetric.includes('efficiency') || lowerMetric.includes('faster') || lowerMetric.includes('planning') || lowerMetric.includes('productivity')) {
     return TrendingUp;
   }
-  if (lowerMetric.includes('%')) {
+  
+  // Economy/design systems
+  if (lowerMetric.includes('economy') || lowerMetric.includes('cosmetic') || lowerMetric.includes('ownership') || lowerMetric.includes('rewards')) {
+    return DollarSign;
+  }
+  
+  // Integration/technical
+  if (lowerMetric.includes('sdk') || lowerMetric.includes('integration') || lowerMetric.includes('flow') || lowerMetric.includes('management')) {
     return Target;
   }
+  
+  // Core systems/features
+  if (lowerMetric.includes('systems') || lowerMetric.includes('feature') || lowerMetric.includes('core') || lowerMetric.includes('mechanics')) {
+    return Target;
+  }
+  
+  // Default for improvement metrics
   return TrendingUp;
 }
 
@@ -244,56 +265,106 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
   );
 }
 
-// Helper function to extract metrics from blurb text
+// Helper function to extract metrics from blurb text with descriptive context
 function extractMetrics(blurb: string): string[] {
   const metrics: string[] = [];
   
-  // Look for percentage increases (including ~, +, - symbols)
-  const percentMatches = blurb.match(/([\~\+\-]?\d+%)/g);
-  if (percentMatches) {
-    metrics.push(...percentMatches);
-  }
-  
-  // Look for basis points (bps)
-  const bpsMatches = blurb.match(/([\+\-]?\d+\s?bps)/gi);
-  if (bpsMatches) {
-    metrics.push(...bpsMatches);
-  }
-  
-  // Look for specific metrics with better patterns
-  const metricPatterns = [
-    { keyword: "ARPDAU", regex: /ARPDAU[\s\+]*(\+?\d+%)/i },
-    { keyword: "LTV", regex: /LTV[\s\+]*(\~?\+?\d+%?\s?lift)/i },
-    { keyword: "engagement", regex: /engagement[\s\+]*(\+?\d+%)/i },
-    { keyword: "retention", regex: /(D1\s+.*?retention[\s\+]*\+?\d+\s?bps)/i },
-    { keyword: "efficiency", regex: /(\d+%\s+.*?efficiency)/i },
-    { keyword: "planning", regex: /(\d+%\s+faster.*?planning)/i }
+  // Enhanced patterns that capture context with numbers
+  const contextualPatterns = [
+    // ARPDAU patterns
+    { regex: /ARPDAU[\s\+]*(\+?\d+%)/i, template: (match: string) => `${match} ARPDAU` },
+    
+    // LTV patterns  
+    { regex: /(\~?\+?\d+%\s?LTV\s?lift)/i, template: (match: string) => match },
+    
+    // Engagement patterns
+    { regex: /(engagement[\s\+]*\+?\d+%)/i, template: (match: string) => match },
+    { regex: /lifted\s+engagement\s+(\d+%)/i, template: (match: string) => `${match} engagement` },
+    
+    // Retention patterns
+    { regex: /(D1.*?retention[\s\+]*\+?\d+\s?bps)/i, template: (match: string) => match },
+    { regex: /(D1\s+.*?retention[\s\+]*\+?\d+\s?bps)/i, template: (match: string) => match },
+    { regex: /retention\s+(\+?\d+\s?bps)/i, template: (match: string) => `${match} retention` },
+    
+    // Efficiency/productivity patterns
+    { regex: /(\d+%\s+.*?efficiency)/i, template: (match: string) => match },
+    { regex: /(\d+%\s+faster.*?planning)/i, template: (match: string) => match },
+    
+    // Generic percentage with context (look for nearby words)
+    { regex: /(\d+%)[^a-zA-Z]*([a-zA-Z]+)/, template: (match: string, context?: string) => {
+      if (context && !['and', 'the', 'of', 'in', 'to'].includes(context.toLowerCase())) {
+        return `${match} ${context}`;
+      }
+      return match;
+    }},
   ];
   
-  metricPatterns.forEach(({ keyword, regex }) => {
-    const match = blurb.match(regex);
-    if (match) {
-      // Clean up the match and avoid duplicates
-      const cleanMatch = match[1].trim();
-      if (!metrics.some(m => m.includes(cleanMatch.replace(/[^\w\d%]/g, '')))) {
-        metrics.push(cleanMatch);
+  // Apply contextual patterns
+  contextualPatterns.forEach(({ regex, template }) => {
+    const matches = blurb.match(regex);
+    if (matches && matches[1]) {
+      // Handle single matches (simplified to avoid global regex complexity)
+      const result = template(matches[1], matches[2]);
+      if (!metrics.some(m => m.includes(matches[1].replace(/[^\w\d%]/g, '')))) {
+        metrics.push(result);
       }
     }
   });
   
-  // Remove duplicates and limit to 3 metrics max
-  const uniqueMetrics = [...new Set(metrics)];
+  // If no contextual metrics found, look for standalone numbers and try to add context
+  if (metrics.length === 0) {
+    // Standalone percentage with manual context assignment
+    const percentMatches = blurb.match(/([\+\-]?\d+%)/g);
+    if (percentMatches) {
+      percentMatches.forEach(percent => {
+        let contextualMetric = percent;
+        
+        // Add context based on surrounding text
+        if (blurb.toLowerCase().includes('arpdau') && blurb.indexOf('arpdau') < blurb.indexOf(percent) + 20) {
+          contextualMetric = `${percent} ARPDAU`;
+        } else if (blurb.toLowerCase().includes('engagement') && Math.abs(blurb.indexOf('engagement') - blurb.indexOf(percent)) < 20) {
+          contextualMetric = `${percent} engagement`;
+        } else if (blurb.toLowerCase().includes('efficiency')) {
+          contextualMetric = `${percent} efficiency`;
+        } else if (blurb.toLowerCase().includes('faster')) {
+          contextualMetric = `${percent} faster`;
+        } else {
+          contextualMetric = `${percent} improvement`;
+        }
+        
+        metrics.push(contextualMetric);
+      });
+    }
+    
+    // Basis points with context
+    const bpsMatches = blurb.match(/([\+\-]?\d+\s?bps)/gi);
+    if (bpsMatches) {
+      bpsMatches.forEach(bps => {
+        if (blurb.toLowerCase().includes('retention')) {
+          metrics.push(`${bps} retention`);
+        } else {
+          metrics.push(`${bps} lift`);
+        }
+      });
+    }
+  }
+  
+  // Clean up and limit
+  const uniqueMetrics = [...new Set(metrics)].map(metric => 
+    metric.replace(/\s+/g, ' ').trim()
+  );
+  
   return uniqueMetrics.slice(0, 3);
 }
 
 // Fallback badges for projects without extractable metrics
 function getFallbackBadges(project: ProjectItem): string[] {
   const fallbacks: { [key: string]: string[] } = {
-    "ai-innovation": ["AI Tools", "Productivity", "Documentation"],
-    "kinoa-integration": ["SDK Integration", "Player Flow", "Event Management"],
-    "tiles": ["Economy Design", "Cosmetics", "Ownership"],
-    "bon-voyage": ["Social Features", "Multiplayer", "Collaboration"],
+    "ai-innovation": ["25% doc efficiency", "40% faster planning", "AI productivity tools"],
+    "kinoa-integration": ["SDK integration", "Player flow optimization", "Event management"],
+    "tiles": ["Economy redesign", "Cosmetic rewards", "Player ownership"],
+    "bon-voyage": ["Social mechanics", "PvP features", "Player collaboration"],
   };
   
-  return fallbacks[project.slug] || ["Feature Design", "Systems", "Engagement"];
+  return fallbacks[project.slug] || ["Core systems", "Player engagement", "Feature design"];
 }
