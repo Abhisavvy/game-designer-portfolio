@@ -157,14 +157,6 @@ export function HomePageContent() {
                 </a>
                 <span>•</span>
                 <a
-                  href={`mailto:${person.email}`}
-                  className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
-                >
-                  <Mail className="w-4 h-4" />
-                  <span>Email</span>
-                </a>
-                <span>•</span>
-                <a
                   href={`tel:${person.phone}`}
                   className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
                 >

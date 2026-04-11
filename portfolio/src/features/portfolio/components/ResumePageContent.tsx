@@ -40,13 +40,6 @@ export function ResumePageContent() {
           {/* Contact Info */}
           <div className="flex flex-wrap justify-center gap-6 mt-6 text-sm text-gray-400">
             <a 
-              href={`mailto:${person.email}`}
-              className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
-            >
-              <Mail className="w-4 h-4" />
-              <span>{person.email}</span>
-            </a>
-            <a 
               href={`tel:${person.phone}`}
               className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
             >

@@ -5,6 +5,8 @@ import { useState } from "react";
 
 interface OptimizedImageProps {
   src: string;
+  fallbackSrc?: string;
+  secondaryFallback?: string;
   alt: string;
   width: number;
   height: number;
@@ -15,6 +17,8 @@ interface OptimizedImageProps {
 
 export function OptimizedImage({ 
   src, 
+  fallbackSrc,
+  secondaryFallback,
   alt, 
   width, 
   height, 
@@ -22,11 +26,27 @@ export function OptimizedImage({
   placeholder,
   priority = false 
 }: OptimizedImageProps) {
+  const [currentSrc, setCurrentSrc] = useState(src);
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
-  // Show placeholder if image fails to load or no src
-  if (imageError || !src) {
+  const handleImageError = () => {
+    if (currentSrc === src && fallbackSrc) {
+      // Try first fallback
+      setCurrentSrc(fallbackSrc);
+      setImageLoading(true);
+    } else if (currentSrc === fallbackSrc && secondaryFallback) {
+      // Try secondary fallback
+      setCurrentSrc(secondaryFallback);
+      setImageLoading(true);
+    } else {
+      // All sources failed, show placeholder
+      setImageError(true);
+    }
+  };
+
+  // Show placeholder if all images failed to load or no src
+  if (imageError || !currentSrc) {
     return (
       <div className={`flex items-center justify-center bg-zinc-800/50 ${className}`}>
         {placeholder}
@@ -37,7 +57,7 @@ export function OptimizedImage({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       <Image
-        src={src}
+        src={currentSrc}
         alt={alt}
         width={width}
         height={height}
@@ -46,7 +66,7 @@ export function OptimizedImage({
           imageLoading ? 'opacity-20' : 'opacity-100'
         }`}
         onLoad={() => setImageLoading(false)}
-        onError={() => setImageError(true)}
+        onError={handleImageError}
         onLoadingComplete={() => setImageLoading(false)}
       />
       {imageLoading && (

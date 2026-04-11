@@ -110,7 +110,9 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
           transition={{ delay: index * 0.1 + 0.1 }}
         >
           <OptimizedImage
-            src={`/assets/${project.title.toLowerCase().replace(/\s+/g, '-')}/hero-image.jpg`}
+            src={`/assets/${project.title.toLowerCase().replace(/\s+/g, '-')}/hero-image.webp`}
+            fallbackSrc={`/assets/${project.title.toLowerCase().replace(/\s+/g, '-')}/hero-image.png`}
+            secondaryFallback={`/assets/${project.title.toLowerCase().replace(/\s+/g, '-')}/hero-image.jpg`}
             alt={`${project.title} - Game Screenshot`}
             width={400}
             height={320}
