@@ -307,12 +307,12 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
           <div className="relative w-32 h-32 mx-auto mb-6">
             <div className="absolute inset-0 bg-gradient-to-br from-orange-600/30 to-orange-500/40 rounded-full blur-xl opacity-60" />
             <OptimizedImage
-              src="/assets/general/profile/abhishek%20headshot.webp"
+              src="/assets/general/profile/abhishek-headshot.webp"
               alt="Abhishek Dutta - Game Designer"
               width={128}
               height={128}
               priority={true}
-              className="relative w-full h-full rounded-full border-2 border-orange-500/30"
+              className="relative w-full h-full rounded-full border-2 border-orange-500/30 object-cover"
               placeholder={
                 <div className="w-full h-full bg-zinc-800/50 backdrop-blur-sm border-2 border-orange-500/30 rounded-full flex items-center justify-center">
                   <Users className="w-12 h-12 text-orange-300/60" />

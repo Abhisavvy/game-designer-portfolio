@@ -25,6 +25,7 @@ export function OptimizedImage({
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
+  // Show placeholder if image fails to load or no src
   if (imageError || !src) {
     return (
       <div className={`flex items-center justify-center bg-zinc-800/50 ${className}`}>
@@ -41,15 +42,16 @@ export function OptimizedImage({
         width={width}
         height={height}
         priority={priority}
-        className={`object-cover transition-all duration-500 ${
-          imageLoading ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+        className={`object-cover transition-all duration-300 ${
+          imageLoading ? 'opacity-20' : 'opacity-100'
         }`}
         onLoad={() => setImageLoading(false)}
         onError={() => setImageError(true)}
+        onLoadingComplete={() => setImageLoading(false)}
       />
       {imageLoading && (
-        <div className="absolute inset-0 bg-zinc-800/50 flex items-center justify-center">
-          <div className="animate-spin w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full" />
+        <div className="absolute inset-0 bg-zinc-800/20 flex items-center justify-center">
+          <div className="animate-spin w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full" />
         </div>
       )}
     </div>
