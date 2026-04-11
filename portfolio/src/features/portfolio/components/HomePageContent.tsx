@@ -81,7 +81,7 @@ export function HomePageContent() {
             {/* Left side - Image placeholder */}
             <div className="order-2 md:order-1">
               <OptimizedImage
-                src="/assets/general/workspace/game-design-workspace.jpg"
+                src="/assets/general/workspace/game-design-workspace.webp"
                 alt="Abhishek's Game Design Workspace"
                 width={600}
                 height={450}
