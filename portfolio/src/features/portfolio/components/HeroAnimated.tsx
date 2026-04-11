@@ -307,7 +307,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
           <div className="relative w-32 h-32 mx-auto mb-6">
             <div className="absolute inset-0 bg-gradient-to-br from-orange-600/30 to-orange-500/40 rounded-full blur-xl opacity-60" />
             <OptimizedImage
-              src="/assets/general/profile/abhishek-headshot.jpg"
+              src="/assets/general/profile/abhishek%20headshot.webp"
               alt="Abhishek Dutta - Game Designer"
               width={128}
               height={128}
