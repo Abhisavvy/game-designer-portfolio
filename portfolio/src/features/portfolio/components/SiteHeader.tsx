@@ -22,24 +22,16 @@ export function SiteHeader() {
           className="flex items-center space-x-2 sm:space-x-3 flex-shrink min-w-0 text-sm font-semibold tracking-tight text-white transition hover:text-orange-200"
         >
           <div className="relative w-7 h-7 sm:w-8 sm:h-8 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden flex-shrink-0">
-            {/* Geometric background pattern */}
+            {/* Custom icon background */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-orange-500"></div>
-            <div className="absolute top-0 right-0 w-3 h-3 bg-orange-700/20 rounded-bl-lg"></div>
-            <div className="absolute bottom-0 left-0 w-2 h-2 bg-white/30 rounded-tr-lg"></div>
             
-            {/* Stylized AD monogram */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" className="text-white sm:w-[18px] sm:h-[18px]">
-                {/* Custom A and D letterforms */}
-                <path 
-                  d="M4 20L8 6h2l4 14h-2l-1-3H7l-1 3H4zm3-5h4l-2-6-2 6z" 
-                  fill="currentColor"
-                />
-                <path 
-                  d="M16 6h3c2 0 4 1.5 4 4v4c0 2.5-2 4-4 4h-3V6zm2 2v10h1c1 0 2-1 2-2v-4c0-1-1-2-2-2h-1z" 
-                  fill="currentColor"
-                />
-              </svg>
+            {/* Custom brand icon */}
+            <div className="absolute inset-0 flex items-center justify-center p-1.5">
+              <img 
+                src="/icon.svg" 
+                alt="Brand Icon"
+                className="w-full h-full object-contain filter brightness-0 invert"
+              />
             </div>
           </div>
           <span className="font-display text-sm sm:text-base tracking-wide hidden sm:inline-block truncate min-w-0" style={{ fontFamily: 'Quicksand, Poppins, system-ui, sans-serif', fontWeight: '600', letterSpacing: '0.5px' }}>
