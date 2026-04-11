@@ -1,0 +1,126 @@
+{
+  "picture": {
+    "url": "",
+    "size": 64,
+    "aspectRatio": 1,
+    "borderRadius": 0,
+    "effects": {
+      "hidden": true,
+      "border": false,
+      "grayscale": false
+    }
+  },
+  "basics": {
+    "name": "Abhishek Dutta",
+    "headline": "Feature Designer | Mobile Game Specialist",
+    "email": "abhishek.dt.97@gmail.com",
+    "phone": "+91-7980700802",
+    "location": "Bengaluru, India",
+    "url": {
+      "label": "",
+      "href": ""
+    },
+    "customFields": []
+  },
+  "sections": {
+    "summary": {
+      "name": "Summary",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "summary",
+      "content": "Results-driven Game Designer with 3+ years designing player-first mobile game systems that drive community engagement and long-term retention. At PlaySimple Games, designed economy and progression systems for Word Roll (40k+ DAU) that delivered 71% monetization improvements and 35% retention increases through data-driven feature design and social engagement mechanics."
+    },
+    "experience": {
+      "name": "Experience",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "experience",
+      "items": [
+        {
+          "id": "exp1",
+          "visible": true,
+          "company": "PlaySimple Games",
+          "position": "Feature Designer",
+          "location": "Bengaluru, India",
+          "date": "August 2022 - Present",
+          "summary": "Designed comprehensive event infrastructure and reward systems for Word Roll's competitive features, creating social engagement mechanics that improved player interaction frequency by 43%.",
+          "url": ""
+        }
+      ]
+    },
+    "education": {
+      "name": "Education",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "education",
+      "items": [
+        {
+          "id": "edu1",
+          "visible": true,
+          "institution": "ICAT Design & Media College",
+          "studyType": "PG Diploma",
+          "area": "Game Design",
+          "score": "",
+          "date": "2021 - 2022",
+          "summary": "",
+          "url": ""
+        }
+      ]
+    },
+    "skills": {
+      "name": "Skills",
+      "columns": 2,
+      "separateLinks": true,
+      "visible": true,
+      "id": "skills",
+      "items": [
+        {
+          "id": "skill1",
+          "visible": true,
+          "name": "Social Game Design",
+          "description": "Unity, Social Game Mechanics, Community-Driven Design",
+          "level": 0,
+          "keywords": []
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "template": "azurill",
+    "layout": {
+      "sidebar": ["basics"],
+      "main": ["summary", "experience", "education", "skills"]
+    },
+    "css": {
+      "value": "",
+      "visible": false
+    },
+    "page": {
+      "margin": 18,
+      "format": "a4",
+      "options": {
+        "breakLine": true,
+        "pageNumbers": false
+      }
+    },
+    "theme": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#000000"
+    },
+    "typography": {
+      "font": {
+        "family": "Inter",
+        "subset": "latin",
+        "variants": ["regular"],
+        "size": 14
+      },
+      "lineHeight": 1.5,
+      "hideIcons": false,
+      "underlineLinks": false
+    }
+  }
+}

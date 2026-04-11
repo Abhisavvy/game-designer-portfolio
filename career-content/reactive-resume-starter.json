@@ -1,0 +1,321 @@
+{
+  "picture": {
+    "hidden": true,
+    "url": "",
+    "size": 80,
+    "rotation": 0,
+    "aspectRatio": 1,
+    "borderRadius": 0,
+    "borderColor": "rgba(0, 0, 0, 0.5)",
+    "borderWidth": 0,
+    "shadowColor": "rgba(0, 0, 0, 0.5)",
+    "shadowWidth": 0
+  },
+  "basics": {
+    "name": "Your Name",
+    "headline": "Game Designer — Mobile, Systems & AI Tools",
+    "email": "you@example.com",
+    "phone": "",
+    "location": "City, Country",
+    "website": {
+      "url": "https://your-portfolio.example.com",
+      "label": "Portfolio"
+    },
+    "customFields": [
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "icon": "linkedin-logo",
+        "text": "linkedin.com/in/yourprofile",
+        "link": "https://linkedin.com/in/yourprofile"
+      },
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440002",
+        "icon": "github-logo",
+        "text": "github.com/yourusername",
+        "link": "https://github.com/yourusername"
+      }
+    ]
+  },
+  "summary": {
+    "title": "",
+    "columns": 1,
+    "hidden": false,
+    "content": "<p>Game designer focused on mobile player experiences and live feature work. Shipped and iterated on features for <strong>Word Roll</strong>, collaborating with engineering and product on clarity, pacing, and retention. Also design and prototype <strong>internal AI-assisted tools</strong> to speed up workflows—turning ambiguous asks into concrete specs and usable flows.</p><p><em>Replace this paragraph with your years of experience, studio name, and one concrete outcome you can share (metric or learning).</em></p>"
+  },
+  "sections": {
+    "profiles": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440003",
+          "hidden": false,
+          "icon": "linkedin-logo",
+          "network": "LinkedIn",
+          "username": "yourprofile",
+          "website": {
+            "url": "https://linkedin.com/in/yourprofile",
+            "label": "linkedin.com/in/yourprofile"
+          }
+        },
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440004",
+          "hidden": false,
+          "icon": "github-logo",
+          "network": "GitHub",
+          "username": "yourusername",
+          "website": {
+            "url": "https://github.com/yourusername",
+            "label": "github.com/yourusername"
+          }
+        }
+      ]
+    },
+    "experience": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440005",
+          "hidden": false,
+          "company": "Word Roll (studio or publisher — replace)",
+          "position": "Game Designer",
+          "location": "Remote / On-site — replace",
+          "period": "Start year — Present",
+          "website": {
+            "url": "",
+            "label": ""
+          },
+          "roles": [],
+          "description": "<ul><li><p>Designed and specified mobile game features (replace with your systems: e.g. daily goals, meta progression, social hooks).</p></li><li><p>Partnered with engineering and art to prototype, tune, and ship within production constraints.</p></li><li><p>Documented UX flows, edge cases, and balancing levers for live updates.</p></li><li><p><em>Add a fourth bullet with a real outcome (metric, playtest insight, or release milestone).</em></p></li></ul>"
+        }
+      ]
+    },
+    "education": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440006",
+          "hidden": false,
+          "school": "Your university or bootcamp",
+          "degree": "Degree or program",
+          "area": "Field of study",
+          "grade": "",
+          "location": "",
+          "period": "Years",
+          "website": {
+            "url": "",
+            "label": ""
+          },
+          "description": "<p>Coursework or highlights relevant to game design (replace or delete).</p>"
+        }
+      ]
+    },
+    "projects": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440007",
+          "hidden": false,
+          "options": {
+            "showLinkInTitle": true
+          },
+          "name": "Word Roll",
+          "period": "Replace with your dates",
+          "website": {
+            "url": "https://apps.apple.com",
+            "label": "App Store — replace with real link"
+          },
+          "description": "<p>Mobile word game. Summarize your design scope: core loops you owned, features you shipped, and tools you used (spreadsheets, Figma, engine, etc.).</p>"
+        },
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440008",
+          "hidden": false,
+          "name": "AI tool — replace name",
+          "period": "Replace",
+          "website": {
+            "url": "",
+            "label": ""
+          },
+          "description": "<p>What problem it solved, who used it, and what you designed (prompts, UI, evaluation workflow). Omit confidential details.</p>"
+        },
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440009",
+          "hidden": false,
+          "name": "Second AI / tools project (optional)",
+          "period": "",
+          "website": {
+            "url": "",
+            "label": ""
+          },
+          "description": "<p>Short description. Hide this item in Reactive Resume if unused.</p>"
+        }
+      ]
+    },
+    "skills": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-44665544000a",
+          "hidden": false,
+          "icon": "game-controller",
+          "name": "Game & systems design",
+          "proficiency": "Advanced",
+          "level": 4,
+          "keywords": ["Mobile UX", "Feature specs", "Balancing", "Live ops"]
+        },
+        {
+          "id": "550e8400-e29b-41d4-a716-44665544000b",
+          "hidden": false,
+          "icon": "users-three",
+          "name": "Collaboration",
+          "proficiency": "Advanced",
+          "level": 4,
+          "keywords": ["Cross-discipline", "Documentation", "Playtests"]
+        },
+        {
+          "id": "550e8400-e29b-41d4-a716-44665544000c",
+          "hidden": false,
+          "icon": "robot",
+          "name": "AI-assisted workflows",
+          "proficiency": "Intermediate",
+          "level": 3,
+          "keywords": ["Tooling", "Prompt design", "Prototyping"]
+        },
+        {
+          "id": "550e8400-e29b-41d4-a716-44665544000d",
+          "hidden": false,
+          "icon": "chart-line",
+          "name": "Analytics & iteration",
+          "proficiency": "Intermediate",
+          "level": 3,
+          "keywords": ["Funnels", "A/B thinking", "Telemetry (if applicable)"]
+        }
+      ]
+    },
+    "languages": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-44665544000e",
+          "hidden": false,
+          "language": "English",
+          "fluency": "Native",
+          "level": 5
+        }
+      ]
+    },
+    "interests": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "awards": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "certifications": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "publications": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "volunteer": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "references": {
+      "title": "",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-44665544000f",
+          "hidden": false,
+          "name": "Available upon request",
+          "position": "",
+          "website": {
+            "url": "",
+            "label": ""
+          },
+          "phone": "",
+          "description": ""
+        }
+      ]
+    }
+  },
+  "customSections": [],
+  "metadata": {
+    "template": "azurill",
+    "layout": {
+      "sidebarWidth": 32,
+      "pages": [
+        {
+          "fullWidth": false,
+          "main": ["summary", "experience", "education", "projects"],
+          "sidebar": ["profiles", "skills", "languages", "references"]
+        }
+      ]
+    },
+    "css": {
+      "enabled": false,
+      "value": ""
+    },
+    "page": {
+      "gapX": 4,
+      "gapY": 6,
+      "marginX": 14,
+      "marginY": 12,
+      "format": "a4",
+      "locale": "en-US",
+      "hideIcons": false
+    },
+    "design": {
+      "colors": {
+        "primary": "rgba(79, 70, 229, 1)",
+        "text": "rgba(0, 0, 0, 1)",
+        "background": "rgba(255, 255, 255, 1)"
+      },
+      "level": {
+        "icon": "star",
+        "type": "circle"
+      }
+    },
+    "typography": {
+      "body": {
+        "fontFamily": "IBM Plex Sans",
+        "fontWeights": ["400", "500"],
+        "fontSize": 10,
+        "lineHeight": 1.5
+      },
+      "heading": {
+        "fontFamily": "IBM Plex Sans",
+        "fontWeights": ["600"],
+        "fontSize": 14,
+        "lineHeight": 1.5
+      }
+    },
+    "notes": ""
+  }
+}

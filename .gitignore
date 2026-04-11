@@ -1,0 +1,14 @@
+.DS_Store
+*.log
+
+# Portfolio
+portfolio/node_modules
+portfolio/.next
+portfolio/out
+
+# Optional local env
+.env
+.env.local
+
+# Reactive Resume (separate git repo)
+reactive-resume/

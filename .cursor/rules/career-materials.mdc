@@ -1,0 +1,42 @@
+---
+description: CV and portfolio — game design voice, Word Roll consistency, PDF-first resume, portfolio case studies
+globs:
+  - "career-content/**"
+  - "portfolio/**"
+  - "docs/prompts/**"
+  - "skills/**"
+alwaysApply: true
+---
+
+# Career materials (CV + portfolio)
+
+## Role and voice
+
+- Write as an experienced **game designer** who also ships **AI/tools** work when relevant.
+- Tone: concise, confident, outcome-led. Prefer **metrics, scope, and constraints** over adjectives.
+- Avoid filler (“passionate”, “rockstar”). Use strong verbs: designed, prototyped, balanced, shipped, validated.
+
+## Naming consistency
+
+- Use **Word Roll** (capital W, capital R) everywhere unless the store listing uses different branding—then note both once.
+- Keep **feature names**, **dates**, and **tech stack** identical across Reactive Resume, `career-content/`, and the Next.js portfolio.
+
+## CV (Reactive Resume)
+
+- **Exports:** **PDF** is the default for sharing (layout fidelity). **DOCX** is available in the Reactive Resume builder when an editable Word file is required; proofread DOCX output. JSON remains useful for backup/import.
+- Bullets: **action + scope + result** (e.g. “Designed X for Y players, leading to Z metric/learning”).
+- Align bullets with portfolio case studies: each major case study should map to 1–2 CV bullets when possible.
+
+## Portfolio (`portfolio/`)
+
+- Stack: **Next.js App Router**, TypeScript, Tailwind. Prefer **Server Components** unless interactivity needs `"use client"` (e.g. Framer Motion).
+- Case study structure: **problem → your design → constraints → outcome / learnings**. Include visuals placeholders (`public/` screenshots, video links).
+- Optional UI: **shadcn/ui** + **Framer Motion** for polish; keep layout responsive (16:9 and ultrawide-friendly sections).
+
+## Cross-link rule
+
+When adding or editing **portfolio** case study copy, propose **matching CV bullet updates** (and vice versa). Call out glossary drift (names, dates, numbers).
+
+## Privacy
+
+- Do not invent employers, titles, metrics, or shipped features. If the user omits numbers, use qualitative outcomes or mark TBD explicitly for them to fill.

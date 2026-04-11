@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="Food Fiesta hero placeholder">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3f2a1a"/>
+      <stop offset="50%" style="stop-color:#7c3f12"/>
+      <stop offset="100%" style="stop-color:#1a1510"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#g)"/>
+  <text x="960" y="540" text-anchor="middle" fill="rgba(255,245,220,0.35)" font-family="system-ui,sans-serif" font-size="42" font-weight="600">Food Fiesta  replace with gameplay still</text>
+</svg>

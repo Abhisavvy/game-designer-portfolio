@@ -1,0 +1,280 @@
+{
+  "picture": {
+    "hidden": true,
+    "url": "",
+    "size": 80,
+    "rotation": 0,
+    "aspectRatio": 1,
+    "borderRadius": 0,
+    "borderColor": "rgba(0, 0, 0, 0.5)",
+    "borderWidth": 0,
+    "shadowColor": "rgba(0, 0, 0, 0.5)",
+    "shadowWidth": 0
+  },
+  "basics": {
+    "name": "Abhishek Dutta",
+    "headline": "Feature Designer | Mobile Game Specialist - Social Gaming Expert",
+    "email": "abhishek.dt.97@gmail.com",
+    "phone": "+91-7980700802",
+    "location": "Bengaluru, India",
+    "website": {
+      "url": "https://abhishek-in-a-nutshell.webflow.io",
+      "label": "Portfolio"
+    },
+    "customFields": [
+      {
+        "id": "linkedin-field",
+        "icon": "linkedin-logo",
+        "text": "linkedin.com/in/abhishek-dt97",
+        "link": "https://linkedin.com/in/abhishek-dt97"
+      }
+    ]
+  },
+  "summary": {
+    "title": "Professional Summary",
+    "columns": 1,
+    "hidden": false,
+    "content": "<p>Results-driven Game Designer with 3+ years designing player-first mobile game systems that drive community engagement and long-term retention. At PlaySimple Games, designed economy and progression systems for Word Roll (40k+ DAU) that delivered 71% monetization improvements and 35% retention increases through data-driven feature design and social engagement mechanics. Proven expertise in end-to-end feature ownership - from ideation to launch - including LiveOps events, reward systems, and competitive social features that contributed to 10x user growth. Passionate about creating social gaming experiences that bring players together while driving sustainable business metrics through balanced economies and compelling progression loops.</p>"
+  },
+  "sections": {
+    "profiles": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "experience": {
+      "title": "Professional Experience",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "playsimple-gameberry-optimized",
+          "company": "PlaySimple Games",
+          "position": "Feature Designer",
+          "location": "Bengaluru, India",
+          "startDate": "2022-08",
+          "endDate": "",
+          "summary": "<ul><li>Designed comprehensive event infrastructure and reward systems for Word Roll's competitive features, creating social engagement mechanics that improved player interaction frequency by 43% and established reusable framework for community-driven events</li><li>Architected progression systems and reward economies (including gacha mechanics and cosmetic systems) that increased player lifetime value by 10% while maintaining fair play balance across diverse skill levels</li><li>Launched 5+ personalized social events using cohort targeting and community mechanics, achieving 23% higher engagement rates and fostering player-to-player interaction through competitive leaderboards and shared goals</li><li>Analyzed behavioral patterns across 40k+ DAU using A/B testing frameworks, identifying community engagement opportunities that influenced social feature roadmap and drove 35% retention improvements</li><li>Authored comprehensive feature specifications for 25+ major systems (seasonal events, battle pass, PvP leaderboards), enabling cross-functional teams to deliver features 30% faster with 95% requirement accuracy</li><li>Conducted competitive analysis of 50+ mobile games using SensorTower and Data.ai, identifying 8 monetization opportunities that influenced product roadmap and contributed to 71% revenue increase</li><li>Spearheaded Word Roll feature roadmap during hypergrowth phase (2024-2025), contributing to 10x DAU expansion from 4k to 40k+ users through strategic feature prioritization</li><li>Developed AI-powered productivity tools (Spec Maker, Meeting Manager) using Cursor AI, reducing feature documentation time by 25% and accelerating sprint planning by 40% across 8-person team</li></ul>"
+        }
+      ]
+    },
+    "education": {
+      "title": "Education",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "game-design-education",
+          "institution": "ICAT Design & Media College",
+          "area": "Game Design",
+          "studyType": "PG Diploma",
+          "startDate": "2021",
+          "endDate": "2022",
+          "summary": ""
+        },
+        {
+          "id": "law-education",
+          "institution": "Calcutta University, Department of Law",
+          "area": "Law",
+          "studyType": "BA LLB",
+          "startDate": "2015",
+          "endDate": "2020",
+          "summary": ""
+        }
+      ]
+    },
+    "skills": {
+      "title": "Technical Skills",
+      "columns": 2,
+      "hidden": false,
+      "items": [
+        {
+          "id": "social-game-development",
+          "name": "Social Game Development",
+          "description": "Unity, Social Game Mechanics, Community-Driven Design, Mobile Game Systems, PvP Systems, Event-Based Monetization, Economy Balancing, Progression Systems, Player Interaction Design"
+        },
+        {
+          "id": "analytics-community-data",
+          "name": "Analytics & Community Data",
+          "description": "Google Analytics, SensorTower, Data.ai, A/B Testing Frameworks, Player Behavior Analysis, Community Health Metrics, Competitive Intelligence, Data-Driven Decision Making"
+        },
+        {
+          "id": "design-collaboration-tools",
+          "name": "Design & Collaboration",
+          "description": "Figma, Excel, Google Sheets, Machinations (Economy Design), UX/UI Design Principles, Technical Implementation Guidelines, Cross-Functional Communication"
+        },
+        {
+          "id": "liveops-management",
+          "name": "LiveOps & Project Management",
+          "description": "JIRA, Confluence, Agile Development, LiveOps Management, Quality Assurance Processes, Documentation Standards, Stakeholder Alignment"
+        },
+        {
+          "id": "ai-innovation-tools",
+          "name": "AI & Innovation",
+          "description": "Cursor AI, Kinoa.io (LiveOps Automation), AI-Powered Productivity Tools, Workflow Optimization, Process Innovation"
+        }
+      ]
+    },
+    "achievements": {
+      "title": "Key Achievements",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "social-engagement-leadership",
+          "title": "Social Engagement Leadership",
+          "summary": "Designed Food Fiesta event mechanics featuring balanced gacha systems and progressive rewards, generating 71% monetization increase and establishing template for future LiveOps events that enhanced community interaction"
+        },
+        {
+          "id": "community-building-innovation",
+          "title": "Community Building Innovation",
+          "summary": "Redesigned Ticket Mania leaderboard architecture with skill-based matchmaking and dynamic rewards, creating organic social groups around competitive goals that increased player LTV by 10% and improved D1 retention rate by 300 basis points"
+        },
+        {
+          "id": "player-experience-optimization",
+          "title": "Player Experience Optimization",
+          "summary": "Transformed Word of the Day from passive feature to interactive collection mechanic that fostered daily engagement habits, achieving 140 basis points D1 retention improvement and 3% overall engagement increase"
+        },
+        {
+          "id": "team-innovation-efficiency",
+          "title": "Team Innovation & Efficiency",
+          "summary": "Built AI-assisted Spec Maker and Meeting Manager tools that became standard workflow for 8-person development team, improving documentation efficiency by 25% and establishing culture of productivity innovation"
+        }
+      ]
+    },
+    "projects": {
+      "title": "Featured Projects",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "food-fiesta-social-project",
+          "name": "Food Fiesta Social Event System",
+          "description": "Community-driven event system fostering social interaction and collaborative gameplay",
+          "summary": "Designed comprehensive social event infrastructure connecting multiple game modes with community rewards and social status elements. Created progression mechanics that encouraged both individual achievement and group participation, establishing framework for social LiveOps events.",
+          "keywords": ["Social Event Design", "Community Building", "Cross-Modal Gameplay", "Social Economy"],
+          "startDate": "2024",
+          "endDate": "2024"
+        },
+        {
+          "id": "ticket-mania-community-project",
+          "name": "Ticket Mania Community Competition System",
+          "description": "Social competitive system building organic player communities through shared goals",
+          "summary": "Redesigned competitive leaderboards to foster community formation around shared competitive objectives. Implemented skill-based matchmaking and dynamic feedback systems that created natural social groups and sustained community engagement beyond individual sessions.",
+          "keywords": ["Community Competition", "Social Psychology", "Player Retention", "Community Formation"],
+          "startDate": "2024",
+          "endDate": "2024"
+        },
+        {
+          "id": "ai-productivity-social-project",
+          "name": "AI-Powered Team Collaboration Suite",
+          "description": "Custom AI tools for enhanced team productivity and cross-functional collaboration",
+          "summary": "Developed Spec Maker and Meeting Manager using Cursor AI to optimize team workflows and improve cross-functional collaboration efficiency. Tools became standard practice across development team and influenced company-wide productivity initiatives.",
+          "keywords": ["AI Innovation", "Team Productivity", "Cross-Functional Collaboration", "Process Innovation"],
+          "startDate": "2026",
+          "endDate": "2026"
+        }
+      ]
+    },
+    "interests": {
+      "title": "Additional Strengths",
+      "columns": 2,
+      "hidden": false,
+      "items": [
+        {
+          "id": "mobile-social-design",
+          "name": "Mobile-First Social Design",
+          "keywords": ["Session-Based Social Gameplay", "Mobile Community Building", "Cross-Platform Social Features"]
+        },
+        {
+          "id": "community-economics",
+          "name": "Community Economics & Strategy",
+          "keywords": ["F2P Social Monetization", "Community LTV Optimization", "Sustainable Social Economy Design"]
+        }
+      ]
+    },
+    "publications": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "volunteer": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "languages": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "awards": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "certifications": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "references": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    }
+  },
+  "metadata": {
+    "template": "azurill",
+    "layout": [
+      [
+        "basics",
+        "summary",
+        "skills"
+      ],
+      [
+        "experience",
+        "achievements",
+        "projects",
+        "education",
+        "interests"
+      ]
+    ],
+    "css": {
+      "value": "/* Gameberry Labs optimized styling */\n\n.section h3 {\n  font-weight: bold;\n  font-size: 14px;\n  text-transform: uppercase;\n  letter-spacing: 1px;\n  margin-bottom: 8px;\n  color: #1e40af;\n}\n\n.experience-item h4 {\n  font-weight: bold;\n  font-size: 12px;\n}\n\n.experience-item .company {\n  font-weight: normal;\n  font-style: italic;\n  color: #666;\n}\n\n/* Social gaming themed accents */\nul li {\n  margin-bottom: 4px;\n  line-height: 1.4;\n}\n\n.section {\n  margin-bottom: 16px;\n}\n\n/* Clean, professional typography for ATS and human scanning */\nbody {\n  font-family: 'Arial', 'Calibri', sans-serif;\n  font-size: 11px;\n  line-height: 1.3;\n  color: #333;\n}\n\n/* Highlight key social gaming terms */\n.highlight {\n  font-weight: 600;\n  color: #1e40af;\n}",
+      "visible": false
+    },
+    "page": {
+      "margin": 18,
+      "format": "a4",
+      "options": {
+        "breakLine": true,
+        "pageNumbers": true
+      }
+    },
+    "theme": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#1e40af"
+    },
+    "typography": {
+      "font": {
+        "family": "Arial",
+        "subset": "latin",
+        "variants": ["regular", "italic", "600"],
+        "size": 11
+      },
+      "lineHeight": 1.3,
+      "hideIcons": false,
+      "underlineLinks": true
+    },
+    "notes": "Optimized specifically for Gameberry Labs Game Designer II position. Emphasizes social gaming expertise, community engagement, and mobile F2P experience. All achievements reframed with social/community angle while maintaining quantified impact metrics."
+  }
+}

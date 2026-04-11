@@ -1,0 +1,285 @@
+{
+  "picture": {
+    "hidden": true,
+    "url": "",
+    "size": 80,
+    "rotation": 0,
+    "aspectRatio": 1,
+    "borderRadius": 0,
+    "borderColor": "rgba(0, 0, 0, 0.5)",
+    "borderWidth": 0,
+    "shadowColor": "rgba(0, 0, 0, 0.5)",
+    "shadowWidth": 0
+  },
+  "basics": {
+    "name": "Abhishek Dutta",
+    "headline": "Feature Designer | Mobile Game Specialist",
+    "email": "abhishek.dt.97@gmail.com",
+    "phone": "+91-7980700802",
+    "location": "Bengaluru, India",
+    "website": {
+      "url": "https://abhishek-in-a-nutshell.webflow.io",
+      "label": "Portfolio"
+    },
+    "customFields": [
+      {
+        "id": "linkedin-field",
+        "icon": "linkedin-logo",
+        "text": "linkedin.com/in/abhishek-dt97",
+        "link": "https://linkedin.com/in/abhishek-dt97"
+      }
+    ]
+  },
+  "summary": {
+    "title": "Professional Summary",
+    "columns": 1,
+    "hidden": false,
+    "content": "<p>Results-driven Feature Designer with 3+ years optimizing mobile game systems for 40k+ DAU products. Proven track record delivering 71% monetization improvements and 35% retention increases through data-driven feature design and rigorous A/B testing frameworks. Expertise in cross-functional collaboration, comprehensive documentation processes, and stakeholder alignment across engineering, product, and analytics teams. Led feature specification and implementation for 25+ major systems including LiveOps, progression mechanics, and competitive leaderboards that contributed to 10x user growth at PlaySimple Games.</p>"
+  },
+  "sections": {
+    "profiles": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "experience": {
+      "title": "Professional Experience",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "playsimple-experience",
+          "company": "PlaySimple Games",
+          "position": "Feature Designer",
+          "location": "Bengaluru, India",
+          "startDate": "2022-08",
+          "endDate": "",
+          "summary": "<ul><li>Authored comprehensive feature specifications for 25+ major systems (seasonal events, battle pass, PvP leaderboards), enabling cross-functional teams to deliver features 30% faster with 95% requirement accuracy</li><li>Analyzed 50+ competitive mobile games using SensorTower and Data.ai, identifying 8 monetization opportunities that influenced product roadmap and contributed to 71% revenue increase</li><li>Implemented A/B testing framework across 15+ features, validating design decisions through data-driven feedback loops that improved feature performance by average 25% post-launch</li><li>Spearheaded Word Roll feature roadmap during hypergrowth phase (2024-2025), contributing to 10x DAU expansion from 4k to 40k+ users through strategic feature prioritization</li><li>Designed event-driven economy systems and reward mechanics for Word Roll, generating 71% monetization increase through optimized player purchase funnels</li><li>Redesigned core game features using behavioral analytics from 40k+ DAU, increasing average session time by 43% and improving D1 retention</li><li>Architected progression systems and daily engagement mechanics, boosting 7-day retention by 35% and increasing daily session frequency by 2.3x for Word Roll's player base</li><li>Developed AI-powered productivity tools (Spec Maker, Meeting Manager) using Cursor AI, reducing feature documentation time by 25% and accelerating sprint planning by 40% across 8-person team</li><li>Launched 5+ personalized LiveOps events using Kinoa.io cohort targeting, achieving 23% higher engagement rates compared to non-segmented campaigns</li></ul>"
+        }
+      ]
+    },
+    "education": {
+      "title": "Education",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "game-design-education",
+          "institution": "ICAT Design & Media College",
+          "area": "Game Design",
+          "studyType": "PG Diploma",
+          "startDate": "2021",
+          "endDate": "2022",
+          "summary": ""
+        },
+        {
+          "id": "law-education",
+          "institution": "Calcutta University, Department of Law",
+          "area": "Law",
+          "studyType": "BA LLB",
+          "startDate": "2015",
+          "endDate": "2020",
+          "summary": ""
+        }
+      ]
+    },
+    "skills": {
+      "title": "Technical Skills",
+      "columns": 2,
+      "hidden": false,
+      "items": [
+        {
+          "id": "game-development",
+          "name": "Game Development",
+          "description": "Unity, Game Design, Feature Specification Writing, Mobile Game Systems, PvP Mechanics Design, Event-Based Monetization, Economy Balancing, Progression Systems"
+        },
+        {
+          "id": "analytics-tools",
+          "name": "Analytics & Data",
+          "description": "Google Analytics, SensorTower, Data.ai, A/B Testing Frameworks, Player Behavior Analysis, Competitive Intelligence, Data-Driven Decision Making"
+        },
+        {
+          "id": "design-tools",
+          "name": "Design Tools",
+          "description": "Figma, Excel, Google Sheets, Machinations (Economy Design), UX Design, Technical Implementation Guidelines"
+        },
+        {
+          "id": "project-management",
+          "name": "Project Management",
+          "description": "JIRA, Confluence, Agile Development, Cross-Functional Communication, Quality Assurance Processes, Documentation"
+        },
+        {
+          "id": "ai-tools",
+          "name": "AI & Automation",
+          "description": "Cursor AI, Kinoa.io (LiveOps), AI-Powered Productivity Tools, Workflow Automation, Spec Generation"
+        }
+      ]
+    },
+    "achievements": {
+      "title": "Key Achievements",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "monetization-achievement",
+          "title": "Monetization Leadership",
+          "summary": "Designed Food Fiesta event mechanics featuring balanced gacha systems and progressive rewards, generating 71% monetization increase and establishing template for future LiveOps events"
+        },
+        {
+          "id": "retention-achievement",
+          "title": "Retention Optimization",
+          "summary": "Redesigned Ticket Mania leaderboard architecture with skill-based matchmaking and dynamic rewards, increasing player LTV by 10% and improving D1 retention rate by 300 basis points"
+        },
+        {
+          "id": "engagement-achievement", 
+          "title": "Engagement Innovation",
+          "summary": "Transformed Word of the Day from passive feature to interactive collection mechanic, achieving 140 basis points D1 retention improvement and 3% overall engagement increase"
+        },
+        {
+          "id": "productivity-achievement",
+          "title": "AI Innovation & Productivity",
+          "summary": "Built AI-assisted Spec Maker and Meeting Manager tools, improving team efficiency by 25% and becoming standard workflow for 8-person development team"
+        },
+        {
+          "id": "liveops-achievement",
+          "title": "LiveOps Excellence",
+          "summary": "Launched 5+ personalized events using Kinoa.io cohort targeting, achieving 23% higher engagement rates and establishing sustainable LiveOps pipeline for Word Roll"
+        }
+      ]
+    },
+    "projects": {
+      "title": "Featured Projects",
+      "columns": 1,
+      "hidden": false,
+      "items": [
+        {
+          "id": "food-fiesta-project",
+          "name": "Food Fiesta Event System",
+          "description": "Cross-mode event system tying all game modes to core word-making loop",
+          "summary": "Designed comprehensive event infrastructure connecting multiple game modes, introduced cosmetic reward systems, and balanced progression mechanics. Result: 22% ARPDAU increase, 3% overall engagement boost, and reusable framework for future events.",
+          "keywords": ["Event Design", "Economy Balancing", "Cross-Modal Gameplay", "LiveOps"],
+          "startDate": "2024",
+          "endDate": "2024"
+        },
+        {
+          "id": "ticket-mania-project",
+          "name": "Ticket Mania Leaderboard Optimization",
+          "description": "Interactive competitive system with skill-based matchmaking and dynamic feedback",
+          "summary": "Redesigned passive leaderboard into active engagement system with ticket collection mechanics and clear player feedback loops. Collaborated with PMs on fair bucketing logic and UX team on feedback density optimization.",
+          "keywords": ["Competitive Design", "Player Psychology", "UX Optimization", "Retention"],
+          "startDate": "2024",
+          "endDate": "2024"
+        },
+        {
+          "id": "ai-tools-project",
+          "name": "AI Productivity Suite",
+          "description": "Custom AI-powered tools for game design workflow optimization",
+          "summary": "Developed Spec Maker and Meeting Manager using Cursor AI to automate feature documentation and sprint planning. Integrated with existing JIRA/Confluence workflows while maintaining quality standards.",
+          "keywords": ["AI Tools", "Workflow Automation", "Team Productivity", "Innovation"],
+          "startDate": "2026",
+          "endDate": "2026"
+        }
+      ]
+    },
+    "interests": {
+      "title": "Additional Strengths",
+      "columns": 2,
+      "hidden": false,
+      "items": [
+        {
+          "id": "mobile-first",
+          "name": "Mobile-First Design",
+          "keywords": ["Session-Based Gameplay", "Touch Optimization", "Platform Guidelines"]
+        },
+        {
+          "id": "business-acumen",
+          "name": "Business Strategy",
+          "keywords": ["F2P Monetization", "LTV Optimization", "Market Analysis"]
+        }
+      ]
+    },
+    "publications": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "volunteer": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "languages": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "awards": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "certifications": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    },
+    "references": {
+      "title": "",
+      "columns": 1,
+      "hidden": true,
+      "items": []
+    }
+  },
+  "metadata": {
+    "template": "azurill",
+    "layout": [
+      [
+        "basics",
+        "summary", 
+        "skills"
+      ],
+      [
+        "experience",
+        "achievements",
+        "projects",
+        "education",
+        "interests"
+      ]
+    ],
+    "css": {
+      "value": "/* Custom styles for ATS optimization and visual clarity */\n\n.section h3 {\n  font-weight: bold;\n  font-size: 14px;\n  text-transform: uppercase;\n  letter-spacing: 1px;\n  margin-bottom: 8px;\n}\n\n.experience-item h4 {\n  font-weight: bold;\n  font-size: 12px;\n}\n\n.experience-item .company {\n  font-weight: normal;\n  font-style: italic;\n}\n\n/* Ensure bullets are ATS-friendly */\nul li {\n  margin-bottom: 4px;\n  line-height: 1.4;\n}\n\n/* Professional color scheme */\n.section {\n  margin-bottom: 16px;\n}\n\n/* Clean typography for scanning */\nbody {\n  font-family: 'Arial', 'Calibri', sans-serif;\n  font-size: 11px;\n  line-height: 1.3;\n  color: #333;\n}",
+      "visible": false
+    },
+    "page": {
+      "margin": 18,
+      "format": "a4",
+      "options": {
+        "breakLine": true,
+        "pageNumbers": true
+      }
+    },
+    "theme": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#1e40af"
+    },
+    "typography": {
+      "font": {
+        "family": "Arial",
+        "subset": "latin",
+        "variants": ["regular", "italic", "600"],
+        "size": 11
+      },
+      "lineHeight": 1.3,
+      "hideIcons": false,
+      "underlineLinks": true
+    },
+    "notes": "Optimized resume for ATS compatibility and hiring manager impact. Features enhanced bullet points using Action+What+Result formula, quantified achievements, and mobile game industry terminology. Export as PDF for best formatting, DOCX when Word format required."
+  }
+}

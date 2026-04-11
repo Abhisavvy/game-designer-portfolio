@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-hidden="true">
+  <rect width="800" height="600" fill="#18181b"/>
+  <rect x="60" y="80" width="680" height="440" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12 8" rx="8"/>
+  <text x="400" y="320" text-anchor="middle" fill="#71717a" font-family="system-ui" font-size="22">Wireframe placeholder</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-hidden="true">
+  <rect width="800" height="600" fill="#18181b"/>
+  <g fill="#eab308" opacity="0.9">
+    <rect x="160" y="200" width="100" height="100" rx="12" transform="rotate(-8 210 250)"/>
+    <rect x="300" y="180" width="100" height="100" rx="12" transform="rotate(4 350 230)"/>
+    <rect x="440" y="210" width="100" height="100" rx="12" transform="rotate(-3 490 260)"/>
+  </g>
+  <text x="400" y="560" text-anchor="middle" fill="#71717a" font-family="system-ui" font-size="18">Tile rewards placeholder</text>
+</svg>
