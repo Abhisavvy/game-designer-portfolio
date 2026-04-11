@@ -43,19 +43,24 @@ function getProjectIcon(slug: string) {
 
 // Get metric-specific icon
 function getMetricIcon(metric: string) {
-  if (metric.includes('%') || metric.includes('ARPDAU') || metric.includes('IAP')) {
+  const lowerMetric = metric.toLowerCase();
+  
+  if (lowerMetric.includes('arpdau') || lowerMetric.includes('ltv') || lowerMetric.includes('lift')) {
     return DollarSign;
   }
-  if (metric.includes('retention') || metric.includes('bps')) {
+  if (lowerMetric.includes('retention') || lowerMetric.includes('bps')) {
     return RefreshCcw;
   }
-  if (metric.includes('engagement') || metric.includes('DAU')) {
+  if (lowerMetric.includes('engagement') || lowerMetric.includes('dau')) {
     return Users;
   }
-  if (metric.includes('LTV') || metric.includes('lift')) {
+  if (lowerMetric.includes('efficiency') || lowerMetric.includes('faster') || lowerMetric.includes('planning')) {
     return TrendingUp;
   }
-  return Target;
+  if (lowerMetric.includes('%')) {
+    return Target;
+  }
+  return TrendingUp;
 }
 
 export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps) {
@@ -190,18 +195,29 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
             animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
             transition={{ delay: index * 0.1 + 0.6 }}
           >
-            {extractMetrics(project.blurb).map((metric, metricIndex) => {
-              const MetricIcon = getMetricIcon(metric);
-              return (
-                <span
-                  key={metricIndex}
-                  className="inline-flex items-center gap-1 px-2 py-1 bg-green-600/40 backdrop-blur-sm border border-green-500/50 rounded text-green-200 text-xs font-medium drop-shadow-md"
-                >
-                  <MetricIcon className="w-3 h-3" />
-                  {metric}
-                </span>
-              );
-            })}
+            {(() => {
+              const extractedMetrics = extractMetrics(project.blurb);
+              const displayMetrics = extractedMetrics.length > 0 ? extractedMetrics : getFallbackBadges(project);
+              
+              return displayMetrics.map((metric, metricIndex) => {
+                const MetricIcon = getMetricIcon(metric);
+                const isExtracted = extractedMetrics.includes(metric);
+                
+                return (
+                  <span
+                    key={metricIndex}
+                    className={`inline-flex items-center gap-1 px-2 py-1 backdrop-blur-sm border rounded text-xs font-medium drop-shadow-md ${
+                      isExtracted 
+                        ? 'bg-green-600/40 border-green-500/50 text-green-200'
+                        : 'bg-blue-600/40 border-blue-500/50 text-blue-200'
+                    }`}
+                  >
+                    <MetricIcon className="w-3 h-3" />
+                    {metric}
+                  </span>
+                );
+              });
+            })()}
           </motion.div>
         </div>
 
@@ -232,30 +248,52 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
 function extractMetrics(blurb: string): string[] {
   const metrics: string[] = [];
   
-  // Look for percentage increases
-  const percentMatches = blurb.match(/(\+?\d+%)/g);
+  // Look for percentage increases (including ~, +, - symbols)
+  const percentMatches = blurb.match(/([\~\+\-]?\d+%)/g);
   if (percentMatches) {
     metrics.push(...percentMatches);
   }
   
-  // Look for basis points
-  const bpsMatches = blurb.match(/(\+?\d+\s?bps)/g);
+  // Look for basis points (bps)
+  const bpsMatches = blurb.match(/([\+\-]?\d+\s?bps)/gi);
   if (bpsMatches) {
     metrics.push(...bpsMatches);
   }
   
-  // Look for specific metrics like "engagement", "retention", "ARPDAU"
-  const metricKeywords = ["engagement", "retention", "ARPDAU", "LTV", "IAP"];
-  metricKeywords.forEach(keyword => {
-    if (blurb.toLowerCase().includes(keyword.toLowerCase())) {
-      // Try to extract the associated number
-      const regex = new RegExp(`${keyword}[^\\d]*([\\+\\-]?\\d+[%]?)`, 'i');
-      const match = blurb.match(regex);
-      if (match && !metrics.includes(match[1])) {
-        metrics.push(`${keyword} ${match[1]}`);
+  // Look for specific metrics with better patterns
+  const metricPatterns = [
+    { keyword: "ARPDAU", regex: /ARPDAU[\s\+]*(\+?\d+%)/i },
+    { keyword: "LTV", regex: /LTV[\s\+]*(\~?\+?\d+%?\s?lift)/i },
+    { keyword: "engagement", regex: /engagement[\s\+]*(\+?\d+%)/i },
+    { keyword: "retention", regex: /(D1\s+.*?retention[\s\+]*\+?\d+\s?bps)/i },
+    { keyword: "efficiency", regex: /(\d+%\s+.*?efficiency)/i },
+    { keyword: "planning", regex: /(\d+%\s+faster.*?planning)/i }
+  ];
+  
+  metricPatterns.forEach(({ keyword, regex }) => {
+    const match = blurb.match(regex);
+    if (match) {
+      // Clean up the match and avoid duplicates
+      const cleanMatch = match[1].trim();
+      if (!metrics.some(m => m.includes(cleanMatch.replace(/[^\w\d%]/g, '')))) {
+        metrics.push(cleanMatch);
       }
     }
   });
   
-  return metrics.slice(0, 3); // Limit to 3 metrics max
+  // Remove duplicates and limit to 3 metrics max
+  const uniqueMetrics = [...new Set(metrics)];
+  return uniqueMetrics.slice(0, 3);
+}
+
+// Fallback badges for projects without extractable metrics
+function getFallbackBadges(project: ProjectItem): string[] {
+  const fallbacks: { [key: string]: string[] } = {
+    "ai-innovation": ["AI Tools", "Productivity", "Documentation"],
+    "kinoa-integration": ["SDK Integration", "Player Flow", "Event Management"],
+    "tiles": ["Economy Design", "Cosmetics", "Ownership"],
+    "bon-voyage": ["Social Features", "Multiplayer", "Collaboration"],
+  };
+  
+  return fallbacks[project.slug] || ["Feature Design", "Systems", "Engagement"];
 }
