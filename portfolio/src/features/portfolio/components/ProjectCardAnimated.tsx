@@ -143,8 +143,8 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
           animate={isInView ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
           transition={{ delay: index * 0.1 + 0.2, type: "spring", damping: 15 }}
         >
-          <div className="p-2 bg-orange-600/20 backdrop-blur-sm border border-orange-500/30 rounded-full">
-            <IconComponent className="w-5 h-5 text-orange-300" />
+          <div className="p-2 bg-orange-600/40 backdrop-blur-sm border border-orange-500/50 rounded-full drop-shadow-md">
+            <IconComponent className="w-5 h-5 text-orange-200" />
           </div>
         </motion.div>
 
@@ -155,15 +155,18 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
           animate={isInView ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 }}
           transition={{ delay: index * 0.1 + 0.3 }}
         >
-          <span className="px-3 py-1 bg-orange-600/20 backdrop-blur-sm border border-orange-500/30 rounded-full text-orange-300 text-sm font-medium">
+          <span className="px-3 py-1 bg-orange-600/40 backdrop-blur-sm border border-orange-500/50 rounded-full text-orange-200 text-sm font-medium drop-shadow-md">
             {project.tag}
           </span>
         </motion.div>
 
+        {/* Dark gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
         {/* Main content */}
-        <div className="absolute inset-0 flex flex-col justify-end p-6">
+        <div className="absolute inset-0 flex flex-col justify-end p-6 z-10">
           <motion.h3
-            className="text-2xl font-bold text-white mb-3 group-hover:text-orange-300 transition-colors"
+            className="text-2xl font-bold text-white mb-3 group-hover:text-orange-300 transition-colors drop-shadow-lg"
             initial={{ y: 20, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
             transition={{ delay: index * 0.1 + 0.4 }}
@@ -172,7 +175,7 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
           </motion.h3>
           
           <motion.p
-            className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+            className="text-gray-100 leading-relaxed group-hover:text-white transition-colors drop-shadow-md"
             initial={{ y: 20, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
             transition={{ delay: index * 0.1 + 0.5 }}
@@ -192,7 +195,7 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
               return (
                 <span
                   key={metricIndex}
-                  className="inline-flex items-center gap-1 px-2 py-1 bg-green-600/20 border border-green-500/30 rounded text-green-300 text-xs font-medium"
+                  className="inline-flex items-center gap-1 px-2 py-1 bg-green-600/40 backdrop-blur-sm border border-green-500/50 rounded text-green-200 text-xs font-medium drop-shadow-md"
                 >
                   <MetricIcon className="w-3 h-3" />
                   {metric}
