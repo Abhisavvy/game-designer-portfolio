@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "name": "abhishek-game-designer-portfolio",
+  "github": {
+    "silent": false,
+    "autoJobCancelation": false
+  },
+  "regions": ["iad1"],
+  "functions": {
+    "portfolio/src/app/**/*.js": {
+      "maxDuration": 15
+    }
+  }
+}
