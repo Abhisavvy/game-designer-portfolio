@@ -82,7 +82,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black py-20">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Organic floating elements inspired by mobile gaming */}
@@ -294,7 +294,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
 
       {/* Main content */}
       <motion.div
-        className="relative z-10 text-center px-6 max-w-5xl mx-auto"
+        className="relative z-10 text-center px-6 max-w-5xl mx-auto pb-20"
         variants={containerVariants}
         initial="visible"
         animate="visible"
@@ -373,7 +373,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
 
         <motion.div
           variants={itemVariants}
-          className="space-y-4"
+          className="space-y-4 mt-8"
         >
           <motion.button
             className="group relative px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full text-black font-semibold text-lg transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/25"
@@ -394,7 +394,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-400"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 text-gray-400 z-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
