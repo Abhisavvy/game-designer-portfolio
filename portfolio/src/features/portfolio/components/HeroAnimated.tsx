@@ -87,7 +87,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
       <div className="absolute inset-0 overflow-hidden">
         {/* Organic floating elements inspired by mobile gaming */}
         <motion.div
-          className="absolute w-64 h-64 bg-gradient-to-r from-orange-600/15 to-orange-500/20 rounded-[40%_60%_70%_30%] blur-3xl"
+          className="absolute w-64 h-64 bg-gradient-to-r from-orange-600/8 to-orange-500/12 rounded-[40%_60%_70%_30%] blur-3xl"
           animate={{
             x: mousePosition.x * 0.02,
             y: mousePosition.y * 0.02,
@@ -104,7 +104,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
           }}
         />
         <motion.div
-          className="absolute w-96 h-96 bg-gradient-to-r from-orange-500/10 to-orange-400/15 rounded-[70% 30% 50% 50%] blur-3xl"
+          className="absolute w-96 h-96 bg-gradient-to-r from-orange-500/5 to-orange-400/8 rounded-[70% 30% 50% 50%] blur-3xl"
           animate={{
             x: mousePosition.x * -0.01,
             y: mousePosition.y * -0.01,
@@ -121,7 +121,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
           }}
         />
         <motion.div
-          className="absolute w-48 h-48 bg-gradient-to-r from-orange-400/20 to-orange-300/25 rounded-[60% 40% 40% 60%] blur-2xl"
+          className="absolute w-48 h-48 bg-gradient-to-r from-orange-400/8 to-orange-300/12 rounded-[60% 40% 40% 60%] blur-2xl"
           animate={{
             x: mousePosition.x * 0.015,
             y: mousePosition.y * 0.015,
@@ -305,7 +305,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
           variants={itemVariants}
         >
           <div className="relative w-32 h-32 mx-auto mb-6">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-600/30 to-orange-500/40 rounded-full blur-xl opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-orange-500/25 rounded-full blur-xl opacity-40" />
             <OptimizedImage
               src="/assets/general/profile/abhishek-headshot.webp"
               alt="Abhishek Dutta - Game Designer"
@@ -326,16 +326,16 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
         </motion.div>
 
         <motion.h1
-          className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
+          className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           variants={itemVariants}
         >
-          <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+          <span className="text-white drop-shadow-lg">
             {headline}
           </span>
         </motion.h1>
 
         <motion.p
-          className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+          className="text-xl md:text-2xl text-gray-100 mb-12 max-w-3xl mx-auto leading-relaxed drop-shadow-md"
           variants={itemVariants}
         >
           {subline}
@@ -362,9 +362,9 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
                 whileHover={{ scale: 1.02 }}
                 custom={index}
               >
-                <div className="flex items-center space-x-2 px-4 py-2 bg-zinc-900/40 border border-orange-500/20 rounded-lg text-white font-normal text-sm hover:border-orange-500/40 transition-colors">
+                <div className="flex items-center space-x-2 px-4 py-2 bg-zinc-900/80 border border-orange-500/30 rounded-lg text-white font-normal text-sm hover:border-orange-500/60 transition-colors backdrop-blur-sm">
                   <Icon className="w-4 h-4 text-orange-400" />
-                  <span className="text-gray-300">{pill}</span>
+                  <span className="text-gray-100">{pill}</span>
                 </div>
               </motion.div>
             );
@@ -394,20 +394,20 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-6 sm:bottom-8 left-0 right-0 flex flex-col items-center justify-center text-gray-400 z-20"
+        className="absolute bottom-6 sm:bottom-8 left-0 right-0 flex flex-col items-center justify-center text-gray-200 z-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
       >
         <motion.div
-          className="flex flex-col items-center justify-center space-y-2"
+          className="flex flex-col items-center justify-center space-y-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full"
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         >
-          <span className="text-sm text-center">Scroll to explore</span>
-          <div className="w-6 h-10 border-2 border-gray-600 rounded-full flex items-center justify-center">
+          <span className="text-sm text-center font-medium">Scroll to explore</span>
+          <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex items-center justify-center">
             <motion.div
-              className="w-1 h-3 bg-gray-400 rounded-full"
+              className="w-1 h-3 bg-gray-200 rounded-full"
               animate={{ y: [0, 12, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
             />

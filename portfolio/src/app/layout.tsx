@@ -35,7 +35,7 @@ export default function RootLayout({
         <Providers>
           <SiteMetaSync />
           <SiteHeader />
-          <div className="min-h-screen bg-zinc-950">{children}</div>
+          <div className="min-h-screen bg-zinc-950 pt-14">{children}</div>
           <SiteFooter />
         </Providers>
       </body>
