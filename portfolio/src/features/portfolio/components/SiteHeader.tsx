@@ -42,18 +42,17 @@ export function SiteHeader() {
               </svg>
             </div>
           </div>
-          <span className="font-display text-xs sm:text-base tracking-wide hidden xs:inline-block" style={{ fontFamily: 'Quicksand, Poppins, system-ui, sans-serif', fontWeight: '600', letterSpacing: '0.5px' }}>Abhishek in a nutshell</span>
-          <span className="font-display text-xs tracking-wide xs:hidden" style={{ fontFamily: 'Quicksand, Poppins, system-ui, sans-serif', fontWeight: '600', letterSpacing: '0.5px' }}>AD</span>
+          <span className="font-display text-sm sm:text-base tracking-wide hidden md:inline-block" style={{ fontFamily: 'Quicksand, Poppins, system-ui, sans-serif', fontWeight: '600', letterSpacing: '0.5px' }}>Abhishek in a nutshell</span>
         </Link>
-        <nav className="flex items-center justify-end gap-x-2 sm:gap-x-4 text-xs sm:text-sm text-orange-100/80">
+        <nav className="flex items-center justify-end gap-x-3 sm:gap-x-4 text-sm sm:text-base text-white/90">
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center space-x-1 transition hover:text-white hover:bg-white/10 px-1.5 py-1 sm:px-2 rounded-md font-bold whitespace-nowrap"
+              className="flex items-center space-x-1.5 transition-all duration-200 hover:text-white hover:bg-white/15 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg font-bold whitespace-nowrap hover:scale-105"
             >
-              <item.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
-              <span className="hidden sm:inline">{item.label}</span>
+              <item.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+              <span className="hidden md:inline">{item.label}</span>
             </Link>
           ))}
         </nav>

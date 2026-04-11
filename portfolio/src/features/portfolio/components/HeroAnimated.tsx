@@ -394,20 +394,20 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 text-gray-400 z-20"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 text-gray-400 z-20 w-fit"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
       >
         <motion.div
-          className="flex flex-col items-center space-y-2"
+          className="flex flex-col items-center justify-center space-y-2"
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         >
-          <span className="text-sm">Scroll to explore</span>
-          <div className="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center">
+          <span className="text-sm text-center whitespace-nowrap">Scroll to explore</span>
+          <div className="w-6 h-10 border-2 border-gray-600 rounded-full flex items-center justify-center mx-auto">
             <motion.div
-              className="w-1 h-3 bg-gray-400 rounded-full mt-2"
+              className="w-1 h-3 bg-gray-400 rounded-full"
               animate={{ y: [0, 12, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
             />
