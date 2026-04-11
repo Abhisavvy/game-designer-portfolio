@@ -10,9 +10,10 @@ import {
   Building,
   Award,
   Code,
-  Gamepad2
+  Gamepad2,
+  Phone
 } from "lucide-react";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 
 export function ResumePageContent() {
   const { person } = defaultPortfolioContent;
@@ -38,22 +39,33 @@ export function ResumePageContent() {
 
           {/* Contact Info */}
           <div className="flex flex-wrap justify-center gap-6 mt-6 text-sm text-gray-400">
-            <div className="flex items-center space-x-2">
+            <a 
+              href={`mailto:${person.email}`}
+              className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+            >
               <Mail className="w-4 h-4" />
               <span>{person.email}</span>
-            </div>
+            </a>
+            <a 
+              href={`tel:${person.phone}`}
+              className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              <span>{person.phone}</span>
+            </a>
+            <a 
+              href={person.links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+            >
+              <FaLinkedin className="w-4 h-4" />
+              <span>LinkedIn</span>
+            </a>
             <div className="flex items-center space-x-2">
               <MapPin className="w-4 h-4" />
               <span>{person.location}</span>
             </div>
-            <a href={person.links.linkedin} className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
-              <FaLinkedin className="w-4 h-4" />
-              <span>LinkedIn</span>
-            </a>
-            <a href={person.links.github} className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
-              <FaGithub className="w-4 h-4" />
-              <span>GitHub</span>
-            </a>
           </div>
 
           {/* Download Button */}

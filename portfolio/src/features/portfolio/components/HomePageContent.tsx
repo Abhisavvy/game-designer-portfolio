@@ -6,8 +6,8 @@ import { StickySkillsSection } from "./StickySkillsSection";
 import { defaultPortfolioContent } from "../data/site-content";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Mail, ExternalLink, MapPin, User } from "lucide-react";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { Mail, ExternalLink, MapPin, User, Phone } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { OptimizedImage } from "./OptimizedImage";
 
 export function HomePageContent() {
@@ -145,9 +145,11 @@ export function HomePageContent() {
                 <span>Get in Touch</span>
               </motion.a>
 
-              <div className="flex justify-center items-center space-x-6 text-gray-400">
+              <div className="flex justify-center items-center space-x-6 text-gray-400 flex-wrap gap-4">
                 <a
                   href={person.links.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
                 >
                   <FaLinkedin className="w-4 h-4" />
@@ -155,11 +157,19 @@ export function HomePageContent() {
                 </a>
                 <span>•</span>
                 <a
-                  href={person.links.github}
+                  href={`mailto:${person.email}`}
                   className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
                 >
-                  <FaGithub className="w-4 h-4" />
-                  <span>GitHub</span>
+                  <Mail className="w-4 h-4" />
+                  <span>Email</span>
+                </a>
+                <span>•</span>
+                <a
+                  href={`tel:${person.phone}`}
+                  className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Phone</span>
                 </a>
                 <span>•</span>
                 <div className="flex items-center space-x-2">

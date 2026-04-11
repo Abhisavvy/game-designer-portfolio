@@ -89,10 +89,10 @@ export type PortfolioContentState = {
     role: string;
     tagline: string;
     email: string;
+    phone: string;
     location: string;
     links: {
       linkedin: string;
-      github: string;
       resumePdf: string;
     };
   };
@@ -174,11 +174,11 @@ export const defaultPortfolioContent: PortfolioContentState = {
     role: "Systems & Feature Designer | LiveOps Expert",
     tagline:
       "Driving engagement through data-driven systems design · LiveOps · Economy · Retention mechanics that convert",
-    email: "you@example.com",
+    email: "abhishek.dt.97@gmail.com",
+    phone: "+91-7980700802",
     location: "Available worldwide · remote-friendly",
     links: {
-      linkedin: "https://linkedin.com/in/yourprofile",
-      github: "https://github.com/yourusername",
+      linkedin: "https://linkedin.com/in/abhishek-dt97",
       resumePdf: "",
     },
   },
