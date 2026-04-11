@@ -19,7 +19,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0 text-sm font-semibold tracking-tight text-white transition hover:text-orange-200"
+          className="flex items-center space-x-2 sm:space-x-3 flex-shrink min-w-0 text-sm font-semibold tracking-tight text-white transition hover:text-orange-200"
         >
           <div className="relative w-7 h-7 sm:w-8 sm:h-8 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden flex-shrink-0">
             {/* Geometric background pattern */}
@@ -42,7 +42,9 @@ export function SiteHeader() {
               </svg>
             </div>
           </div>
-          <span className="font-display text-sm sm:text-base tracking-wide hidden md:inline-block" style={{ fontFamily: 'Quicksand, Poppins, system-ui, sans-serif', fontWeight: '600', letterSpacing: '0.5px' }}>Abhishek in a nutshell</span>
+          <span className="font-display text-sm sm:text-base tracking-wide hidden sm:inline-block truncate min-w-0" style={{ fontFamily: 'Quicksand, Poppins, system-ui, sans-serif', fontWeight: '600', letterSpacing: '0.5px' }}>
+            Abhishek in a nutshell
+          </span>
         </Link>
         <nav className="flex items-center justify-end gap-x-3 sm:gap-x-4 text-sm sm:text-base text-white/90">
           {nav.map((item) => (
