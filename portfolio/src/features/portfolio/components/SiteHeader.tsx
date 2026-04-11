@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { defaultPortfolioContent } from "../data/site-content";
 import { Zap, User, Briefcase, Mail, FileText } from "lucide-react";
 
@@ -27,9 +28,11 @@ export function SiteHeader() {
             
             {/* Custom brand icon */}
             <div className="absolute inset-0 flex items-center justify-center p-1.5">
-              <img 
+              <Image 
                 src="/icon.svg" 
                 alt="Brand Icon"
+                width={20}
+                height={20}
                 className="w-full h-full object-contain filter brightness-0 invert"
               />
             </div>
