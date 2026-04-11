@@ -2,7 +2,7 @@
 
 > **Professional portfolio showcasing systems design, feature design, and LiveOps expertise in game development**
 
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fabhdutta%2Fgame-designer-portfolio&root-directory=portfolio)
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAbhisavvy%2Fgame-designer-portfolio&root-directory=portfolio)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
@@ -74,7 +74,7 @@ career-workspace/
 ### **Local Development**
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR-USERNAME/game-designer-portfolio.git
+git clone https://github.com/Abhisavvy/game-designer-portfolio.git
 cd game-designer-portfolio
 
 # Install dependencies
@@ -207,6 +207,6 @@ Passionate about creating engaging game experiences through data-driven design a
 
 **Built with ❤️ by a Game Designer for Game Designers**
 
-[⭐ Star this repo](https://github.com/YOUR-USERNAME/game-designer-portfolio/stargazers) if it helped you create your portfolio!
+[⭐ Star this repo](https://github.com/Abhisavvy/game-designer-portfolio/stargazers) if it helped you create your portfolio!
 
 </div>
