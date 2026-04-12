@@ -356,8 +356,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             outcome: "The tools eliminated manual reformatting entirely — one meeting extraction now feeds both stakeholder emails and the spec pipeline. Team members joining projects mid-stream get full context without knowledge transfer sessions.\n\nThe 8-person dev team adopted this as the standard workflow, with all specs following consistent structure. Most importantly, we stopped rewriting the same content for emails, specs, and presentations. One input, multiple outputs.",
             contributions: "I identified the core problem: messy meeting notes were creating bottlenecks in our spec pipeline. So I designed a two-tool solution that automates the entire process.\n\nI built the Feature Spec Dashboard as a web app with Granola integration, handling the data sorting and dual output generation. The template system I created uses standard section headers that align perfectly with our spec format.\n\nI also built Spec Maker as a local tool that generates complete markdown specs, with PPTX export planned for presentations. Most importantly, I drove adoption across the entire 8-person dev team, making this our standard workflow.",
             links: [
-                { label: "Feature Spec Dashboard", href: "https://abhishekdutta1-project.vercel.app/" },
-                { label: "Spec Maker (Local)", href: "#" },
+                { label: "Feature Spec Dashboard", href: "https://abhishekdutta1-project.vercel.app/" }
             ],
             media: {
                 hero: {
