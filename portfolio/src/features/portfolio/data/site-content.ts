@@ -237,12 +237,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
                     heading: "Design process",
                     items: [
                         {
-                            thumb: "/assets/bon-voyage/gallery-progression.svg",
-                            full: "/assets/bon-voyage/gallery-progression.svg",
-                            alt: "60-level progression curve and key requirements",
-                            label: "Progression"
-                        },
-                        {
                             thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             full: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             alt: "Seasons IAP Distribution",
