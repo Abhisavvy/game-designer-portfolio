@@ -330,6 +330,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/tiles/feedback-win-1776014988056.png",
                             alt: "Tile Grant feedback",
                             label: "gallery - Feedback_Win.png"
+                        },
+                        {
+                            thumb: "/assets/tiles/tiles-on-home-screen-1776015076972.png",
+                            full: "/assets/tiles/tiles-on-home-screen-1776015076972.png",
+                            alt: "Tile screen",
+                            label: "Gallery - Tiles on Home Screen.png"
                         }
                     ]
                 }
