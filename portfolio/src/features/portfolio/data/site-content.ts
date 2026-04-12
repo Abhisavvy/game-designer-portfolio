@@ -252,6 +252,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/bon-voyage/feedback-win-xpcollection-1776013416918.png",
                             alt: "Feedback from outro",
                             label: "Gallery - Feedback_Win_XPCollection.png"
+                        },
+                        {
+                            thumb: "/assets/bon-voyage/seasons-iap-distribution-1776013983172.png",
+                            full: "/assets/bon-voyage/seasons-iap-distribution-1776013983172.png",
+                            alt: "IAP distribution on player cohorts",
+                            label: "Gallery - Seasons IAP distribution.png"
                         }
                     ]
                 }
