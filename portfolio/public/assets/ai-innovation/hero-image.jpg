@@ -1,11 +1,117 @@
-<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="300" fill="#F3F4F6"/>
-  <rect x="1" y="1" width="398" height="298" stroke="#E5E7EB" stroke-width="2" stroke-dasharray="8 8"/>
-  <circle cx="200" cy="120" r="30" fill="#D1D5DB"/>
-  <path d="M185 115 L200 105 L215 115 L210 125 L190 125 Z" fill="#9CA3AF"/>
-  <rect x="150" y="180" width="100" height="8" rx="4" fill="#E5E7EB"/>
-  <rect x="170" y="200" width="60" height="6" rx="3" fill="#F3F4F6"/>
-  <text x="200" y="250" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="12">
-    Upload Image
-  </text>
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="outputGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="28" font-weight="bold">AI & Innovation</text>
+  <text x="400" y="75" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="14">Meeting Notes → Structured Specs</text>
+  
+  <!-- Input: Messy Meeting Notes -->
+  <g transform="translate(50, 120)">
+    <rect x="0" y="0" width="180" height="120" rx="8" fill="#374151" stroke="#4b5563" stroke-width="2"/>
+    <text x="90" y="20" text-anchor="middle" fill="#f3f4f6" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Messy Meeting Notes</text>
+    
+    <!-- Chaotic text lines -->
+    <line x1="15" y1="35" x2="120" y2="35" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="15" y1="45" x2="80" y2="45" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="15" y1="55" x2="140" y2="55" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="15" y1="65" x2="60" y2="65" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="15" y1="75" x2="110" y2="75" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="15" y1="85" x2="90" y2="85" stroke="#9ca3af" stroke-width="2"/>
+    <line x1="15" y1="95" x2="130" y2="95" stroke="#9ca3af" stroke-width="2"/>
+    
+    <!-- Scattered dots to show chaos -->
+    <circle cx="150" cy="40" r="2" fill="#ef4444"/>
+    <circle cx="160" cy="60" r="2" fill="#f59e0b"/>
+    <circle cx="155" cy="80" r="2" fill="#ef4444"/>
+  </g>
+  
+  <!-- AI Processing Arrow -->
+  <g transform="translate(280, 160)">
+    <path d="M0 20 L80 20 L70 10 M80 20 L70 30" stroke="url(#aiGradient)" stroke-width="3" fill="none"/>
+    <rect x="25" y="5" width="30" height="30" rx="15" fill="url(#aiGradient)"/>
+    <text x="40" y="23" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">AI</text>
+  </g>
+  
+  <!-- Processing Box -->
+  <g transform="translate(400, 120)">
+    <rect x="0" y="0" width="160" height="120" rx="8" fill="#1f2937" stroke="url(#aiGradient)" stroke-width="2"/>
+    <text x="80" y="20" text-anchor="middle" fill="#f3f4f6" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Feature Spec Dashboard</text>
+    
+    <!-- Processing visualization -->
+    <rect x="15" y="30" width="130" height="8" rx="4" fill="#374151"/>
+    <rect x="15" y="30" width="90" height="8" rx="4" fill="url(#aiGradient)"/>
+    
+    <rect x="15" y="45" width="130" height="8" rx="4" fill="#374151"/>
+    <rect x="15" y="45" width="110" height="8" rx="4" fill="url(#aiGradient)"/>
+    
+    <rect x="15" y="60" width="130" height="8" rx="4" fill="#374151"/>
+    <rect x="15" y="60" width="70" height="8" rx="4" fill="url(#aiGradient)"/>
+    
+    <!-- Structured sections -->
+    <text x="20" y="85" fill="#94a3b8" font-family="Arial, sans-serif" font-size="9">• Problem Statement</text>
+    <text x="20" y="95" fill="#94a3b8" font-family="Arial, sans-serif" font-size="9">• Business Goals</text>
+    <text x="20" y="105" fill="#94a3b8" font-family="Arial, sans-serif" font-size="9">• User Flows</text>
+  </g>
+  
+  <!-- Output Arrow -->
+  <g transform="translate(600, 160)">
+    <path d="M0 20 L80 20 L70 10 M80 20 L70 30" stroke="url(#outputGradient)" stroke-width="3" fill="none"/>
+  </g>
+  
+  <!-- Output: Structured Specs -->
+  <g transform="translate(570, 280)">
+    <rect x="0" y="0" width="180" height="100" rx="8" fill="#065f46" stroke="url(#outputGradient)" stroke-width="2"/>
+    <text x="90" y="20" text-anchor="middle" fill="#f3f4f6" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Structured Specs</text>
+    
+    <!-- Clean organized lines -->
+    <rect x="15" y="30" width="150" height="3" rx="1" fill="#10b981"/>
+    <rect x="15" y="40" width="120" height="3" rx="1" fill="#10b981"/>
+    <rect x="15" y="50" width="140" height="3" rx="1" fill="#10b981"/>
+    <rect x="15" y="60" width="100" height="3" rx="1" fill="#10b981"/>
+    <rect x="15" y="70" width="130" height="3" rx="1" fill="#10b981"/>
+    <rect x="15" y="80" width="110" height="3" rx="1" fill="#10b981"/>
+    
+    <!-- Success indicator -->
+    <circle cx="160" cy="35" r="8" fill="#10b981"/>
+    <path d="M155 35 L158 38 L165 31" stroke="#ffffff" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- Secondary Output: Stakeholder Emails -->
+  <g transform="translate(50, 280)">
+    <rect x="0" y="0" width="160" height="100" rx="8" fill="#1e40af" stroke="#3b82f6" stroke-width="2"/>
+    <text x="80" y="20" text-anchor="middle" fill="#f3f4f6" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Stakeholder Emails</text>
+    
+    <!-- Email icon -->
+    <rect x="20" y="30" width="120" height="60" rx="4" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1"/>
+    <path d="M20 35 L80 55 L140 35" stroke="#3b82f6" stroke-width="2" fill="none"/>
+    
+    <!-- Email lines -->
+    <rect x="30" y="65" width="80" height="2" rx="1" fill="#60a5fa"/>
+    <rect x="30" y="72" width="60" height="2" rx="1" fill="#60a5fa"/>
+    <rect x="30" y="79" width="70" height="2" rx="1" fill="#60a5fa"/>
+  </g>
+  
+  <!-- Connection lines showing dual output -->
+  <path d="M480 180 Q520 220 520 280" stroke="url(#outputGradient)" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+  <path d="M480 180 Q280 220 130 280" stroke="#3b82f6" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+  
+  <!-- Bottom tagline -->
+  <text x="400" y="360" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="12">One Input • Multiple Outputs • Zero Manual Work</text>
 </svg>
