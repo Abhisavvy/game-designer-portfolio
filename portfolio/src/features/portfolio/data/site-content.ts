@@ -291,6 +291,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/food-fiesta/feedback-win-1776013836481.png",
                             alt: "Feedback on outro",
                             label: "Gallery - Feedback_Win.png"
+                        },
+                        {
+                            thumb: "/assets/food-fiesta/home-01-1776014074294.png",
+                            full: "/assets/food-fiesta/home-01-1776014074294.png",
+                            alt: "Event FTUE",
+                            label: "Gallery - Home_01.png"
                         }
                     ]
                 }
