@@ -243,12 +243,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             label: "Progression"
                         },
                         {
-                            thumb: "/assets/bon-voyage/gallery-economy.svg",
-                            full: "/assets/bon-voyage/gallery-economy.svg",
-                            alt: "Gems economy design and coin de-risking model",
-                            label: "Economy"
-                        },
-                        {
                             thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             full: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             alt: "Seasons IAP Distribution",
