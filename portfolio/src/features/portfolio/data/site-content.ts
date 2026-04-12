@@ -249,12 +249,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             label: "Economy"
                         },
                         {
-                            thumb: "/assets/bon-voyage/gallery-progression.svg",
-                            full: "/assets/bon-voyage/gallery-progression.svg",
-                            alt: "A/B test results dashboard showing IAP and retention lifts",
-                            label: "Results"
-                        },
-                        {
                             thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             full: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             alt: "Seasons IAP Distribution",
