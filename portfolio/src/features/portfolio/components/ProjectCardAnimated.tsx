@@ -176,12 +176,12 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
 
         {/* Top badge/tag */}
         <motion.div
-          className="absolute top-4 right-4 z-10"
+          className="absolute top-4 right-4 z-10 max-w-[60%]"
           initial={{ x: 20, opacity: 0 }}
           animate={isInView ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 }}
           transition={{ delay: index * 0.1 + 0.3 }}
         >
-          <span className="px-3 py-1 bg-orange-600/40 backdrop-blur-sm border border-orange-500/50 rounded-full text-orange-200 text-sm font-medium drop-shadow-md">
+          <span className="px-3 py-1 bg-orange-600/40 backdrop-blur-sm border border-orange-500/50 rounded-full text-orange-200 text-sm font-medium drop-shadow-md truncate block">
             {project.tag}
           </span>
         </motion.div>
@@ -192,7 +192,13 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
         {/* Main content */}
         <div className="absolute inset-0 flex flex-col justify-end p-6 z-10">
           <motion.h3
-            className="text-2xl font-bold text-white mb-3 group-hover:text-orange-300 transition-colors drop-shadow-lg"
+            className="text-xl lg:text-2xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors drop-shadow-lg"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden'
+            }}
             initial={{ y: 20, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
             transition={{ delay: index * 0.1 + 0.4 }}
@@ -201,7 +207,13 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
           </motion.h3>
           
           <motion.p
-            className="text-gray-100 leading-relaxed group-hover:text-white transition-colors drop-shadow-md"
+            className="text-gray-100 leading-relaxed group-hover:text-white transition-colors drop-shadow-md mb-3"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden'
+            }}
             initial={{ y: 20, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
             transition={{ delay: index * 0.1 + 0.5 }}
@@ -361,7 +373,7 @@ function extractMetrics(blurb: string): string[] {
 function getFallbackBadges(project: ProjectItem): string[] {
   const fallbacks: { [key: string]: string[] } = {
     "ai-innovation": ["25% doc efficiency", "40% faster planning", "AI productivity tools"],
-    "kinoa-integration": ["SDK integration", "Player flow optimization", "Event management"],
+    "kinoa-integration": ["SDK integration", "Event flows", "Player engagement"],
     "tiles": ["Economy redesign", "Cosmetic rewards", "Player ownership"],
     "bon-voyage": ["Social mechanics", "PvP features", "Player collaboration"],
   };

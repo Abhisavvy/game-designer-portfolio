@@ -203,10 +203,10 @@ export const defaultPortfolioContent: PortfolioContentState = {
     },
     {
       slug: "kinoa-integration",
-      title: "Kinoa LiveOps Integration",
-      tag: "LiveOps Platform · SDK Integration",
+      title: "Kinoa SDK Integration",
+      tag: "LiveOps Platform",
       blurb:
-        "Designed seamless Kinoa SDK integration and optimized player engagement through event management flows.",
+        "Seamless SDK integration with optimized event flows for enhanced player engagement.",
       href: "/work/kinoa-integration",
       externalUrl: "",
     },
