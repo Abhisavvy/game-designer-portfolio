@@ -2,7 +2,109 @@
 
 import { useState, useEffect } from 'react';
 import { ImageUploader } from '@/features/admin/components/ImageUploader';
+import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
 import { Image as ImageIcon, Trash2, Download, Filter, Search } from 'lucide-react';
+import { defaultPortfolioContent } from '@/features/portfolio/data/site-content';
+
+// Component to show actual project images from site-content.ts
+function ProjectImagesOverview({ onResetPlaceholder }: { onResetPlaceholder: (slug: string) => void }) {
+  const projects = defaultPortfolioContent.projects;
+  const caseStudies = defaultPortfolioContent.caseStudies;
+
+  return (
+    <div className="space-y-6">
+      {/* Hero Images */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Hero Images</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          {projects.map((project) => {
+            const caseStudy = caseStudies[project.slug as keyof typeof caseStudies];
+            const imageSrc = caseStudy?.media?.hero?.posterSrc || '/assets/placeholder-image.svg';
+            const isPlaceholder = imageSrc.includes('placeholder-image.svg');
+            
+            return (
+              <div key={project.slug} className="text-center">
+                <div className="relative">
+                  <img
+                    src={imageSrc}
+                    alt={`${project.title} hero`}
+                    className="w-full h-20 object-cover rounded-lg border border-gray-300 mb-2"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/assets/placeholder-image.svg';
+                    }}
+                  />
+                  <div className={`absolute top-1 right-1 text-white text-xs px-1 rounded ${
+                    isPlaceholder ? 'bg-orange-500' : 'bg-green-500'
+                  }`}>
+                    {imageSrc.endsWith('.svg') ? 'SVG' : imageSrc.endsWith('.png') ? 'PNG' : 'IMG'}
+                  </div>
+                  <button
+                    onClick={() => onResetPlaceholder(project.slug)}
+                    className={`absolute bottom-1 right-1 text-white text-xs px-2 py-1 rounded transition-colors ${
+                      isPlaceholder 
+                        ? 'bg-red-500 hover:bg-red-600' 
+                        : 'bg-blue-500 hover:bg-blue-600'
+                    }`}
+                    title={isPlaceholder ? "Reset placeholder" : "Reset to placeholder"}
+                  >
+                    Reset
+                  </button>
+                </div>
+                <p className="text-xs text-gray-600 truncate" title={project.title}>
+                  {project.slug}
+                </p>
+                <p className="text-xs text-gray-500 truncate" title={project.title}>
+                  {project.title}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Gallery Images */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Gallery Images</h3>
+        <div className="space-y-4">
+          {projects.map((project) => {
+            const caseStudy = caseStudies[project.slug as keyof typeof caseStudies];
+            const galleryItems = caseStudy?.media?.processGallery?.items || [];
+            
+            if (galleryItems.length === 0) return null;
+            
+            return (
+              <div key={`gallery-${project.slug}`} className="border border-gray-200 rounded-lg p-4">
+                <h4 className="font-medium text-gray-900 mb-2">{project.title} Gallery</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {galleryItems.map((item, index) => (
+                    <div key={index} className="text-center">
+                      <div className="relative">
+                        <img
+                          src={item.thumb}
+                          alt={item.alt}
+                          className="w-full h-16 object-cover rounded-md border border-gray-300 mb-1"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/assets/placeholder-image.svg';
+                          }}
+                        />
+                        <div className="absolute top-1 right-1 bg-blue-500 text-white text-xs px-1 rounded">
+                          {item.thumb.endsWith('.svg') ? 'SVG' : item.thumb.endsWith('.png') ? 'PNG' : 'IMG'}
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-600 truncate" title={item.label}>
+                        {item.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface Asset {
   filename: string;
@@ -73,6 +175,31 @@ export default function AssetsManagementPage() {
     }
   };
 
+  const resetPlaceholder = async (projectSlug: string) => {
+    if (!confirm(`Reset placeholder for ${projectSlug}? This will set it back to the default placeholder image.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin/assets/reset-placeholder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectSlug, resetType: 'hero' }),
+      });
+
+      if (response.ok) {
+        alert('Placeholder reset successfully');
+        // Reload the page to show updated placeholders
+        window.location.reload();
+      } else {
+        alert('Failed to reset placeholder');
+      }
+    } catch (error) {
+      console.error('Failed to reset placeholder:', error);
+      alert('Failed to reset placeholder');
+    }
+  };
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -97,39 +224,42 @@ export default function AssetsManagementPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Assets Management</h1>
-        <p className="text-gray-600">
-          Upload and manage images and media files for your portfolio projects.
-        </p>
+      <AdminBreadcrumb />
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <ImageIcon className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-1">Assets Management</h1>
+            <p className="text-slate-600">
+              Upload and manage images and media files for your portfolio projects.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Current Project Images Overview */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Current Project Images</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          {['bon-voyage', 'food-fiesta', 'tiles', 'word-roll-events', 'ai-innovation', 'kinoa-integration', 'ticket-mania'].map((slug) => (
-            <div key={slug} className="text-center">
-              <div className="relative">
-                <img
-                  src={`/assets/${slug}/poster.svg`}
-                  alt={`${slug} hero`}
-                  className="w-full h-20 object-cover rounded-lg border border-gray-300 mb-2"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/assets/placeholder-image.svg';
-                  }}
-                />
-                <div className="absolute top-1 right-1 bg-orange-500 text-white text-xs px-1 rounded">
-                  SVG
-                </div>
-              </div>
-              <p className="text-xs text-gray-600 truncate">{slug}</p>
-            </div>
-          ))}
+        <ProjectImagesOverview onResetPlaceholder={resetPlaceholder} />
+        
+        <div className="mt-4 flex items-center justify-between">
+          <p className="text-sm text-gray-600">
+            <strong>Orange badges</strong> indicate placeholder images, <strong>green badges</strong> indicate actual project images. Click "Reset" to change any image back to placeholder.
+          </p>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => {
+                const projectSlugs = defaultPortfolioContent.projects.map(p => p.slug);
+                projectSlugs.forEach(slug => resetPlaceholder(slug));
+              }}
+              className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded-md hover:bg-red-100 transition-colors border border-red-200"
+            >
+              Reset All to Placeholders
+            </button>
+          </div>
         </div>
-        <p className="text-sm text-gray-600 mt-4">
-          <strong>Orange badges</strong> indicate placeholder images. Upload new images via project editors to replace them.
-        </p>
       </div>
 
       {/* Upload Section */}

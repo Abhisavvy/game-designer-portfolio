@@ -1,0 +1,27 @@
+/* Force dark text in all admin form inputs */
+.admin-panel input[type="text"],
+.admin-panel input[type="email"], 
+.admin-panel input[type="url"],
+.admin-panel input[type="tel"],
+.admin-panel textarea,
+.admin-panel select {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+.admin-panel input[type="text"]:focus,
+.admin-panel input[type="email"]:focus, 
+.admin-panel input[type="url"]:focus,
+.admin-panel input[type="tel"]:focus,
+.admin-panel textarea:focus,
+.admin-panel select:focus {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+/* Ensure placeholder text remains visible but distinct */
+.admin-panel input::placeholder,
+.admin-panel textarea::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}

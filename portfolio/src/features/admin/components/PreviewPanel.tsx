@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Monitor, Tablet, Smartphone, ExternalLink } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Monitor, Tablet, Smartphone, ExternalLink, RefreshCw } from 'lucide-react';
 
 interface PreviewPanelProps {
   previewUrl?: string;
@@ -36,6 +36,8 @@ const devices = {
 export function PreviewPanel({ previewUrl = '/' }: PreviewPanelProps) {
   const [activeDevice, setActiveDevice] = useState<DeviceType>('desktop');
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const currentDevice = devices[activeDevice];
 
@@ -48,21 +50,36 @@ export function PreviewPanel({ previewUrl = '/' }: PreviewPanelProps) {
     setIsLoading(false);
   };
 
+  const handleRefresh = () => {
+    setIsLoading(true);
+    setRefreshKey(prev => prev + 1);
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-900">Live Preview</h3>
-          <a
-            href={previewUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-700"
-          >
-            <ExternalLink size={16} />
-            <span>Open in new tab</span>
-          </a>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={handleRefresh}
+              className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-100"
+              title="Refresh preview"
+            >
+              <RefreshCw size={16} />
+              <span>Refresh</span>
+            </button>
+            <a
+              href={previewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-700"
+            >
+              <ExternalLink size={16} />
+              <span>Open in new tab</span>
+            </a>
+          </div>
         </div>
         
         {/* Device Selector */}
@@ -109,6 +126,8 @@ export function PreviewPanel({ previewUrl = '/' }: PreviewPanelProps) {
 
             {/* Preview Iframe */}
             <iframe
+              ref={iframeRef}
+              key={refreshKey}
               src={previewUrl}
               className="w-full h-full border-0"
               onLoad={handleIframeLoad}

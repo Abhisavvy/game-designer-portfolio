@@ -391,6 +391,24 @@ export class ASTManipulator {
     }
   }
 
+  addGalleryImage(slug: string, imageData: { path: string; alt: string; label: string }): void {
+    this.requireDefaultPortfolioRoot("ASTManipulator.addGalleryImage");
+    const transformer = this.createDefaultContentRootTransformer((root, factory) =>
+      this.addGalleryImageToProject(root, slug, imageData, factory),
+    );
+    const result = ts.transform(this.sourceFile, [transformer]);
+    try {
+      const next = result.transformed[0];
+      if (!next || !ts.isSourceFile(next)) {
+        throw new Error("AST transform did not return a SourceFile");
+      }
+      this.writeTransformedFile(next);
+      this.sourceFile = next;
+    } finally {
+      result.dispose();
+    }
+  }
+
   deleteProject(slug: string): void {
     this.requireDefaultPortfolioRoot("ASTManipulator.deleteProject");
     const transformer = this.createDefaultContentRootTransformer((root, factory) =>
@@ -666,6 +684,100 @@ export class ASTManipulator {
                       mediaProp,
                       mediaProp.name,
                       factory.updateObjectLiteralExpression(heroObj, heroProps),
+                    );
+                  }
+                  return mediaProp;
+                });
+                
+                return factory.updatePropertyAssignment(
+                  csField,
+                  csField.name,
+                  factory.updateObjectLiteralExpression(mediaObj, mediaProps),
+                );
+              }
+              return csField;
+            });
+            
+            return factory.updatePropertyAssignment(
+              csProp,
+              csProp.name,
+              factory.updateObjectLiteralExpression(caseStudy, updatedProps),
+            );
+          }
+          return csProp;
+        });
+        
+        return factory.updatePropertyAssignment(
+          p,
+          p.name,
+          factory.updateObjectLiteralExpression(caseStudiesObj, caseStudyProps),
+        );
+      }
+      return p;
+    });
+    
+    return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private addGalleryImageToProject(
+    rootObj: ts.ObjectLiteralExpression,
+    slug: string,
+    imageData: { path: string; alt: string; label: string },
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const props = rootObj.properties.map((p) => {
+      if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
+      
+      // Look for caseStudies property
+      if (p.name.text === "caseStudies" && ts.isObjectLiteralExpression(p.initializer)) {
+        const caseStudiesObj = p.initializer;
+        const caseStudyProps = caseStudiesObj.properties.map((csProp) => {
+          if (!ts.isPropertyAssignment(csProp) || !ts.isIdentifier(csProp.name)) return csProp;
+          
+          // Check if this case study matches our slug
+          if (csProp.name.text === slug && ts.isObjectLiteralExpression(csProp.initializer)) {
+            const caseStudy = csProp.initializer;
+            const updatedProps = caseStudy.properties.map((csField) => {
+              if (!ts.isPropertyAssignment(csField) || !ts.isIdentifier(csField.name)) return csField;
+              
+              // Update media.processGallery.items
+              if (csField.name.text === "media" && ts.isObjectLiteralExpression(csField.initializer)) {
+                const mediaObj = csField.initializer;
+                const mediaProps = mediaObj.properties.map((mediaProp) => {
+                  if (!ts.isPropertyAssignment(mediaProp) || !ts.isIdentifier(mediaProp.name)) return mediaProp;
+                  
+                  if (mediaProp.name.text === "processGallery" && ts.isObjectLiteralExpression(mediaProp.initializer)) {
+                    const galleryObj = mediaProp.initializer;
+                    const galleryProps = galleryObj.properties.map((galleryProp) => {
+                      if (!ts.isPropertyAssignment(galleryProp) || !ts.isIdentifier(galleryProp.name)) return galleryProp;
+                      
+                      if (galleryProp.name.text === "items" && ts.isArrayLiteralExpression(galleryProp.initializer)) {
+                        const itemsArray = galleryProp.initializer;
+                        
+                        // Create new gallery item
+                        const newItem = factory.createObjectLiteralExpression([
+                          factory.createPropertyAssignment("thumb", factory.createStringLiteral(imageData.path)),
+                          factory.createPropertyAssignment("full", factory.createStringLiteral(imageData.path)),
+                          factory.createPropertyAssignment("alt", factory.createStringLiteral(imageData.alt)),
+                          factory.createPropertyAssignment("label", factory.createStringLiteral(imageData.label)),
+                        ], true);
+                        
+                        // Add new item to array
+                        const newElements = [...itemsArray.elements, newItem];
+                        
+                        return factory.updatePropertyAssignment(
+                          galleryProp,
+                          galleryProp.name,
+                          factory.updateArrayLiteralExpression(itemsArray, newElements),
+                        );
+                      }
+                      return galleryProp;
+                    });
+                    
+                    return factory.updatePropertyAssignment(
+                      mediaProp,
+                      mediaProp.name,
+                      factory.updateObjectLiteralExpression(galleryObj, galleryProps),
                     );
                   }
                   return mediaProp;

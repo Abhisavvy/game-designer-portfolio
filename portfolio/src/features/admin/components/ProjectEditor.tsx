@@ -9,7 +9,66 @@ import Link from 'next/link';
 import { CVSyncPanel } from './CVSyncPanel';
 import { ImageUploader } from './ImageUploader';
 import { PreviewPanel } from './PreviewPanel';
+import { GalleryManager } from './GalleryManager';
 import type { AdminProject, AdminCaseStudy } from '../types/admin';
+import { defaultPortfolioContent } from '@/features/portfolio/data/site-content';
+
+// Component to display current hero image with actual path from site-content.ts
+function CurrentHeroImageDisplay({ 
+  project, 
+  onResetToPlaceholder 
+}: { 
+  project: AdminProject; 
+  onResetToPlaceholder: () => void;
+}) {
+  const caseStudy = defaultPortfolioContent.caseStudies[project.slug as keyof typeof defaultPortfolioContent.caseStudies];
+  const currentImageSrc = caseStudy?.media?.hero?.posterSrc || '/assets/placeholder-image.svg';
+  const isPlaceholder = currentImageSrc.includes('placeholder-image.svg');
+
+  return (
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+      <h4 className="text-md font-medium text-gray-900 mb-3">Current Hero Image</h4>
+      <div className="flex items-start space-x-4">
+        <div className="flex-shrink-0">
+          <div className="relative">
+            <img
+              src={currentImageSrc}
+              alt={`${project.title} hero image`}
+              className="w-32 h-20 object-cover rounded-lg border border-gray-300"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/assets/placeholder-image.svg';
+              }}
+            />
+            <div className={`absolute top-1 right-1 text-white text-xs px-1 rounded ${
+              isPlaceholder ? 'bg-orange-500' : 'bg-green-500'
+            }`}>
+              {isPlaceholder ? 'PLACEHOLDER' : 'CUSTOM'}
+            </div>
+          </div>
+        </div>
+        <div className="flex-1">
+          <p className="text-sm text-gray-600 mb-2">
+            <strong>Current Path:</strong> {currentImageSrc}
+          </p>
+          <p className="text-sm text-gray-500 mb-3">
+            {isPlaceholder 
+              ? 'This is a placeholder image. Upload a new hero image below to replace it.'
+              : 'This is a custom image. Upload a new one below to replace it, or reset to placeholder.'
+            }
+          </p>
+          {!isPlaceholder && (
+            <button
+              onClick={onResetToPlaceholder}
+              className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded-md hover:bg-red-100 transition-colors border border-red-200"
+            >
+              Reset to Placeholder
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const projectSchema = z.object({
   slug: z.string().min(1, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Slug must contain only lowercase letters, numbers, and hyphens'),
@@ -274,7 +333,8 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                   type="text"
                   {...projectForm.register('slug')}
                   placeholder="e.g., word-roll-events"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 />
                 {projectForm.formState.errors.slug && (
                   <p className="text-red-500 text-sm mt-1">{projectForm.formState.errors.slug.message}</p>
@@ -290,7 +350,8 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                   type="text"
                   {...projectForm.register('title')}
                   placeholder="e.g., Word Roll Event System"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 />
                 {projectForm.formState.errors.title && (
                   <p className="text-red-500 text-sm mt-1">{projectForm.formState.errors.title.message}</p>
@@ -305,7 +366,8 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                   type="text"
                   {...projectForm.register('tag')}
                   placeholder="e.g., Game Design"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 />
                 {projectForm.formState.errors.tag && (
                   <p className="text-red-500 text-sm mt-1">{projectForm.formState.errors.tag.message}</p>
@@ -320,7 +382,8 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                   type="text"
                   {...projectForm.register('href')}
                   placeholder="e.g., /projects/word-roll-events"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 />
                 {projectForm.formState.errors.href && (
                   <p className="text-red-500 text-sm mt-1">{projectForm.formState.errors.href.message}</p>
@@ -383,7 +446,8 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                   type="text"
                   {...caseStudyForm.register('title')}
                   placeholder="Detailed project name"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 />
                 {caseStudyForm.formState.errors.title && (
                   <p className="text-red-500 text-sm mt-1">{caseStudyForm.formState.errors.title.message}</p>
@@ -398,7 +462,8 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                   type="text"
                   {...caseStudyForm.register('subtitle')}
                   placeholder="Brief tagline or context"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 />
                 {caseStudyForm.formState.errors.subtitle && (
                   <p className="text-red-500 text-sm mt-1">{caseStudyForm.formState.errors.subtitle.message}</p>
@@ -502,30 +567,20 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
 
             {/* Current Hero Image */}
             {project && (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <h4 className="text-md font-medium text-gray-900 mb-3">Current Hero Image</h4>
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
-                    <img
-                      src={`/assets/${project.slug}/poster.svg`}
-                      alt={`${project.title} hero image`}
-                      className="w-32 h-20 object-cover rounded-lg border border-gray-300"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/assets/placeholder-image.svg';
-                      }}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-600 mb-2">
-                      <strong>Current:</strong> /assets/{project.slug}/poster.svg
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Upload a new hero image below to replace this placeholder. 
-                      Recommended size: 800x600px or larger.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <CurrentHeroImageDisplay 
+                project={project} 
+                onResetToPlaceholder={() => {
+                  // Reset hero image to placeholder
+                  fetch('/api/admin/assets/reset-placeholder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projectSlug: project.slug, resetType: 'hero' }),
+                  }).then(() => {
+                    setMessage({ type: 'success', text: 'Hero image reset to placeholder' });
+                    window.location.reload();
+                  });
+                }}
+              />
             )}
             
             {/* Hero Image Upload */}
@@ -537,26 +592,31 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                 maxFiles={1}
                 onUploadComplete={(asset) => {
                   console.log('Hero image uploaded:', asset);
-                  setMessage({ type: 'success', text: 'Hero image uploaded! It will replace the placeholder automatically.' });
+                  setMessage({ type: 'success', text: 'Hero image uploaded! The live site will update automatically. Refresh the preview to see changes.' });
+                  // Trigger a page reload after a short delay to show the updated image
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 2000);
                 }}
               />
             </div>
 
-            {/* Gallery Images Upload */}
+            {/* Gallery Images Management */}
             <div className="bg-white border border-gray-200 rounded-lg p-4">
-              <h4 className="text-md font-medium text-gray-900 mb-3">Gallery Images</h4>
-              <p className="text-sm text-gray-600 mb-3">
-                Upload additional images for case study galleries and process documentation.
-              </p>
-              <ImageUploader
-                projectSlug={project?.slug}
-                category="gallery"
-                maxFiles={10}
-                onUploadComplete={(asset) => {
-                  console.log('Gallery image uploaded:', asset);
-                  setMessage({ type: 'success', text: 'Gallery image uploaded successfully!' });
-                }}
-              />
+              {project && (
+                <GalleryManager
+                  projectSlug={project.slug}
+                  initialItems={(() => {
+                    const caseStudy = defaultPortfolioContent.caseStudies[project.slug as keyof typeof defaultPortfolioContent.caseStudies];
+                    return caseStudy?.media?.processGallery?.items || [];
+                  })()}
+                  onItemsChange={(items) => {
+                    // Update gallery items in site-content.ts
+                    console.log('Gallery items updated:', items);
+                    setMessage({ type: 'success', text: 'Gallery updated! Changes will reflect on the live site.' });
+                  }}
+                />
+              )}
             </div>
 
             {/* Usage Guide */}
@@ -590,7 +650,7 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
         {/* Preview Panel */}
         <div className="lg:col-span-1">
           <PreviewPanel 
-            previewUrl={project?.href ? `http://localhost:3000${project.href}` : 'http://localhost:3000'}
+            previewUrl={project?.href ? `${window.location.origin}${project.href}` : window.location.origin}
           />
         </div>
       </div>

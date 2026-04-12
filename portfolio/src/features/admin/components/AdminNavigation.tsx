@@ -73,7 +73,7 @@ export function AdminNavigation() {
   }, [mobileOpen]);
 
   return (
-    <div className="max-lg:w-0 max-lg:flex-shrink-0 max-lg:overflow-visible lg:w-64 lg:flex-shrink-0">
+    <div className="max-lg:w-0 max-lg:flex-shrink-0 max-lg:overflow-visible lg:w-72 lg:flex-shrink-0">
       <div className="fixed left-0 right-0 top-0 z-[45] flex h-14 items-center border-b border-gray-200 bg-white px-4 lg:hidden">
         <button
           type="button"
@@ -102,18 +102,27 @@ export function AdminNavigation() {
       <aside
         id="admin-sidebar-nav"
         className={[
-          'fixed inset-y-0 left-0 z-50 w-64 shrink-0 bg-gray-900 p-4 text-white transition-transform duration-200 ease-out',
+          'fixed inset-y-0 left-0 z-50 w-72 shrink-0 bg-slate-900 border-r border-slate-800 text-white transition-transform duration-200 ease-out',
           'lg:static lg:z-0 lg:translate-x-0',
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         ].join(' ')}
       >
-        <div className="mb-6 flex items-center justify-between lg:block">
-          <div className="text-lg font-semibold tracking-tight lg:mb-8">
-            Portfolio Admin
+        {/* Header */}
+        <div className="p-6 border-b border-slate-800 flex items-center justify-between lg:block">
+          <div className="flex items-center space-x-3 lg:mb-0">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <LayoutDashboard className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <div className="text-lg font-semibold text-white tracking-tight">
+                Portfolio Admin
+              </div>
+              <p className="text-xs text-slate-400 hidden lg:block">Content Management</p>
+            </div>
           </div>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-300 hover:bg-gray-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 lg:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 lg:hidden"
             onClick={() => setMobileOpen(false)}
             aria-label="Close admin navigation"
           >
@@ -121,8 +130,9 @@ export function AdminNavigation() {
           </button>
         </div>
 
-        <nav aria-label="Admin sections">
-          <ul className="space-y-2">
+        {/* Navigation */}
+        <nav aria-label="Admin sections" className="p-4 flex-1">
+          <ul className="space-y-1">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const isActive = isNavItemActive(pathname, item.href);
@@ -131,22 +141,34 @@ export function AdminNavigation() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`flex items-center space-x-3 rounded-lg p-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 ${
+                    className={`group flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${
                       isActive
-                        ? 'bg-orange-600 text-white'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg shadow-orange-500/25'
+                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                     }`}
                     aria-current={isActive ? 'page' : undefined}
                     onClick={() => setMobileOpen(false)}
                   >
-                    <Icon size={20} aria-hidden />
-                    <span>{item.label}</span>
+                    <div className="flex items-center space-x-3">
+                      <Icon size={20} className={isActive ? 'text-white' : 'text-slate-400 group-hover:text-white'} aria-hidden />
+                      <span className="font-medium">{item.label}</span>
+                    </div>
+                    {isActive && (
+                      <div className="w-1 h-1 bg-white/70 rounded-full"></div>
+                    )}
                   </Link>
                 </li>
               );
             })}
           </ul>
         </nav>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-slate-800">
+          <div className="text-xs text-slate-500 text-center">
+            Development Mode Only
+          </div>
+        </div>
       </aside>
     </div>
   );

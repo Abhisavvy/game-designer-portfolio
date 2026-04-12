@@ -273,7 +273,8 @@ export function ImageUploader({
                 </label>
                 <select
                   {...form.register('category')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 >
                   <option value="hero">Hero Image</option>
                   <option value="gallery">Gallery</option>
@@ -293,7 +294,8 @@ export function ImageUploader({
                   type="text"
                   {...form.register('projectSlug')}
                   placeholder="e.g., word-roll-events"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-slate-300 bg-white text-slate-900 placeholder-slate-400 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-500 hover:border-slate-400"
+                  style={{ color: '#0f172a' }}
                 />
                 {form.formState.errors.projectSlug && (
                   <p className="text-red-500 text-sm mt-1">{form.formState.errors.projectSlug.message}</p>

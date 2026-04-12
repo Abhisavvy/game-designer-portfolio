@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
+import { triggerHotReload } from '@/features/admin/utils/hot-reload';
 import path from 'path';
 import { z } from 'zod';
 
@@ -64,6 +65,9 @@ export async function POST(request: NextRequest) {
       ...validatedProject,
       externalUrl: validatedProject.externalUrl || '',
     });
+    
+    // Trigger hot reload to update the live site
+    await triggerHotReload(SITE_CONTENT_PATH);
 
     return NextResponse.json({ success: true, project: validatedProject });
   } catch (error) {
@@ -99,6 +103,9 @@ export async function PUT(request: NextRequest) {
     // Update project using AST manipulation
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
     astManipulator.updateProject(slug, validatedProject);
+    
+    // Trigger hot reload to update the live site
+    await triggerHotReload(SITE_CONTENT_PATH);
 
     return NextResponse.json({ success: true, project: validatedProject });
   } catch (error) {
@@ -132,6 +139,9 @@ export async function DELETE(request: NextRequest) {
     // Delete project using AST manipulation
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
     astManipulator.deleteProject(slug);
+    
+    // Trigger hot reload to update the live site
+    await triggerHotReload(SITE_CONTENT_PATH);
 
     return NextResponse.json({ success: true });
   } catch (error) {

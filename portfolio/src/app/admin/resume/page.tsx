@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Upload, Download, FileText, AlertCircle, CheckCircle, Copy, ExternalLink } from 'lucide-react';
+import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
 import type { ConsistencyIssue } from '@/features/admin/types/admin';
 
 export default function ResumeManagementPage() {
@@ -163,11 +164,19 @@ export default function ResumeManagementPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Resume Management</h1>
-        <p className="text-gray-600">
-          Import Reactive Resume JSON to validate consistency, or export portfolio data to Reactive Resume format.
-        </p>
+      <AdminBreadcrumb />
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+            <FileText className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-1">Resume Management</h1>
+            <p className="text-slate-600">
+              Import Reactive Resume JSON to validate consistency, or export portfolio data to Reactive Resume format.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Message */}

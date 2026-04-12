@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Edit, Trash2, ExternalLink, AlertCircle, CheckCircle } from 'lucide-react';
+import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
 import type { AdminProject } from '@/features/admin/types/admin';
 
 export default function ProjectsManagementPage() {
@@ -75,6 +76,8 @@ export default function ProjectsManagementPage() {
 
   return (
     <div className="space-y-8">
+      <AdminBreadcrumb />
+      
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Projects Management</h1>

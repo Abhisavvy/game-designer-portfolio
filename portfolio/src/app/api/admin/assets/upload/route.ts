@@ -3,6 +3,8 @@ import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import { z } from 'zod';
+import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
+import { triggerHotReload } from '@/features/admin/utils/hot-reload';
 
 const uploadSchema = z.object({
   category: z.enum(['hero', 'gallery', 'process', 'profile']),
@@ -77,6 +79,32 @@ export async function POST(request: NextRequest) {
     const publicUrl = validatedMetadata.projectSlug
       ? `/assets/${validatedMetadata.projectSlug}/${filename}`
       : `/assets/general/${filename}`;
+
+    // Update site-content.ts based on image category
+    if (validatedMetadata.projectSlug) {
+      try {
+        const siteContentPath = path.join(process.cwd(), 'src/features/portfolio/data/site-content.ts');
+        const astManipulator = new ASTManipulator(siteContentPath);
+        
+        if (validatedMetadata.category === 'hero') {
+          astManipulator.updateProjectImage(validatedMetadata.projectSlug, publicUrl);
+          console.log(`Updated hero image for project ${validatedMetadata.projectSlug}: ${publicUrl}`);
+        } else if (validatedMetadata.category === 'gallery') {
+          astManipulator.addGalleryImage(validatedMetadata.projectSlug, {
+            path: publicUrl,
+            alt: validatedMetadata.altText,
+            label: validatedMetadata.usageContext,
+          });
+          console.log(`Added gallery image for project ${validatedMetadata.projectSlug}: ${publicUrl}`);
+        }
+        
+        // Trigger hot reload to update the live site
+        await triggerHotReload(siteContentPath);
+      } catch (error) {
+        console.error('Failed to update site-content.ts:', error);
+        // Don't fail the upload, just log the error
+      }
+    }
 
     // Return asset info
     const assetInfo = {

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useAdminData } from '@/features/admin/hooks/useAdminData';
+import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
 import { User, FolderOpen, Image as ImageIcon, FileText, AlertCircle } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -43,70 +44,77 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">Portfolio Admin Dashboard</h1>
-        <p className="text-gray-600">
-          Manage your portfolio content, assets, and CV synchronization.
-        </p>
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-pink-500 rounded-xl flex items-center justify-center">
+            <FolderOpen className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-1">Portfolio Admin Dashboard</h1>
+            <p className="text-slate-600">
+              Manage your portfolio content, assets, and CV synchronization.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/admin/personal"
-          className="rounded-lg border border-gray-200 bg-white p-6 shadow transition-shadow hover:shadow-md"
+          className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg hover:border-orange-200 hover:-translate-y-1"
         >
           <div className="flex items-center space-x-4">
-            <div className="rounded-lg bg-blue-100 p-3">
-              <User className="text-blue-600" size={24} />
+            <div className="rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-all">
+              <User className="text-white" size={24} />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Personal Info</h3>
-              <p className="text-sm text-gray-600">{personalInfo ? 'Configured' : 'Not set'}</p>
+              <h3 className="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">Personal Info</h3>
+              <p className="text-sm text-slate-600">{personalInfo ? 'Configured' : 'Not set'}</p>
             </div>
           </div>
         </Link>
 
         <Link
           href="/admin/projects"
-          className="rounded-lg border border-gray-200 bg-white p-6 shadow transition-shadow hover:shadow-md"
+          className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg hover:border-orange-200 hover:-translate-y-1"
         >
           <div className="flex items-center space-x-4">
-            <div className="rounded-lg bg-green-100 p-3">
-              <FolderOpen className="text-green-600" size={24} />
+            <div className="rounded-xl bg-gradient-to-br from-green-500 to-green-600 p-3 group-hover:from-green-600 group-hover:to-green-700 transition-all">
+              <FolderOpen className="text-white" size={24} />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Projects</h3>
-              <p className="text-sm text-gray-600">{projects.length} projects</p>
+              <h3 className="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">Projects</h3>
+              <p className="text-sm text-slate-600">{projects.length} projects</p>
             </div>
           </div>
         </Link>
 
         <Link
           href="/admin/assets"
-          className="rounded-lg border border-gray-200 bg-white p-6 shadow transition-shadow hover:shadow-md"
+          className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg hover:border-orange-200 hover:-translate-y-1"
         >
           <div className="flex items-center space-x-4">
-            <div className="rounded-lg bg-purple-100 p-3">
-              <ImageIcon className="text-purple-600" size={24} />
+            <div className="rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 p-3 group-hover:from-purple-600 group-hover:to-purple-700 transition-all">
+              <ImageIcon className="text-white" size={24} />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Assets</h3>
-              <p className="text-sm text-gray-600">Images & files</p>
+              <h3 className="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">Assets</h3>
+              <p className="text-sm text-slate-600">Images & files</p>
             </div>
           </div>
         </Link>
 
         <Link
           href="/admin/resume"
-          className="rounded-lg border border-gray-200 bg-white p-6 shadow transition-shadow hover:shadow-md"
+          className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg hover:border-orange-200 hover:-translate-y-1"
         >
           <div className="flex items-center space-x-4">
-            <div className="rounded-lg bg-orange-100 p-3">
-              <FileText className="text-orange-600" size={24} />
+            <div className="rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 p-3 group-hover:from-orange-600 group-hover:to-orange-700 transition-all">
+              <FileText className="text-white" size={24} />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Resume</h3>
-              <p className="text-sm text-gray-600">CV sync & export</p>
+              <h3 className="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">Resume</h3>
+              <p className="text-sm text-slate-600">CV sync & export</p>
             </div>
           </div>
         </Link>

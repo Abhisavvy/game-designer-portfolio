@@ -1,4 +1,5 @@
 import { AdminLayout } from '@/features/admin/components/AdminLayout';
+import './admin-styles.css';
 
 export default function Layout({
   children,

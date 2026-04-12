@@ -1,13 +1,21 @@
 'use client';
 
+import { use } from 'react';
 import { ProjectEditor } from '@/features/admin/components/ProjectEditor';
+import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
 
 interface EditProjectPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default function EditProjectPage({ params }: EditProjectPageProps) {
-  return <ProjectEditor projectSlug={params.slug} />;
+  const { slug } = use(params);
+  return (
+    <div className="space-y-6">
+      <AdminBreadcrumb />
+      <ProjectEditor projectSlug={slug} />
+    </div>
+  );
 }

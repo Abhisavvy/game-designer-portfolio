@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Save, AlertCircle, CheckCircle } from 'lucide-react';
+import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
+import { AdminInput, AdminTextarea } from '@/features/admin/components/AdminInput';
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -110,12 +112,20 @@ export default function PersonalInfoPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl">
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">Personal Information</h1>
-        <p className="text-gray-600">
-          Update your personal details and contact information.
-        </p>
+    <div className="mx-auto max-w-4xl space-y-8">
+      <AdminBreadcrumb />
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+            <Save className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-1">Personal Information</h1>
+            <p className="text-slate-600">
+              Update your personal details and contact information.
+            </p>
+          </div>
+        </div>
       </div>
 
       {message ? (
@@ -141,19 +151,20 @@ export default function PersonalInfoPage() {
       ) : null}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow">
-          <h2 className="mb-4 text-xl font-semibold text-gray-900">Basic Information</h2>
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+          <h2 className="mb-6 text-xl font-semibold text-slate-900">Basic Information</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-name">
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-name">
                 Full Name
               </label>
               <input
                 id="personal-name"
                 type="text"
                 {...register('name')}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 hover:border-slate-400"
+                style={{ color: '#0f172a' }}
               />
               {errors.name ? (
                 <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
@@ -161,14 +172,15 @@ export default function PersonalInfoPage() {
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-role">
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-role">
                 Role/Title
               </label>
               <input
                 id="personal-role"
                 type="text"
                 {...register('role')}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 hover:border-slate-400"
+                style={{ color: '#0f172a' }}
               />
               {errors.role ? (
                 <p className="mt-1 text-sm text-red-500">{errors.role.message}</p>
@@ -177,7 +189,7 @@ export default function PersonalInfoPage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-tagline">
+            <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-tagline">
               Tagline
             </label>
             <input
@@ -192,7 +204,7 @@ export default function PersonalInfoPage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-location">
+            <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-location">
               Location
             </label>
             <input
@@ -207,7 +219,7 @@ export default function PersonalInfoPage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-bio">
+            <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-bio">
               Bio/Summary
             </label>
             <textarea
@@ -222,19 +234,20 @@ export default function PersonalInfoPage() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow">
-          <h2 className="mb-4 text-xl font-semibold text-gray-900">Contact Information</h2>
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+          <h2 className="mb-6 text-xl font-semibold text-slate-900">Contact Information</h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-email">
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-email">
                 Email
               </label>
               <input
                 id="personal-email"
                 type="email"
                 {...register('email')}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 hover:border-slate-400"
+                style={{ color: '#0f172a' }}
               />
               {errors.email ? (
                 <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
@@ -242,14 +255,15 @@ export default function PersonalInfoPage() {
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-phone">
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-phone">
                 Phone
               </label>
               <input
                 id="personal-phone"
                 type="tel"
                 {...register('phone')}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 hover:border-slate-400"
+                style={{ color: '#0f172a' }}
               />
               {errors.phone ? (
                 <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>
@@ -258,7 +272,7 @@ export default function PersonalInfoPage() {
           </div>
 
           <div className="mt-4">
-            <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="personal-linkedin">
+            <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-linkedin">
               LinkedIn URL
             </label>
             <input
@@ -277,7 +291,7 @@ export default function PersonalInfoPage() {
           <button
             type="submit"
             disabled={!isDirty || saving}
-            className="flex items-center space-x-2 rounded-lg bg-orange-600 px-6 py-3 text-white transition-colors hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 px-6 py-3 text-white font-semibold shadow-lg hover:from-orange-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
           >
             <Save size={20} aria-hidden />
             <span>{saving ? 'Saving...' : 'Save Changes'}</span>
