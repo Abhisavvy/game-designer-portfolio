@@ -456,6 +456,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/wotd/screenshot-2026-04-12-20-50-48-397-in-playsimple-wordbingo-1776018493285.jpg",
                             alt: "Step 3",
                             label: "Gallery - Screenshot_2026-04-12-20-50-48-397_in.playsimple.wordbingo.jpg"
+                        },
+                        {
+                            thumb: "/assets/wotd/image-1776018546584.png",
+                            full: "/assets/wotd/image-1776018546584.png",
+                            alt: "D1RR control vs Variant",
+                            label: "Gallery - image.png"
                         }
                     ]
                 }
