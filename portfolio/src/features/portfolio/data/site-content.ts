@@ -313,7 +313,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/tiles/screenshot-2026-04-12-at-10-50-46-pm-1776014484957.png"
+                    posterSrc: "/assets/tiles/screenshot-2026-04-12-at-10-50-46-pm-1776014526927.png"
                 },
                 processGallery: {
                     groupId: "tiles-process",
