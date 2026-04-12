@@ -28,7 +28,7 @@
   
   <!-- Main title -->
   <text x="600" y="140" text-anchor="middle" fill="#ffffff" font-family="Inter, system-ui, sans-serif" font-size="64" font-weight="800" letter-spacing="-0.03em">AI Innovation</text>
-  <text x="600" y="180" text-anchor="middle" fill="#a3a3a3" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="500" letter-spacing="-0.01em">Meeting Notes ’ Structured Specifications</text>
+  <text x="600" y="180" text-anchor="middle" fill="#a3a3a3" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="500" letter-spacing="-0.01em">Meeting Notes ï¿½ Structured Specifications</text>
   
   <!-- Left side: Messy input representation -->
   <g transform="translate(120, 280)">
