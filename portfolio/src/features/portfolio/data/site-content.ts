@@ -366,7 +366,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "ai-innovation-process",
                     heading: "Tool Architecture",
-                    items: []
+                    items: [{
+                            thumb: "/assets/ai-innovation/screenshot-2026-04-13-at-12-03-27-am-1776019525635.png",
+                            full: "/assets/ai-innovation/screenshot-2026-04-13-at-12-03-27-am-1776019525635.png",
+                            alt: "Process flow",
+                            label: "Gallery - Screenshot 2026-04-13 at 12.03.27\u202FAM.png"
+                        }]
                 }
             }
         },
