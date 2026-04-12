@@ -229,7 +229,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/placeholder-image.svg"
+                    posterSrc: "/assets/bon-voyage/bonvoyage-hero-image-1776012924558.png"
                 },
                 processGallery: {
                     groupId: "bon-voyage-process",
