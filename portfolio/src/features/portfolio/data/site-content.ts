@@ -406,7 +406,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/kinoa-integration/hero-image.svg"
+                    posterSrc: "/assets/kinoa-integration/screenshot-2026-04-13-at-12-23-57-am-1776020099651.png"
                 },
                 processGallery: {
                     groupId: "kinoa-integration-process",
