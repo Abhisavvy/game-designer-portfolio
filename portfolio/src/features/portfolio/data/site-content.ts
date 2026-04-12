@@ -458,7 +458,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "ticket-mania-process",
                     heading: "Design process",
-                    items: []
+                    items: [{
+                            thumb: "/assets/ticket-mania/screenshot-2026-04-12-17-03-41-227-in-playsimple-wordbingo-1776017580465.jpg",
+                            full: "/assets/ticket-mania/screenshot-2026-04-12-17-03-41-227-in-playsimple-wordbingo-1776017580465.jpg",
+                            alt: "How to play",
+                            label: "Gallery - Screenshot_2026-04-12-17-03-41-227_in.playsimple.wordbingo.jpg"
+                        }]
                 }
             }
         }
