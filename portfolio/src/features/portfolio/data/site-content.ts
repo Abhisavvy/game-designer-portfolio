@@ -320,12 +320,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
                     heading: "Design process",
                     items: [
                         {
-                            thumb: "/assets/tiles/gallery-gacha-economy.svg",
-                            full: "/assets/tiles/gallery-gacha-economy.svg",
-                            alt: "Machinations model for gacha probability tuning",
-                            label: "Economy Model"
-                        },
-                        {
                             thumb: "/assets/tiles/gallery-visual-design.svg",
                             full: "/assets/tiles/gallery-visual-design.svg",
                             alt: "Tile skin visual design and rarity differentiation",
