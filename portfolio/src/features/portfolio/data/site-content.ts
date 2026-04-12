@@ -368,12 +368,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
                     heading: "Tool Architecture",
                     items: [
                         {
-                            thumb: "/assets/ai-innovation/gallery-spec-maker.svg",
-                            full: "/assets/ai-innovation/gallery-spec-maker.svg",
-                            alt: "Spec Maker \u2014 structured input to complete markdown spec documents",
-                            label: "Spec Maker"
-                        },
-                        {
                             thumb: "/assets/ai-innovation/gallery-pipeline.svg",
                             full: "/assets/ai-innovation/gallery-pipeline.svg",
                             alt: "End-to-end pipeline from meeting notes to complete documentation",
