@@ -416,13 +416,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             thumb: "/assets/kinoa-integration/gallery-design-doc.svg",
                             full: "/assets/kinoa-integration/gallery-design-doc.svg",
                             alt: "Kinoa SDK integration design document",
-                            label: "Design Document",
-                        },
-                        {
-                            thumb: "/assets/kinoa-integration/gallery-liveops-flows.svg",
-                            full: "/assets/kinoa-integration/gallery-liveops-flows.svg",
-                            alt: "LiveOps event flows and configurations",
-                            label: "LiveOps Flows",
+                            label: "Design Document"
                         }
                     ]
                 }
