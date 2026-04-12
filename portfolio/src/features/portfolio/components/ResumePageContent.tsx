@@ -13,14 +13,20 @@ import {
   Gamepad2,
   Phone
 } from "lucide-react";
+import Image from "next/image";
 import { FaLinkedin } from "react-icons/fa";
 
 export function ResumePageContent() {
   const { person } = defaultPortfolioContent;
 
+  const handleDownloadPDF = () => {
+    // Trigger browser print dialog which can save as PDF
+    window.print();
+  };
+
   return (
-    <div className="min-h-screen bg-black pt-20 pb-12">
-      <div className="max-w-4xl mx-auto px-6">
+    <div className="min-h-screen bg-black pt-20 pb-12 print:bg-white print:pt-4 print:pb-4">
+      <div className="max-w-4xl mx-auto px-6 print:px-4 print:max-w-full">
         {/* Header */}
         <motion.div
           className="text-center mb-12"
@@ -28,17 +34,32 @@ export function ResumePageContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* Profile Image Placeholder */}
-          <div className="w-32 h-32 mx-auto mb-6 bg-zinc-800 rounded-full flex items-center justify-center border-2 border-orange-500/30">
-            <div className="text-orange-400 text-sm font-medium">Photo</div>
+          {/* Profile Image */}
+          <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-2 border-orange-500/30">
+            <Image 
+              src="/assets/general/profile/abhishek-headshot.webp" 
+              alt="Abhishek Dutta"
+              width={128}
+              height={128}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <h1 className="text-4xl font-bold text-white mb-2">{person.name}</h1>
-          <p className="text-xl text-orange-400 mb-4">{person.role}</p>
-          <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">{person.tagline}</p>
+          <p className="text-xl text-orange-400 mb-4">Game Designer | Mobile Game Specialist</p>
+          <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Results-driven Game Designer with 3+ years designing player-first mobile game systems that drive community engagement and long-term retention. Expert in LiveOps events, economy systems, and data-driven feature design.
+          </p>
 
           {/* Contact Info */}
           <div className="flex flex-wrap justify-center gap-6 mt-6 text-sm text-gray-400">
+            <a 
+              href={`mailto:${person.email}`}
+              className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              <span>{person.email}</span>
+            </a>
             <a 
               href={`tel:${person.phone}`}
               className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
@@ -57,13 +78,14 @@ export function ResumePageContent() {
             </a>
             <div className="flex items-center space-x-2">
               <MapPin className="w-4 h-4" />
-              <span>{person.location}</span>
+              <span>Bengaluru, India</span>
             </div>
           </div>
 
           {/* Download Button */}
           <motion.button
-            className="mt-6 inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full text-black font-semibold hover:shadow-lg transition-all duration-300"
+            onClick={handleDownloadPDF}
+            className="mt-6 inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full text-black font-semibold hover:shadow-lg transition-all duration-300 print:hidden"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -73,7 +95,7 @@ export function ResumePageContent() {
         </motion.div>
 
         {/* Resume Content */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 print:gap-4 print:grid-cols-3">
           {/* Left Column */}
           <div className="md:col-span-1 space-y-8">
             {/* Skills */}
@@ -88,14 +110,14 @@ export function ResumePageContent() {
               </h2>
               <div className="space-y-3">
                 {[
-                  "Systems Design",
-                  "LiveOps Management", 
-                  "Retention Mechanics",
+                  "Feature Design & Documentation",
+                  "Mobile Game Systems", 
+                  "LiveOps Management",
                   "Economy Design",
-                  "A/B Testing",
-                  "Player Psychology",
-                  "Mobile Game Design",
-                  "Data Analysis"
+                  "PvP Mechanics Design",
+                  "Critical Thinking & Analysis",
+                  "A/B Testing & Analytics",
+                  "Player Behavior Analysis"
                 ].map((skill, index) => (
                   <div key={skill} className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
@@ -117,11 +139,11 @@ export function ResumePageContent() {
               </h2>
               <div className="space-y-3">
                 {[
-                  "40k+ DAU Growth",
-                  "22% ARPDAU Increase",
+                  "50k+ DAU (Word Roll)",
+                  "71% Monetization Increase",
                   "300 bps D1 Retention",
                   "25+ Features Shipped",
-                  "3+ Years Experience"
+                  "10x User Growth Contribution"
                 ].map((metric, index) => (
                   <div key={metric} className="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700/50">
                     <div className="text-orange-300 font-semibold text-sm">{metric}</div>
@@ -144,64 +166,76 @@ export function ResumePageContent() {
                 <span>Experience</span>
               </h2>
 
-              {/* Word Roll Experience */}
+              {/* PlaySimple Games Experience */}
               <div className="bg-zinc-800/30 rounded-xl p-6 border border-zinc-700/30 mb-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-white">Systems Designer</h3>
-                    <p className="text-orange-400 font-medium">Word Roll</p>
+                    <h3 className="text-xl font-bold text-white">Game Designer</h3>
+                    <p className="text-orange-400 font-medium">PlaySimple Games</p>
                   </div>
                   <div className="text-gray-400 text-sm flex items-center space-x-2">
                     <Calendar className="w-4 h-4" />
-                    <span>2021 - Present</span>
+                    <span>August 2022 – Present (3+ years)</span>
                   </div>
                 </div>
                 <ul className="text-gray-300 space-y-2 leading-relaxed">
-                  <li>• Designed retention mechanics and LiveOps events that grew DAU from 4k to 40k+</li>
-                  <li>• Built economy systems and progression mechanics that increased ARPDAU by 22%</li>
-                  <li>• Implemented A/B testing frameworks for feature optimization and player segmentation</li>
-                  <li>• Created event infrastructure for seasonal content and live service operations</li>
+                  <li>• Created detailed feature specifications for 25+ major systems including seasonal events, battle pass mechanics, and competitive leaderboards</li>
+                  <li>• Designed economy and progression systems for Word Roll (50k+ DAU) delivering 71% monetization improvements and 35% retention increases</li>
+                  <li>• Conducted competitive analysis of 50+ mobile games using SensorTower and Data.ai, identifying market opportunities that influenced product roadmap</li>
+                  <li>• Established data-driven feedback loops and A/B testing frameworks to validate design decisions and optimize feature performance</li>
                 </ul>
               </div>
 
-              {/* AI Innovation Work */}
+              {/* Key Achievements Section */}
               <div className="bg-zinc-800/30 rounded-xl p-6 border border-zinc-700/30 mb-6">
-                <div className="flex items-start justify-between mb-4">
+                <h3 className="text-xl font-bold text-white mb-4">Key Achievements</h3>
+                
+                <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-bold text-white">AI & Innovation Lead</h3>
-                    <p className="text-orange-400 font-medium">Development Team</p>
+                    <h4 className="text-orange-400 font-semibold">Social Engagement Leadership - Food Fiesta (2024)</h4>
+                    <p className="text-gray-300 text-sm">Designed Food Fiesta event mechanics featuring balanced gacha systems and progressive rewards, generating 71% monetization increase and establishing template for future LiveOps events.</p>
                   </div>
-                  <div className="text-gray-400 text-sm flex items-center space-x-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>Recent</span>
+                  
+                  <div>
+                    <h4 className="text-orange-400 font-semibold">Community Building Innovation - Ticket Mania (2024)</h4>
+                    <p className="text-gray-300 text-sm">Redesigned Ticket Mania leaderboard architecture with skill-based matchmaking and dynamic rewards, increasing player LTV by 10% and improving D1 retention rate by 300 basis points.</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-orange-400 font-semibold">Player Experience Optimization - Word of the Day (2024)</h4>
+                    <p className="text-gray-300 text-sm">Transformed Word of the Day from passive feature to interactive collection mechanic, achieving 140 basis points D1 retention improvement and 3% overall engagement increase.</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-orange-400 font-semibold">AI Innovation & Team Productivity (2026)</h4>
+                    <p className="text-gray-300 text-sm">Built AI-assisted Spec Maker and Meeting Manager tools that became standard workflow for 8-person development team, improving documentation efficiency by 25%.</p>
                   </div>
                 </div>
-                <ul className="text-gray-300 space-y-2 leading-relaxed">
-                  <li>• Built AI-assisted Spec Maker and Meeting Manager tools using Cursor AI</li>
-                  <li>• Achieved 25% improvement in documentation efficiency and 40% faster sprint planning</li>
-                  <li>• Established productivity culture that became team standard across 8-person development team</li>
-                  <li>• Integrated AI workflows without disrupting established development processes</li>
-                </ul>
               </div>
 
-              {/* Kinoa Integration */}
+              {/* Education & Skills */}
               <div className="bg-zinc-800/30 rounded-xl p-6 border border-zinc-700/30">
-                <div className="flex items-start justify-between mb-4">
+                <h3 className="text-xl font-bold text-white mb-4">Education & Technical Skills</h3>
+                
+                <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-bold text-white">LiveOps Integration Specialist</h3>
-                    <p className="text-orange-400 font-medium">Kinoa.io Platform</p>
+                    <h4 className="text-orange-400 font-semibold">Education</h4>
+                    <div className="text-gray-300 text-sm space-y-1">
+                      <p>• PG Diploma in Game Design | ICAT Design & Media College | 2021-2022</p>
+                      <p>• BA LLB | Department of Law, Calcutta University | 2015-2020</p>
+                    </div>
                   </div>
-                  <div className="text-gray-400 text-sm flex items-center space-x-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>Integration Project</span>
+                  
+                  <div>
+                    <h4 className="text-orange-400 font-semibold">Technical Proficiency</h4>
+                    <p className="text-gray-300 text-sm">Unity, Excel, Google Sheets, Figma, SensorTower, Data.ai, Google Analytics, A/B Testing, JIRA, Confluence, Kinoa.io, Cursor AI</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-orange-400 font-semibold">LiveOps Expertise</h4>
+                    <p className="text-gray-300 text-sm">Deployed 5+ events with Kinoa.io running personalized events for players based on their cohorts. Expert in real-time event optimization and data-driven monetization strategies.</p>
                   </div>
                 </div>
-                <ul className="text-gray-300 space-y-2 leading-relaxed">
-                  <li>• Created comprehensive design document for seamless Kinoa SDK integration</li>
-                  <li>• Set up LiveOps features through flows and in-app configurations</li>
-                  <li>• Tested various events and made real-time optimizations for player engagement</li>
-                  <li>• Optimized monetization strategies through data-driven event management</li>
-                </ul>
               </div>
             </motion.section>
 
