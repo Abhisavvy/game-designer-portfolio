@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "test:admin-stubs": "node webpack/scripts/verify-admin-stub-loader.mjs",
+    "verify:ast-manipulator": "npx --yes tsx ./src/features/admin/utils/run-ast-verify.ts",
     "start": "next start",
     "lint": "next lint"
   },

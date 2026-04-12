@@ -1,11 +1,7 @@
-export interface AdminProject {
-  slug: string;
-  title: string;
-  tag: string;
-  blurb: string;
-  href: string;
-  externalUrl: string;
-}
+import type { ProjectItem } from "@/features/portfolio/data/site-content";
+
+/** Same shape as portfolio `ProjectItem` defaults in `site-content.ts` (single source of truth). */
+export type AdminProject = ProjectItem;
 
 export interface AdminCaseStudy {
   title: string;
@@ -14,7 +10,8 @@ export interface AdminCaseStudy {
   approach: string;
   constraints: string;
   outcome: string;
-  contributions: string;
+  /** Optional “My contributions” block (Webflow-style). */
+  contributions?: string;
   links: Array<{ label: string; href: string }>;
   media: {
     hero: { posterSrc: string };
