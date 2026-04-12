@@ -88,7 +88,7 @@ export function HomePageContent() {
                 alt="Abhishek's Game Design Workspace"
                 width={600}
                 height={450}
-                className="aspect-[4/3] rounded-2xl border border-zinc-700/50 overflow-hidden"
+                className="aspect-[4/3] w-full h-full object-cover object-center rounded-2xl border border-zinc-700/50 overflow-hidden"
                 placeholder={
                   <div className="aspect-[4/3] bg-zinc-800/50 rounded-2xl border border-zinc-700/50 flex items-center justify-center">
                     <div className="text-center">

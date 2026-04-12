@@ -136,7 +136,7 @@ export function ProjectCardAnimated({
         whileHover={{ y: -8 }}
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
       >
-        <div className="relative h-80 bg-gradient-to-br from-zinc-900 to-black rounded-2xl overflow-hidden border border-zinc-700/50 transition-all duration-500 group-hover:border-orange-500/50 group-hover:shadow-2xl group-hover:shadow-orange-500/15">
+        <div className="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] lg:aspect-[16/10] min-h-[280px] bg-gradient-to-br from-zinc-900 to-black rounded-2xl overflow-hidden border border-zinc-700/50 transition-all duration-500 group-hover:border-orange-500/50 group-hover:shadow-2xl group-hover:shadow-orange-500/15">
         {/* Background gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-orange-600/10 via-transparent to-orange-500/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
@@ -155,7 +155,7 @@ export function ProjectCardAnimated({
             width={400}
             height={320}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center"
             placeholder={
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800/50 to-zinc-900/70">
                 <div className="text-center p-6">

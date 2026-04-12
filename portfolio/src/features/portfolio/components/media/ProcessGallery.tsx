@@ -135,7 +135,7 @@ export function ProcessGallery({ groupId, heading, items }: Props) {
               alt={item.alt}
               fill
               sizes="(max-width: 768px) 50vw, 33vw"
-              className="object-cover transition duration-300 group-hover:scale-105"
+              className="object-cover object-center transition duration-300 group-hover:scale-105"
             />
             <span className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-black/70 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
               <span className="text-xs font-semibold uppercase tracking-wide text-white">

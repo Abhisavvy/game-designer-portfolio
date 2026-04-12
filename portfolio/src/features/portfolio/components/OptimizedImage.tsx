@@ -65,7 +65,7 @@ export function OptimizedImage({
         height={height}
         priority={priority}
         sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"}
-        className={`object-cover transition-all duration-300 ${
+        className={`object-cover object-center transition-all duration-300 ${
           imageLoading ? 'opacity-20' : 'opacity-100'
         }`}
         onLoad={() => setImageLoading(false)}
