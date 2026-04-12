@@ -285,6 +285,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/food-fiesta/foodfiesta-01-1776013765627.png",
                             alt: "Main screen",
                             label: "Main screen - FoodFiesta_01.png"
+                        },
+                        {
+                            thumb: "/assets/food-fiesta/feedback-win-1776013836481.png",
+                            full: "/assets/food-fiesta/feedback-win-1776013836481.png",
+                            alt: "Feedback on outro",
+                            label: "Gallery - Feedback_Win.png"
                         }
                     ]
                 }
