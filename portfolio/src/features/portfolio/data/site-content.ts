@@ -336,6 +336,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/tiles/tiles-on-home-screen-1776015076972.png",
                             alt: "Tile screen",
                             label: "Gallery - Tiles on Home Screen.png"
+                        },
+                        {
+                            thumb: "/assets/tiles/default-tile-1776015216518.png",
+                            full: "/assets/tiles/default-tile-1776015216518.png",
+                            alt: "Tile screen",
+                            label: "Gallery - Default tile.png"
                         }
                     ]
                 }
