@@ -476,6 +476,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/ticket-mania/gameboard-fillrow-13btiles-makeword-1776017759922.png",
                             alt: "Ticket collected feedback",
                             label: "Gallery - Gameboard_FillRow_13BTiles_MakeWord.png"
+                        },
+                        {
+                            thumb: "/assets/ticket-mania/ticket-mania-1776018351803.png",
+                            full: "/assets/ticket-mania/ticket-mania-1776018351803.png",
+                            alt: "Leaderboard screen",
+                            label: "Gallery - ticket mania.png"
                         }
                     ]
                 }
