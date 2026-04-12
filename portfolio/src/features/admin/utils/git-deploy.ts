@@ -17,8 +17,13 @@ export async function deployToVercel(options: DeployOptions = {}): Promise<void>
   try {
     console.log('Starting auto-deployment process...');
     
+    // Change to the workspace root directory for git operations
+    const workspaceRoot = process.cwd().includes('/portfolio') 
+      ? process.cwd().replace('/portfolio', '') 
+      : process.cwd();
+    
     // Check if there are any changes to commit
-    const { stdout: statusOutput } = await execAsync('git status --porcelain');
+    const { stdout: statusOutput } = await execAsync('git status --porcelain', { cwd: workspaceRoot });
     if (!statusOutput.trim()) {
       console.log('No changes to commit, skipping deployment');
       return;
@@ -27,17 +32,17 @@ export async function deployToVercel(options: DeployOptions = {}): Promise<void>
     console.log('Changes detected:', statusOutput.trim());
     
     // Add all changes
-    await execAsync('git add .');
+    await execAsync('git add .', { cwd: workspaceRoot });
     console.log('Files staged for commit');
     
     // Commit with timestamp
     const timestamp = new Date().toISOString();
     const commitMessage = `${message} - ${timestamp}`;
-    await execAsync(`git commit -m "${commitMessage}"`);
+    await execAsync(`git commit -m "${commitMessage}"`, { cwd: workspaceRoot });
     console.log(`Committed with message: ${commitMessage}`);
     
     // Push to remote
-    await execAsync(`git push origin ${branch}`);
+    await execAsync(`git push origin ${branch}`, { cwd: workspaceRoot });
     console.log(`Pushed to ${branch} branch - Vercel deployment triggered`);
     
   } catch (error) {
@@ -48,7 +53,12 @@ export async function deployToVercel(options: DeployOptions = {}): Promise<void>
 
 export async function getGitStatus(): Promise<{ hasChanges: boolean; files: string[] }> {
   try {
-    const { stdout } = await execAsync('git status --porcelain');
+    // Change to the workspace root directory for git operations
+    const workspaceRoot = process.cwd().includes('/portfolio') 
+      ? process.cwd().replace('/portfolio', '') 
+      : process.cwd();
+      
+    const { stdout } = await execAsync('git status --porcelain', { cwd: workspaceRoot });
     const files = stdout.trim().split('\n').filter(line => line.trim());
     return {
       hasChanges: files.length > 0,
