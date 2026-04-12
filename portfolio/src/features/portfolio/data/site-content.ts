@@ -274,7 +274,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/food-fiesta/poster.svg",
+                    posterSrc: "/assets/placeholder-image.svg"
                 },
                 processGallery: {
                     groupId: "food-fiesta-process",
@@ -299,8 +299,8 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             label: "Results",
                         },
                     ],
-                },
-            },
+                }
+            }
         },
         tiles: {
             title: "Tiles",
