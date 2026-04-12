@@ -162,7 +162,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
   },
   workSection: {
     eyebrow: "Featured Work",
-    title: "Systems I've Built at Word Roll",
+    title: "Game Systems That Drive Results",
   },
   footerCta: {
     title: "Let’s build the next hit game",
@@ -186,63 +186,63 @@ export const defaultPortfolioContent: PortfolioContentState = {
     {
       slug: "bon-voyage",
       title: "Bon Voyage",
-      tag: "Long-term Retention · Economy",
+      tag: "Long-term Retention · Economy Design",
       blurb:
-        "60-day seasonal event with secondary currency — IAP rev/DAU +12%, D1RR +22 bps, session time +1.4%.",
+        "60-day seasonal event with gems secondary currency. Drove IAP revenue +12%, D1 retention +22 bps, session time +1.4%.",
       href: "/work/bon-voyage",
       externalUrl: "",
     },
     {
       slug: "food-fiesta",
       title: "Food Fiesta",
-      tag: "Cross-mode Event",
+      tag: "Cross-mode Events · Engagement",
       blurb:
-        "Cross-mode event tying all game modes via bonus tiles — engagement +7.5% in D7+, rolling retention +50 bps.",
+        "Cross-mode event connecting all game modes via bonus tile collection. Achieved engagement +7.5% in D7+ cohorts, rolling retention +50 bps.",
       href: "/work/food-fiesta",
       externalUrl: "",
     },
     {
       slug: "tiles",
       title: "Tiles",
-      tag: "Cosmetic System · Economy",
+      tag: "Cosmetic Systems · Gacha Design",
       blurb:
-        "First cosmetic reward system with Machinations-tuned gacha — payer spend +1200 coins, IAP conversion lift.",
+        "First cosmetic reward system with Machinations-tuned gacha mechanics. Generated payer spend +1,200 coins, significant IAP conversion lift.",
       href: "/work/tiles",
       externalUrl: "",
     },
     {
       slug: "ticket-mania",
       title: "Ticket Mania",
-      tag: "Leaderboard · Monetization",
+      tag: "Leaderboards · Monetization",
       blurb:
-        "Ticket-based leaderboard driving swap usage and payer conversion — rev/DAU +7%, D1RR +170 bps, D7 LTV +10%.",
+        "Ticket collection leaderboard driving swap usage and payer conversion. Delivered revenue +7%, D1 retention +170 bps, D7 LTV +10%.",
       href: "/work/ticket-mania",
       externalUrl: "",
     },
     {
       slug: "wotd",
-      title: "Word of the Day (WOTD)",
-      tag: "Feature Optimization",
+      title: "Word of the Day",
+      tag: "Feature Optimization · Engagement",
       blurb:
-        "Two-step interactive WOTD mechanic — D30 LTV +9.4%, D1RR +73 bps, engagement +0.63 moves/DAU.",
+        "Two-step interactive WOTD mechanic with letter collection and gameplay integration. Achieved D30 LTV +9.4%, D1 retention +73 bps, engagement +0.63 moves/DAU.",
       href: "/work/wotd",
       externalUrl: "",
     },
     {
       slug: "ai-innovation",
       title: "AI & Innovation",
-      tag: "Productivity Tools · AI",
+      tag: "Productivity Tools · Workflow Automation",
       blurb:
-        "Feature Spec Dashboard + Spec Maker pipeline — automated meeting note bifurcation to spec-ready content, eliminating manual reformatting.",
+        "Feature Spec Dashboard + Spec Maker pipeline automating meeting note bifurcation to production-ready documentation. Eliminated manual reformatting across 8-person dev team.",
       href: "/work/ai-innovation",
       externalUrl: "",
     },
     {
       slug: "kinoa-integration",
       title: "Kinoa LiveOps Integration",
-      tag: "LiveOps Platform",
+      tag: "Platform Integration · LiveOps",
       blurb:
-        "Seamless SDK integration with optimized event flows for enhanced player engagement.",
+        "Seamless SDK integration with optimized event configuration flows. Enhanced LiveOps capabilities for real-time player engagement and event management.",
       href: "/work/kinoa-integration",
       externalUrl: "",
     },
