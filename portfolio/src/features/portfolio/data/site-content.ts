@@ -318,7 +318,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "tiles-process",
                     heading: "Design process",
-                    items: []
+                    items: [{
+                            thumb: "/assets/tiles/screenshot-2026-04-12-at-10-50-46-pm-1776014937820.png",
+                            full: "/assets/tiles/screenshot-2026-04-12-at-10-50-46-pm-1776014937820.png",
+                            alt: "Machinations diagram",
+                            label: "Gallery - Screenshot 2026-04-12 at 10.50.46\u202FPM.png"
+                        }]
                 }
             }
         },
