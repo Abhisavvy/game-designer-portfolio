@@ -366,14 +366,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "ai-innovation-process",
                     heading: "Tool Architecture",
-                    items: [
-                        {
-                            thumb: "/assets/ai-innovation/gallery-pipeline.svg",
-                            full: "/assets/ai-innovation/gallery-pipeline.svg",
-                            alt: "End-to-end pipeline from meeting notes to complete documentation",
-                            label: "Full Pipeline"
-                        }
-                    ]
+                    items: []
                 }
             }
         },
