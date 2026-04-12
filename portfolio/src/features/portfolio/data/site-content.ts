@@ -184,20 +184,38 @@ export const defaultPortfolioContent: PortfolioContentState = {
   },
   projects: [
     {
-      slug: "food-fiesta",
-      title: "Food Fiesta",
-      tag: "Feature design · Live event",
+      slug: "seasons",
+      title: "Seasons",
+      tag: "Long-term Retention · Economy",
       blurb:
-        "Cross-mode event tying the core loop together — lifted engagement 3% and ARPDAU 22%.",
+        "60-day event with secondary currency — IAP rev/DAU +12%, D1RR +22 bps, session time +1.4%.",
+      href: "/work/seasons",
+      externalUrl: "",
+    },
+    {
+      slug: "food-fiesta",
+      title: "Food Fiesta & Tiles",
+      tag: "Cross-mode Event · Cosmetics",
+      blurb:
+        "Cross-mode event with cosmetic tile rewards — engagement +7.5% in D7+, rev/DAU +22%, rolling retention +50 bps.",
       href: "/work/food-fiesta",
+      externalUrl: "",
+    },
+    {
+      slug: "ticket-mania",
+      title: "Ticket Mania",
+      tag: "Leaderboard · Monetization",
+      blurb:
+        "Ticket-based leaderboard driving swap usage and payer conversion — rev/DAU +7%, D1RR +170 bps, D7 LTV +10%.",
+      href: "/work/ticket-mania",
       externalUrl: "",
     },
     {
       slug: "ai-innovation",
       title: "AI & Innovation",
-      tag: "Productivity Tools · AI Integration",
+      tag: "Productivity Tools · AI",
       blurb:
-        "Built AI-assisted Spec Maker and Meeting Manager tools — 25% documentation efficiency, 40% faster sprint planning.",
+        "Meeting Note Taker and Feature Spec Dashboard — structured meeting output to spec-ready content, eliminating manual bifurcation.",
       href: "/work/ai-innovation",
       externalUrl: "",
     },
@@ -213,45 +231,71 @@ export const defaultPortfolioContent: PortfolioContentState = {
     {
       slug: "wotd",
       title: "Word of the Day (WOTD)",
-      tag: "Feature optimization",
+      tag: "Feature Optimization",
       blurb:
         "Made WOTD interactive and learning-oriented — D1 rolling retention +140 bps, engagement +3%.",
       href: "/work/wotd",
       externalUrl: "",
     },
-    {
-      slug: "ticket-mania",
-      title: "Ticket Mania",
-      tag: "Feature optimization · Leaderboard",
-      blurb:
-        "Active leaderboard loop with tickets and feedback — engagement +3%, D1 retention +300 bps, ~10% LTV lift.",
-      href: "/work/ticket-mania",
-      externalUrl: "",
-    },
-    {
-      slug: "tiles",
-      title: "Tiles",
-      tag: "Rewards · Economy",
-      blurb:
-        "Cosmetic reward system beyond coins — economy de-risking and stronger ownership.",
-      href: "/work/tiles",
-      externalUrl: "",
-    },
   ],
   caseStudies: {
-    "food-fiesta": {
-      title: "Food Fiesta",
-      subtitle: "Feature design · Word Roll",
+    seasons: {
+      title: "Seasons",
+      subtitle: "Long-term Retention · Economy Design · Word Roll",
       problem:
-        "Players were moving from high-engagement buckets to low-engagement buckets within cohorts. The decline correlated with behavioral narrowing — players sticking to preferred modes only.",
+        "Two core gaps: (1) Long-term retention — a delta in D30/D1 ratio vs. competitors with long-horizon events. (2) Economy — coins were the only currency with many tap sources but few sinks, causing inflation over time.",
       approach:
-        "1. Build an event that ties all game modes back to the core word-making loop.\n2. Double down on core mechanics so players optimize how they form words.\n3. Target highly engaged players (~31% of DAU) who had exhausted daily play.",
+        "1. Designed a 60-day event (Mon–Sat) with 60 levels, gated by keys earned from game completions.\n2. Introduced gems as a secondary event currency to delay coin grants on game over, de-risking the coin economy.\n3. Tuned progression so keys required per level matched expected play patterns across player deciles (P4–P8 target).",
       constraints:
-        "Live mobile title, multi-mode audience, economy and event scheduling with product and live-ops.",
+        "Live mobile title with existing economy. Secondary currency had to feel natural, not punitive. 60-day horizon required careful pacing to avoid early burnout or late-stage drop-off. Solo series engagement had to be monitored for cannibalization.",
       outcome:
-        "Overall engagement +3%. ARPDAU +22%.",
+        "IAP rev/DAU +12% (100% confidence). D1RR +22 bps (99.8% confidence). Session time/user +1.4% (100% confidence). Net rev/DAU +1.8% (100% confidence). D50 LTV +3.6% (80% confidence). D30 new payer conversion +7 bps. Repeat payer purchases +3.2%, amount/purchase +8.6%. Non-payer wallet reduced 16% (intended economy de-risking). ~7% event completion rate vs. 9% target.",
       contributions:
-        "1. Designed event infrastructure for Food Fiesta so future events could plug in smoothly.\n2. Introduced new cosmetic rewards to reduce inflation and strengthen sinks.\n3. Defined task structures and balanced rewards across levels for progression and retention.",
+        "1. Designed the full 60-level progression curve, balancing key requirements against expected play frequency.\n2. Introduced gems as secondary currency — first non-coin currency in the game — to address inflation.\n3. Analyzed solo series cannibalization (4.1% engagement drop) and identified keys-earned differential as root cause.\n4. Validated FTUE CTR improvement (+190 bps) driven by gems FTUE flow.\n5. Monitored player decile engagement — found upsides across all deciles, not just P4–P8 target.",
+      links: [],
+      media: {
+        hero: {
+          posterSrc: "/assets/seasons/poster.svg",
+        },
+        processGallery: {
+          groupId: "seasons-process",
+          heading: "Design process",
+          items: [
+            {
+              thumb: "/assets/seasons/gallery-progression.svg",
+              full: "/assets/seasons/gallery-progression.svg",
+              alt: "60-level progression curve and key requirements",
+              label: "Progression",
+            },
+            {
+              thumb: "/assets/seasons/gallery-economy.svg",
+              full: "/assets/seasons/gallery-economy.svg",
+              alt: "Gems economy design and coin de-risking model",
+              label: "Economy",
+            },
+            {
+              thumb: "/assets/seasons/gallery-results.svg",
+              full: "/assets/seasons/gallery-results.svg",
+              alt: "A/B test results dashboard showing IAP and retention lifts",
+              label: "Results",
+            },
+          ],
+        },
+      },
+    },
+    "food-fiesta": {
+      title: "Food Fiesta & Tiles",
+      subtitle: "Cross-mode Event · Cosmetic Rewards · Word Roll",
+      problem:
+        "Players in later cohorts narrowed to a single preferred game mode, dropping into low-engagement buckets. Non-leaderboard days had a 1–2 move gap with no compelling content. Rewards were entirely coin-based, limiting economy levers.",
+      approach:
+        "1. Built a Mon–Sat event tying all game modes together via DW/TW bonus tiles on the last letter of the gameboard.\n2. Introduced tile skins as the first cosmetic reward in the game — creating sinks beyond coins.\n3. Gated event unlock at lifetime 150 moves or D7+ cohort to target the right player segment.\n4. Designed progression levels unlocked by bonus tile collection, expected to drive power-up usage.",
+      constraints:
+        "Pre-allocation bias of ~3% in experiment setup. Multi-mode balance — had to ensure no single mode was disproportionately rewarded. Economy de-risking with cosmetics had to feel like genuine ownership, not just coin replacement.",
+      outcome:
+        "Engagement +7.5% (~2.4 moves) in D7+ cohort. Rev/DAU +22% (+8 cents) driven by IAP +100% (+6 cents) and ad rev +5% (+2 cents). Rolling retention +50 bps in D7+ (96% confidence). Power-up usage +26%, bingo rate +55 bps. High-engagement bucket (30+ moves) share +200 bps. IT ad impressions +7%, banner +8%. Payer (earn–spend)/DAU decreased by ~1,200 coins, driving IAP upsides.",
+      contributions:
+        "1. Designed the cross-mode event structure with DW/TW bonus tile mechanic.\n2. Introduced tile skins as first-ever cosmetic reward system in Word Roll.\n3. Defined task structures and balanced rewards across progression levels.\n4. Analyzed engagement uplift across all game modes and identified Monday/Tuesday as peak event days.\n5. Monitored early-cohort retention signals (D1 down 62 bps — attributed to experiment bias, not feature impact).",
       links: [],
       media: {
         hero: {
@@ -270,13 +314,13 @@ export const defaultPortfolioContent: PortfolioContentState = {
             {
               thumb: "/assets/food-fiesta/gallery-ui.svg",
               full: "/assets/food-fiesta/gallery-ui.svg",
-              alt: "UI mockups for Food Fiesta progression and rewards",
+              alt: "UI mockups for Food Fiesta progression and tile rewards",
               label: "UI",
             },
             {
               thumb: "/assets/food-fiesta/gallery-analytics.svg",
               full: "/assets/food-fiesta/gallery-analytics.svg",
-              alt: "Engagement and economy readouts used to validate the event",
+              alt: "Engagement and economy readouts across player cohorts",
               label: "Results",
             },
           ],
@@ -328,18 +372,20 @@ export const defaultPortfolioContent: PortfolioContentState = {
     },
     "ai-innovation": {
       title: "AI & Innovation",
-      subtitle: "Productivity Tools · Development Team",
+      subtitle: "Productivity Tools · Feature Spec Pipeline",
       problem:
-        "Manual documentation and meeting processes were creating bottlenecks for our 8-person development team, with feature specification writing taking excessive time and sprint planning sessions becoming inefficient.",
+        "Unstructured meeting output created bottlenecks: manual bifurcation of decisions vs. specs vs. stakeholder updates. Context was lost when team members joined later in pre-production. Duplicate work — same content rewritten for email, specs, and presentations.",
       approach:
-        "1. Built AI-assisted Spec Maker and Meeting Manager tools using Cursor AI.\n2. Integrated tools into existing development workflows without disrupting established processes.\n3. Established these tools as standard workflow across entire development team.",
+        "1. Built Feature Spec Dashboard — ingests Granola meeting notes, bifurcates into structured sections (problem statements, vision, goals, flows), and produces mail-ready and spec-ready output.\n2. Built Spec Maker — takes structured input from the Dashboard (or raw notes) and generates complete spec documents in markdown.\n3. Template-driven extraction ensures output aligns with standard section headers so Spec Maker doesn't have to infer structure.",
       constraints:
-        "Team adoption challenges, workflow integration complexity, maintaining documentation accuracy standards.",
+        "Team adoption across 8-person dev team. Meeting note quality varies by source. Spec template had to be flexible enough for different feature types while maintaining consistent structure.",
       outcome:
-        "25% improvement in documentation efficiency, 40% faster sprint planning, established productivity culture that became team standard.",
+        "Single source of truth from meetings — one extraction feeds both email and spec pipeline. Consistent structure across all specs. Reduced time from meeting completion to spec-ready data with minimal manual reformatting. Adopted as team standard workflow.",
       contributions:
-        "1. Conceptualized and developed both AI productivity tools from initial problem identification to full team deployment.\n2. Integrated Cursor AI effectively into existing development workflows.\n3. Drove team adoption by demonstrating clear efficiency gains and providing comprehensive training.\n4. Established productivity culture that influenced broader organizational approach to workflow optimization.",
-      links: [],
+        "1. Identified the meeting-to-spec pipeline gap and designed the two-tool architecture (Dashboard → Spec Maker).\n2. Built Feature Spec Dashboard with Granola integration, data bifurcation, and mail/spec output.\n3. Designed template-driven extraction aligned to standard spec sections.\n4. Built Spec Maker for structured-input-to-full-spec generation.\n5. Drove team adoption and established as standard workflow across development team.",
+      links: [
+        { label: "Feature Spec Dashboard", url: "https://abhishekdutta1-project.vercel.app/" },
+      ],
       media: {
         hero: {
           posterSrc: "/assets/ai-innovation/poster.svg",
@@ -351,14 +397,14 @@ export const defaultPortfolioContent: PortfolioContentState = {
             {
               thumb: "/assets/ai-innovation/gallery-spec-maker.svg",
               full: "/assets/ai-innovation/gallery-spec-maker.svg",
-              alt: "AI-assisted Spec Maker tool interface",
-              label: "Spec Maker Tool",
+              alt: "Feature Spec Dashboard — meeting notes to structured output",
+              label: "Spec Dashboard",
             },
             {
               thumb: "/assets/ai-innovation/gallery-meeting-manager.svg",
               full: "/assets/ai-innovation/gallery-meeting-manager.svg",
-              alt: "Meeting Manager workflow optimization",
-              label: "Meeting Manager",
+              alt: "Spec Maker — structured input to full spec document",
+              label: "Spec Maker",
             },
           ],
         },
@@ -419,32 +465,32 @@ export const defaultPortfolioContent: PortfolioContentState = {
     },
     "ticket-mania": {
       title: "Ticket Mania",
-      subtitle: "Feature optimization · Word Roll",
+      subtitle: "Leaderboard Redesign · Monetization · Word Roll",
       problem:
-        "Players engaged with leaderboard events too passively.",
+        "Players engaged with leaderboard events too passively. The existing leaderboard mechanic lacked a compelling collection loop, and booster monetization was underperforming.",
       approach:
-        "1. Complete rows and collect tickets while forming words.\n2. Clear feedback each time a ticket is earned.",
+        "1. Designed a ticket-collection mechanic on classic games — players fill rows on the gameboard to earn tickets.\n2. Tickets feed into a leaderboard where top players receive rewards.\n3. Increased swap usage by creating natural demand through ticket collection pressure.\n4. Redesigned leaderboard intro CTA to drive instant bot game starts.",
       constraints:
-        "Fairness, leaderboard bucketing, UX for feedback density.",
+        "Fairness in leaderboard bucketing. Bot chase logic imported from control was suboptimal for new mechanic. FTUE landed on leaderboard screen (navigational dead end). Booster price-to-reward conflict with swap pricing.",
       outcome:
-        "Engagement +3%, D1 retention +300 bps, ~10% LTV impact.",
+        "Rev/DAU +7% (~3 cents, 100% confidence) primarily from IAP. D7 LTV +10% (75% confidence). D30 LTdays +9% (+0.45 days, 91% confidence). D1RR for D2+ organic +170 bps (99% confidence). D1R for organic +300 bps (95% confidence). Rolling retention +50 bps (high confidence). Engagement (starts/play/end per DAU) +3% (100% confidence). Swap spend +100 coins/DAU, (earn–spend) shifted from +50 to −5 coins. D7 payer conversion +55 bps (93% confidence).",
       contributions:
-        "1. Concepted the mechanic.\n2. Worked with PMs on assign and bucketing logic.\n3. Partnered with UX on flows.",
+        "1. Designed the ticket-collection mechanic and gameboard integration.\n2. Analyzed booster purchase decline — identified LB screen top-of-funnel drop and swap pricing conflict as root causes.\n3. Identified FTUE navigational dead-end issue and proposed optimization.\n4. Flagged bot chase logic as suboptimal for new mechanic — proposed future iteration.\n5. Drove decision to ramp variant to 100% based on strong IAP and retention signals.",
       links: [],
     },
     tiles: {
-      title: "Tiles",
-      subtitle: "Rewards · Economy · Word Roll",
+      title: "Tiles (Cosmetic Rewards)",
+      subtitle: "Economy Design · Cosmetic System · Word Roll",
       problem:
-        "Rewards were almost entirely coin-based, limiting economy levers.",
+        "Rewards were entirely coin-based, limiting economy levers. No cosmetic layer existed to create ownership or drive non-currency engagement.",
       approach:
-        "1. Introduce tiles as a cosmetic reward.\n2. De-risk a coin-only economy and support IAP context.\n3. Build a sense of ownership beyond currency.",
+        "1. Introduced tile skins as the first cosmetic reward in Word Roll.\n2. Designed tile drops tied to Food Fiesta event progression.\n3. Used Machinations to model gacha fairness and event-specific exclusivity.\n4. Created sinks beyond coins to de-risk the coin economy and support IAP context.",
       constraints:
-        "Gacha fairness, event exclusivity, tooling (e.g. Machinations) for tuning.",
+        "Gacha fairness perception. Event exclusivity had to feel rewarding, not punitive. Machinations tooling for economy tuning. Cosmetics had to complement, not replace, existing coin rewards.",
       outcome:
-        "Created room to de-risk IAP and diversify rewards.",
+        "Part of the Food Fiesta results: payer (earn–spend) decreased by ~1,200 coins driving IAP upsides. Created genuine ownership layer beyond currency. Enabled future cosmetic expansion.",
       contributions:
-        "1. Built a tile gacha with Machinations.\n2. Implemented event-specific tile drops for exclusivity.",
+        "1. Designed the tile cosmetic system and gacha mechanics using Machinations.\n2. Implemented event-specific tile drops for exclusivity and progression incentives.\n3. Balanced cosmetic rewards against existing coin economy to avoid cannibalization.",
       links: [],
       media: {
         processGallery: {
@@ -454,13 +500,13 @@ export const defaultPortfolioContent: PortfolioContentState = {
             {
               thumb: "/assets/word-roll/gallery-machinations.svg",
               full: "/assets/word-roll/gallery-machinations.svg",
-              alt: "Machinations-style economy diagram placeholder for tile gacha tuning",
+              alt: "Machinations economy diagram for tile gacha tuning",
               label: "Model",
             },
             {
               thumb: "/assets/word-roll/gallery-rewards.svg",
               full: "/assets/word-roll/gallery-rewards.svg",
-              alt: "Reward structure notes for tiles versus coin sinks",
+              alt: "Reward structure for tiles versus coin sinks",
               label: "Rewards",
             },
           ],

@@ -30,6 +30,7 @@ interface ProjectCardAnimatedProps {
 // Get project-specific icon based on project slug/title
 function getProjectIcon(slug: string) {
   switch (slug) {
+    case "seasons": return Calendar;
     case "food-fiesta": return Utensils;
     case "bon-voyage": return Plane;
     case "wotd": return BookOpen;
