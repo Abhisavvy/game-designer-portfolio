@@ -279,14 +279,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "food-fiesta-process",
                     heading: "Design process",
-                    items: [
-                        {
-                            thumb: "/assets/food-fiesta/gallery-analytics.svg",
-                            full: "/assets/food-fiesta/gallery-analytics.svg",
-                            alt: "Cross-mode engagement analysis",
-                            label: "Results"
-                        }
-                    ]
+                    items: []
                 }
             }
         },
