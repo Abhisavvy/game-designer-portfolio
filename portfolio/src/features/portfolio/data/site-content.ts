@@ -433,7 +433,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/wotd/hero-image.png"
+                    posterSrc: "/assets/placeholder-image.svg"
                 },
                 processGallery: {
                     groupId: "wotd-process",
