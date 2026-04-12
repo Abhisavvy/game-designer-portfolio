@@ -7,7 +7,7 @@ This folder groups your CV tooling and public portfolio. Open **`career-workspac
 | Path | Purpose |
 |------|---------|
 | `reactive-resume/` | Clone of [Reactive Resume](https://github.com/amruthpillai/reactive-resume). Edit in the app; export **PDF** (best layout fidelity) or **DOCX** when Word is required. See [docs/REACTIVE-RESUME.md](docs/REACTIVE-RESUME.md). |
-| `portfolio/` | Next.js (App Router) site for your public portfolio. Run `npm install` then `npm run dev`. **Edit copy in the browser:** [Edit portfolio](http://localhost:3000/edit) (saved in `localStorage` key `portfolio-site-editor-v2`). **CV:** [CV builder](http://localhost:3000/cv-builder) exports Reactive Resume JSON. Default layout/copy mirrors [Abhishek in a nutshell (Webflow)](https://abhishek-in-a-nutshell.webflow.io/). See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). |
+| `portfolio/` | Next.js (App Router) site for your public portfolio. Run `npm install` then `npm run dev`. **Edit copy in the browser:** [Edit portfolio](http://localhost:3000/edit) (saved in `localStorage` key `portfolio-site-editor-v2`). **CV:** [CV builder](http://localhost:3000/cv-builder) exports Reactive Resume JSON. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). |
 | `career-content/` | Optional notes, YAML/Markdown source snippets, or exports (JSON) for AI-assisted edits. |
 | `docs/prompts/` | Copy-paste prompts for CV bullets, case studies, and JD tailoring. |
 | `skills/career-sync/` | Cursor skill (duplicate at `.cursor/skills/career-sync/` for discovery). Optionally also copy to `~/.cursor/skills-cursor/career-sync/` for global use. |

@@ -1,5 +1,5 @@
 /**
- * Default portfolio copy shaped like https://abhishek-in-a-nutshell.webflow.io/
+ * Default portfolio content for the Next.js site.
  * Live site + /edit use PortfolioEditorProvider (localStorage).
  */
 import { mergeCaseStudyMedia, type CaseStudyMedia, } from "./case-study-media";
@@ -18,7 +18,7 @@ export type CaseStudy = {
     approach: string;
     constraints: string;
     outcome: string;
-    /** Optional “My contributions” block (Webflow-style). */
+    /** Optional “My contributions” block . */
     contributions?: string;
     links: {
         label: string;
@@ -67,7 +67,7 @@ export type PortfolioContentState = {
         siteName: string;
         title: string;
         description: string;
-        /** Link to your Webflow or other canonical portfolio (shown in footer). */
+        /** Link to other canonical portfolio (shown in footer). */
         referencePortfolioUrl?: string;
     };
     hero: PortfolioHero;
@@ -119,13 +119,12 @@ export function mergeWithDefaultPortfolio(raw: Partial<PortfolioContentState> | 
         caseStudies: mergeCaseStudyRecords(d.caseStudies, raw.caseStudies),
     };
 }
-/** Defaults aligned with Abhishek’s Webflow portfolio (you can edit in /edit). */
+/** Default portfolio content (you can edit in /edit). */
 export const defaultPortfolioContent: PortfolioContentState = {
     siteMeta: {
         siteName: "Abhishek Dutta - Systems Designer",
         title: "Abhishek — Systems & Feature Designer | LiveOps Expert",
         description: "Systems & Feature Designer specializing in LiveOps, retention mechanics, and economy design. 3+ years driving measurable impact through data-driven mobile game design.",
-        referencePortfolioUrl: "https://abhishek-in-a-nutshell.webflow.io/",
     },
     hero: {
         headline: "Building Systems That Keep Players Engaged",
