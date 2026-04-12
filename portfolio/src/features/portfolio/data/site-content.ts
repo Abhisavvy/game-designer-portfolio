@@ -386,15 +386,16 @@ export const defaultPortfolioContent: PortfolioContentState = {
       problem:
         "Unstructured meeting output created bottlenecks: manual bifurcation of decisions vs. specs vs. stakeholder updates. Context was lost when team members joined later in pre-production. Duplicate work — same content rewritten for email, specs, and presentations. Teams struggled to turn messy Granola meeting notes into organized, actionable content.",
       approach:
-        "1. Built Feature Spec Dashboard — ingests meeting notes from Granola (or similar), bifurcates into structured sections (problem statements, vision, goals, flows), and produces both mail-ready summaries and spec-ready content.\n2. Built Spec Maker — takes structured input from Dashboard or raw meeting data and generates complete spec documents in markdown (with future PPTX support planned).\n3. Template-driven extraction using standard section headers ensures output aligns with spec format so Spec Maker doesn't need to infer structure.\n4. Created single source of truth pipeline: Meeting → Dashboard → Spec Maker → Complete Documentation.",
+        "1. **Feature Spec Dashboard** — ingests meeting notes from Granola (or similar tools), bifurcates raw notes into structured sections (problem statements, vision, anti-vision, business goals, design goals, flows), and produces both mail-ready stakeholder updates and spec-ready content for downstream processing.\n2. **Spec Maker** — takes structured input from Dashboard output (or raw meeting data/freeform prompts) and generates complete spec documents in markdown format, with future PPTX generation planned for presentation-ready outputs.\n3. **Template-driven extraction** — uses standard section headers (Problem, Vision, Business Goals, Design Goals, Flows) so output aligns perfectly with Spec Maker's expected input format, eliminating manual reformatting.\n4. **End-to-end pipeline** — Meeting notes → Dashboard bifurcation → Mail + Spec-ready data → Spec Maker → Complete documentation, creating single source of truth from meetings.",
       constraints:
         "Team adoption across 8-person dev team. Meeting note quality varies by source (Granola vs manual). Spec template had to be flexible for different feature types while maintaining consistency. Integration with existing workflows and tools.",
       outcome:
-        "Eliminated manual bifurcation of meeting content. Single extraction now feeds both stakeholder emails and spec pipeline instead of rewriting same content multiple places. Reduced time from meeting completion to spec-ready data with minimal manual reformatting. Provided context retention for team members joining mid-production. Adopted as standard team workflow with consistent structure across all feature specs.",
+        "**Eliminated manual bifurcation** — one extraction now feeds both stakeholder emails and spec pipeline instead of rewriting same content in multiple formats. **Context retention** — team members joining later stages of pre-production gain full context without requiring knowledge transfer sessions. **Workflow standardization** — adopted as team standard across 8-person dev team with consistent spec structure. **Efficiency gains** — reduced time from meeting completion to spec-ready data with minimal manual reformatting. **Duplicate work elimination** — same meeting content no longer rewritten for emails, specs, and presentations.",
       contributions:
-        "1. Identified the meeting-to-spec pipeline gap and architected the two-tool solution (Dashboard → Spec Maker).\n2. Built Feature Spec Dashboard with Granola integration, automated data bifurcation, and dual output (mail + spec-ready).\n3. Designed template-driven extraction system aligned to standard spec sections (Problem, Vision, Goals, Flows).\n4. Built Spec Maker for structured-input-to-complete-spec generation with markdown output.\n5. Established format consistency so all team specs follow same structure and sections.\n6. Drove adoption across development team and integrated into standard pre-production workflow.",
+        "1. **Identified pipeline gap** — recognized that unstructured meeting output was creating bottlenecks and designed the two-tool architecture (Dashboard → Spec Maker) to solve it.\n2. **Built Feature Spec Dashboard** — developed web app with Granola integration, automated data bifurcation logic, and dual output system (stakeholder emails + spec-ready structured data).\n3. **Designed template-driven extraction** — created system using standard spec section headers (Problem, Vision, Anti-vision, Business Goals, Design Goals, Flows) for consistent output formatting.\n4. **Built Spec Maker** — developed locally-hosted tool that consumes structured input and generates complete spec documents in markdown, with planned PPTX export for presentations.\n5. **Established format consistency** — ensured all team feature specs follow identical structure and section ordering for predictable workflow.\n6. **Drove team adoption** — integrated tools into standard pre-production workflow across 8-person development team, eliminating ad-hoc spec creation methods.",
       links: [
         { label: "Feature Spec Dashboard", href: "https://abhishekdutta1-project.vercel.app/" },
+        { label: "Spec Maker (Local)", href: "#" },
       ],
       media: {
         hero: {
@@ -402,19 +403,25 @@ export const defaultPortfolioContent: PortfolioContentState = {
         },
         processGallery: {
           groupId: "ai-innovation-process",
-          heading: "Development process",
+          heading: "Tool Architecture",
           items: [
             {
-              thumb: "/assets/ai-innovation/gallery-spec-maker.svg",
-              full: "/assets/ai-innovation/gallery-spec-maker.svg",
-              alt: "Feature Spec Dashboard — meeting notes to structured output",
+              thumb: "/assets/ai-innovation/gallery-spec-dashboard.svg",
+              full: "/assets/ai-innovation/gallery-spec-dashboard.svg",
+              alt: "Feature Spec Dashboard — Granola meeting notes to structured bifurcated output",
               label: "Spec Dashboard",
             },
             {
-              thumb: "/assets/ai-innovation/gallery-meeting-manager.svg",
-              full: "/assets/ai-innovation/gallery-meeting-manager.svg",
-              alt: "Spec Maker — structured input to full spec document",
+              thumb: "/assets/ai-innovation/gallery-spec-maker.svg",
+              full: "/assets/ai-innovation/gallery-spec-maker.svg",
+              alt: "Spec Maker — structured input to complete markdown spec documents",
               label: "Spec Maker",
+            },
+            {
+              thumb: "/assets/ai-innovation/gallery-pipeline.svg",
+              full: "/assets/ai-innovation/gallery-pipeline.svg",
+              alt: "End-to-end pipeline from meeting notes to complete documentation",
+              label: "Full Pipeline",
             },
           ],
         },
