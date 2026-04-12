@@ -6,7 +6,6 @@ import { SiteHeader } from "@/features/portfolio/components/SiteHeader";
 import { SiteMetaSync } from "@/features/portfolio/components/SiteMetaSync";
 import { defaultPortfolioContent } from "@/features/portfolio/data/site-content";
 import "./globals.css";
-import "../styles/print.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

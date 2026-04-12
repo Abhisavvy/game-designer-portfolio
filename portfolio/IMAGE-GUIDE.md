@@ -119,6 +119,25 @@ mkdir -p word-roll bon-voyage
 - **Descriptive filenames** for better organization
 - **Add alt text descriptions** when customizing components
 
+## 📄 **Resume PDF**
+
+### **Required File:**
+- **Location**: `/public/ABHISHEK DUTTA RESUME.pdf`
+- **Purpose**: Downloadable resume when users click "Download PDF" on `/resume` page
+- **Format**: PDF file
+- **Naming**: Must be exactly `ABHISHEK DUTTA RESUME.pdf` (with spaces)
+
+### **How to Add:**
+1. **Export your resume** from Reactive Resume as PDF
+2. **Rename the file** to `ABHISHEK DUTTA RESUME.pdf`
+3. **Replace the placeholder** in `/public/ABHISHEK DUTTA RESUME.pdf`
+
+### **Current Status:**
+- ⚠️ **Placeholder PDF** currently in place
+- 🔄 **Replace with your actual resume** for production use
+
 ---
 
 🎮 **Your portfolio will automatically display these images once you add them to the correct folders!**
+
+📄 **Don't forget to replace the placeholder PDF with your actual resume!**

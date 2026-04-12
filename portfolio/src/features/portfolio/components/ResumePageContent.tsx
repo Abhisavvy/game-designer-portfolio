@@ -20,13 +20,18 @@ export function ResumePageContent() {
   const { person } = defaultPortfolioContent;
 
   const handleDownloadPDF = () => {
-    // Trigger browser print dialog which can save as PDF
-    window.print();
+    // Download the pre-made PDF file
+    const link = document.createElement('a');
+    link.href = '/ABHISHEK DUTTA RESUME.pdf';
+    link.download = 'ABHISHEK DUTTA RESUME.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
-    <div className="min-h-screen bg-black pt-20 pb-12 print:bg-white print:pt-4 print:pb-4">
-      <div className="max-w-4xl mx-auto px-6 print:px-4 print:max-w-full">
+    <div className="min-h-screen bg-black pt-20 pb-12">
+      <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <motion.div
           className="text-center mb-12"
@@ -85,7 +90,7 @@ export function ResumePageContent() {
           {/* Download Button */}
           <motion.button
             onClick={handleDownloadPDF}
-            className="mt-6 inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full text-black font-semibold hover:shadow-lg transition-all duration-300 print:hidden"
+            className="mt-6 inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full text-black font-semibold hover:shadow-lg transition-all duration-300"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -95,7 +100,7 @@ export function ResumePageContent() {
         </motion.div>
 
         {/* Resume Content */}
-        <div className="grid md:grid-cols-3 gap-8 print:gap-4 print:grid-cols-3">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="md:col-span-1 space-y-8">
             {/* Skills */}
