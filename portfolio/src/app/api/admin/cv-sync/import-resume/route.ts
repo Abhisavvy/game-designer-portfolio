@@ -108,18 +108,120 @@ export async function POST(request: NextRequest) {
 }
 
 async function validateConsistency(resumeInfo: any) {
-  // This would compare resume data with portfolio data
-  // For now, return mock consistency issues
-  return [
-    {
-      type: 'personal_info',
-      severity: 'medium' as const,
+  const issues = [];
+  
+  try {
+    // Load current portfolio data
+    const siteContent = await import('@/features/portfolio/data/site-content');
+    
+    // Compare personal information
+    const portfolioPersonal = {
+      name: siteContent.defaultPortfolioContent.person?.name || '',
+      email: siteContent.defaultPortfolioContent.person?.email || '',
+      phone: siteContent.defaultPortfolioContent.person?.phone || '',
+      location: siteContent.defaultPortfolioContent.person?.location || '',
+      linkedin: siteContent.defaultPortfolioContent.person?.links?.linkedin || '',
+    };
+
+    // Check name consistency
+    if (resumeInfo.personal.name && portfolioPersonal.name) {
+      if (resumeInfo.personal.name.trim() !== portfolioPersonal.name.trim()) {
+        issues.push({
+          type: 'personal_info',
+          severity: 'medium' as const,
+          projectSlug: 'general',
+          field: 'name',
+          message: 'Name differs between CV and portfolio',
+          cvValue: resumeInfo.personal.name,
+          portfolioValue: portfolioPersonal.name,
+          suggestion: 'Ensure consistent name formatting across CV and portfolio',
+        });
+      }
+    }
+
+    // Check email consistency
+    if (resumeInfo.personal.email && portfolioPersonal.email) {
+      if (resumeInfo.personal.email !== portfolioPersonal.email) {
+        issues.push({
+          type: 'personal_info',
+          severity: 'high' as const,
+          projectSlug: 'general',
+          field: 'email',
+          message: 'Email address differs between CV and portfolio',
+          cvValue: resumeInfo.personal.email,
+          portfolioValue: portfolioPersonal.email,
+          suggestion: 'Update email address to match across both platforms',
+        });
+      }
+    }
+
+    // Check LinkedIn consistency
+    if (resumeInfo.personal.linkedin && portfolioPersonal.linkedin) {
+      if (resumeInfo.personal.linkedin !== portfolioPersonal.linkedin) {
+        issues.push({
+          type: 'personal_info',
+          severity: 'medium' as const,
+          projectSlug: 'general',
+          field: 'linkedin',
+          message: 'LinkedIn URL differs between CV and portfolio',
+          cvValue: resumeInfo.personal.linkedin,
+          portfolioValue: portfolioPersonal.linkedin,
+          suggestion: 'Ensure LinkedIn URL is consistent',
+        });
+      }
+    }
+
+    // Check location consistency
+    if (resumeInfo.personal.location && portfolioPersonal.location) {
+      if (resumeInfo.personal.location !== portfolioPersonal.location) {
+        issues.push({
+          type: 'personal_info',
+          severity: 'low' as const,
+          projectSlug: 'general',
+          field: 'location',
+          message: 'Location format differs between CV and portfolio',
+          cvValue: resumeInfo.personal.location,
+          portfolioValue: portfolioPersonal.location,
+          suggestion: 'Consider using consistent location format',
+        });
+      }
+    }
+
+    // Check for missing portfolio projects in CV experience
+    if (siteContent.defaultPortfolioContent.projects && resumeInfo.experience) {
+      const portfolioProjects = siteContent.defaultPortfolioContent.projects.map((p: any) => p.title.toLowerCase());
+      const cvHighlights = resumeInfo.experience
+        .flatMap((job: any) => job.highlights || [])
+        .join(' ')
+        .toLowerCase();
+
+      portfolioProjects.forEach((projectTitle: string) => {
+        if (!cvHighlights.includes(projectTitle)) {
+          issues.push({
+            type: 'project_missing',
+            severity: 'medium' as const,
+            projectSlug: 'general',
+            field: 'experience',
+            message: `Portfolio project "${projectTitle}" not mentioned in CV highlights`,
+            cvValue: 'Not found in CV',
+            portfolioValue: projectTitle,
+            suggestion: 'Consider adding CV bullets for this portfolio project',
+          });
+        }
+      });
+    }
+
+  } catch (error) {
+    console.error('Error validating consistency:', error);
+    issues.push({
+      type: 'validation_error',
+      severity: 'high' as const,
       projectSlug: 'general',
-      field: 'name',
-      message: 'Name format differs between CV and portfolio',
-      cvValue: resumeInfo.personal.name,
-      portfolioValue: 'Current Portfolio Name',
-      suggestion: 'Update portfolio to match CV format',
-    },
-  ];
+      field: 'system',
+      message: 'Could not validate consistency due to system error',
+      suggestion: 'Check portfolio data structure and try again',
+    });
+  }
+
+  return issues;
 }

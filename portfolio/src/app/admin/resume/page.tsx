@@ -53,9 +53,19 @@ export default function ResumeManagementPage() {
     try {
       setExporting(true);
       
-      // Get approved CV bullets (this would come from your CV sync system)
-      const bullets = []; // TODO: Fetch approved bullets from state/API
-      const personalInfo = {}; // TODO: Fetch current personal info
+      // Load current personal info and any approved bullets
+      let bullets: any[] = [];
+      let personalInfo: any = {};
+      
+      try {
+        const personalResponse = await fetch('/api/admin/content/personal');
+        if (personalResponse.ok) {
+          const personalData = await personalResponse.json();
+          personalInfo = personalData.personal || {};
+        }
+      } catch (error) {
+        console.warn('Could not load personal info for export:', error);
+      }
 
       const response = await fetch('/api/admin/cv-sync/export-resume', {
         method: 'POST',

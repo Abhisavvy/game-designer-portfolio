@@ -2,50 +2,61 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { bullets, personalInfo } = await request.json();
-    
-    if (!bullets || !personalInfo) {
-      return NextResponse.json(
-        { error: 'CV bullets and personal info are required' },
-        { status: 400 }
-      );
-    }
-
     // Load current site content to extract portfolio data
     const siteContent = await import('@/features/portfolio/data/site-content');
+    
+    // Get request data (bullets and personalInfo are optional for this endpoint)
+    const requestBody = await request.json().catch(() => ({}));
+    const { bullets = [], personalInfo = {} } = requestBody;
+
+    // Extract current personal info from site content
+    const currentPersonalInfo = {
+      name: siteContent.defaultPortfolioContent.person?.name || '',
+      role: siteContent.defaultPortfolioContent.person?.role || '',
+      email: siteContent.defaultPortfolioContent.person?.email || '',
+      phone: siteContent.defaultPortfolioContent.person?.phone || '',
+      location: siteContent.defaultPortfolioContent.person?.location || '',
+      linkedin: siteContent.defaultPortfolioContent.person?.links?.linkedin || '',
+      bio: siteContent.defaultPortfolioContent.about?.body || '',
+    };
+
+    // Merge with any provided personalInfo (allowing override)
+    const mergedPersonalInfo = { ...currentPersonalInfo, ...personalInfo };
 
     // Generate Reactive Resume compatible JSON
     const reactiveResumeData = {
       $schema: "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
       basics: {
-        name: personalInfo.name || siteContent.personalInfo?.name || '',
-        label: personalInfo.role || siteContent.personalInfo?.role || '',
-        email: personalInfo.email || siteContent.personalInfo?.contact?.email || '',
-        phone: personalInfo.phone || siteContent.personalInfo?.contact?.phone || '',
-        url: siteContent.personalInfo?.contact?.linkedin || '',
-        summary: personalInfo.bio || siteContent.about?.body || '',
+        name: mergedPersonalInfo.name,
+        label: mergedPersonalInfo.role,
+        email: mergedPersonalInfo.email,
+        phone: mergedPersonalInfo.phone,
+        url: mergedPersonalInfo.linkedin,
+        summary: mergedPersonalInfo.bio,
         location: {
-          city: personalInfo.location || siteContent.personalInfo?.location || '',
+          city: mergedPersonalInfo.location,
         },
         profiles: [
           {
             network: "LinkedIn",
             username: "",
-            url: personalInfo.linkedin || siteContent.personalInfo?.contact?.linkedin || '',
+            url: mergedPersonalInfo.linkedin,
           },
         ],
       },
       work: [
         {
-          name: "Game Studio", // This would come from your actual work experience
-          position: personalInfo.role || "Game Designer",
+          name: "Portfolio Projects", // Generic work entry for portfolio projects
+          position: mergedPersonalInfo.role,
           url: "",
-          startDate: "2023-01-01", // These would come from actual data
+          startDate: "2023-01-01", // Generic start date
           endDate: "",
-          summary: "Game design and development work",
-          highlights: bullets
-            .filter((bullet: any) => bullet.approved)
-            .map((bullet: any) => bullet.content),
+          summary: "Game design and development work showcased in portfolio",
+          highlights: Array.isArray(bullets) 
+            ? bullets
+                .filter((bullet: any) => bullet.approved)
+                .map((bullet: any) => bullet.content)
+            : [],
         },
       ],
       education: [], // Would be populated from actual education data
@@ -61,7 +72,7 @@ export async function POST(request: NextRequest) {
           keywords: ["C#", "JavaScript", "TypeScript", "Next.js"],
         },
       ],
-      projects: siteContent.projects?.map((project: any) => ({
+      projects: siteContent.defaultPortfolioContent.projects?.map((project: any) => ({
         name: project.title,
         description: project.blurb,
         highlights: [],

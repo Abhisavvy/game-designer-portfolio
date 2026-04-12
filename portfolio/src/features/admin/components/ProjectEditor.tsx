@@ -511,8 +511,16 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
           </div>
         )}
 
-            {activeTab === 'cv-sync' && caseStudy && (
-              <CVSyncPanel caseStudy={caseStudy} />
+            {activeTab === 'cv-sync' && project && (
+              <CVSyncPanel 
+                projectSlugs={[project.slug]}
+                onBulletsGenerated={(bullets) => {
+                  console.log('Generated bullets:', bullets);
+                }}
+                onIssuesFound={(issues) => {
+                  console.log('Consistency issues:', issues);
+                }}
+              />
             )}
           </div>
         </div>

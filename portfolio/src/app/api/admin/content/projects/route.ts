@@ -21,7 +21,7 @@ export async function GET() {
     const siteContent = await import('@/features/portfolio/data/site-content');
     
     // Extract projects data
-    const projects = siteContent.projects.map(project => ({
+    const projects = siteContent.defaultPortfolioContent.projects.map((project: any) => ({
       slug: project.slug,
       title: project.title,
       tag: project.tag,
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     
     // Check if slug already exists
     const siteContent = await import('@/features/portfolio/data/site-content');
-    const existingProject = siteContent.projects.find(p => p.slug === validatedProject.slug);
+    const existingProject = siteContent.defaultPortfolioContent.projects.find((p: any) => p.slug === validatedProject.slug);
     
     if (existingProject) {
       return NextResponse.json(
@@ -60,7 +60,10 @@ export async function POST(request: NextRequest) {
 
     // Add project using AST manipulation
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
-    await astManipulator.addProject(validatedProject);
+    astManipulator.addProject({
+      ...validatedProject,
+      externalUrl: validatedProject.externalUrl || '',
+    });
 
     return NextResponse.json({ success: true, project: validatedProject });
   } catch (error) {
@@ -95,7 +98,7 @@ export async function PUT(request: NextRequest) {
     
     // Update project using AST manipulation
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
-    await astManipulator.updateProject(slug, validatedProject);
+    astManipulator.updateProject(slug, validatedProject);
 
     return NextResponse.json({ success: true, project: validatedProject });
   } catch (error) {
@@ -128,7 +131,7 @@ export async function DELETE(request: NextRequest) {
 
     // Delete project using AST manipulation
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
-    await astManipulator.deleteProject(slug);
+    astManipulator.deleteProject(slug);
 
     return NextResponse.json({ success: true });
   } catch (error) {

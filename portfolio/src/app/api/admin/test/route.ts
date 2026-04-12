@@ -10,7 +10,7 @@ export async function GET() {
       tests.push({
         name: 'Site Content Import',
         status: 'pass',
-        message: `Loaded ${siteContent.projects?.length || 0} projects`,
+        message: `Loaded ${siteContent.defaultPortfolioContent.projects?.length || 0} projects`,
       });
     } catch (error) {
       tests.push({
@@ -22,7 +22,7 @@ export async function GET() {
 
     // Test 2: Check admin types
     try {
-      const { AdminProject } = await import('@/features/admin/types/admin');
+      const adminTypes = await import('@/features/admin/types/admin');
       tests.push({
         name: 'Admin Types',
         status: 'pass',
