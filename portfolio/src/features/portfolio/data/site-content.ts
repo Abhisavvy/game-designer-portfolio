@@ -151,7 +151,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
     person: {
         name: "Abhishek Dutta",
         role: "Game Designer & AI Tools Developer",
-        tagline: "Test deployment update",
+        tagline: "Game designer who ships AI/tools work when relevant",
         email: "test@example.com",
         phone: "+1234567890",
         location: "Remote",
