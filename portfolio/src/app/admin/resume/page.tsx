@@ -63,13 +63,8 @@ export default function ResumeManagementPage() {
       setImporting(true);
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('metadata', JSON.stringify({
-        category: 'profile',
-        altText: 'Resume PDF',
-        usageContext: 'Latest resume document for download',
-      }));
 
-      const response = await fetch('/api/admin/assets/upload', {
+      const response = await fetch('/api/admin/resume/upload', {
         method: 'POST',
         body: formData,
       });
@@ -78,7 +73,7 @@ export default function ResumeManagementPage() {
         const result = await response.json();
         setMessage({ 
           type: 'success', 
-          text: `Resume PDF uploaded successfully. Available at: ${result.asset.publicUrl}` 
+          text: `Resume PDF uploaded successfully! It will now be available for download on the CV page.` 
         });
       } else {
         const error = await response.json();
