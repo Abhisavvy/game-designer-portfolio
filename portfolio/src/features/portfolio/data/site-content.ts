@@ -274,7 +274,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/food-fiesta/screenshot-2026-04-12-at-10-37-41-pm-1776013716174.png"
+                    posterSrc: "/assets/food-fiesta/hero-image.png"
                 },
                 processGallery: {
                     groupId: "food-fiesta-process",
@@ -361,7 +361,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             ],
             media: {
                 hero: {
-                    posterSrc: "/assets/ai-innovation/poster.svg"
+                    posterSrc: "/assets/ai-innovation/hero-image.svg"
                 },
                 processGallery: {
                     groupId: "ai-innovation-process",
@@ -400,7 +400,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/kinoa-integration/poster.svg"
+                    posterSrc: "/assets/kinoa-integration/hero-image.svg"
                 },
                 processGallery: {
                     groupId: "kinoa-integration-process",
@@ -430,7 +430,17 @@ export const defaultPortfolioContent: PortfolioContentState = {
             constraints: "UX clarity, session fit, collaboration with UX and engineering.",
             outcome: "D30 LTV +9.4% (high confidence, or +6.04% removing outliers). D1RR +73 bps (high confidence). Engagement +0.63 moves/DAU (high confidence). Step 1 completion: 55% of DAU. Step 2 completion: 34% of DAU. Solo Series saw -0.27 moves/DAU (attributed to pre-post bias and variant experiment interference). No impact on DBH mode where feature was inactive.",
             contributions: "1. Concepted the mechanic.\n2. Built the daily WOTD list with meanings.\n3. Partnered with UX on flows.",
-            links: []
+            links: [],
+            media: {
+                hero: {
+                    posterSrc: "/assets/wotd/hero-image.png"
+                },
+                processGallery: {
+                    groupId: "wotd-process",
+                    heading: "Design process",
+                    items: []
+                }
+            }
         },
         "ticket-mania": {
             title: "Ticket Mania",
@@ -440,7 +450,17 @@ export const defaultPortfolioContent: PortfolioContentState = {
             constraints: "Fairness in leaderboard bucketing. Bot chase logic imported from control was suboptimal for new mechanic. FTUE landed on leaderboard screen (navigational dead end). Booster price-to-reward conflict with swap pricing.",
             outcome: "Rev/DAU +7% (~3 cents, 100% confidence) primarily from IAP. D7 LTV +10% (75% confidence). D30 LTdays +9% (+0.45 days, 91% confidence). D1RR for D2+ organic +170 bps (99% confidence). D1R for organic +300 bps (95% confidence). Rolling retention +50 bps (high confidence). Engagement (starts/play/end per DAU) +3% (100% confidence). Swap spend +100 coins/DAU, (earn–spend) shifted from +50 to −5 coins. D7 payer conversion +55 bps (93% confidence).",
             contributions: "1. Designed the ticket-collection mechanic and gameboard integration.\n2. Analyzed booster purchase decline — identified LB screen top-of-funnel drop and swap pricing conflict as root causes.\n3. Identified FTUE navigational dead-end issue and proposed optimization.\n4. Flagged bot chase logic as suboptimal for new mechanic — proposed future iteration.\n5. Drove decision to ramp variant to 100% based on strong IAP and retention signals.",
-            links: []
+            links: [],
+            media: {
+                hero: {
+                    posterSrc: "/assets/ticket-mania/screenshot-2026-04-12-at-11-26-35-pm-1776017402864.png"
+                },
+                processGallery: {
+                    groupId: "ticket-mania-process",
+                    heading: "Design process",
+                    items: []
+                }
+            }
         }
     }
 };
