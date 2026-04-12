@@ -411,14 +411,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "kinoa-integration-process",
                     heading: "Integration process",
-                    items: [
-                        {
-                            thumb: "/assets/kinoa-integration/gallery-design-doc.svg",
-                            full: "/assets/kinoa-integration/gallery-design-doc.svg",
-                            alt: "Kinoa SDK integration design document",
-                            label: "Design Document"
-                        }
-                    ]
+                    items: []
                 }
             }
         },
