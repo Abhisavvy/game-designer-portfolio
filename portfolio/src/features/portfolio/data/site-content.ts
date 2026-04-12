@@ -372,6 +372,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/ai-innovation/screenshot-2026-04-13-at-12-03-27-am-1776019525635.png",
                             alt: "Process flow",
                             label: "Gallery - Screenshot 2026-04-13 at 12.03.27\u202FAM.png"
+                        },
+                        {
+                            thumb: "/assets/ai-innovation/screenshot-2026-04-13-at-12-03-53-am-1776019549213.png",
+                            full: "/assets/ai-innovation/screenshot-2026-04-13-at-12-03-53-am-1776019549213.png",
+                            alt: "Meeting Manager",
+                            label: "Gallery - Screenshot 2026-04-13 at 12.03.53\u202FAM.png"
                         }
                     ]
                 }
