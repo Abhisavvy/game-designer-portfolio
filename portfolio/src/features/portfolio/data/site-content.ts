@@ -464,6 +464,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/ticket-mania/screenshot-2026-04-12-17-03-41-227-in-playsimple-wordbingo-1776017580465.jpg",
                             alt: "How to play",
                             label: "Gallery - Screenshot_2026-04-12-17-03-41-227_in.playsimple.wordbingo.jpg"
+                        },
+                        {
+                            thumb: "/assets/ticket-mania/gameboard-fillrow-13btiles-makeword-1776017694185.png",
+                            full: "/assets/ticket-mania/gameboard-fillrow-13btiles-makeword-1776017694185.png",
+                            alt: "Tickets collected",
+                            label: "Gallery - Gameboard_FillRow_13BTiles_MakeWord.png"
                         }
                     ]
                 }
