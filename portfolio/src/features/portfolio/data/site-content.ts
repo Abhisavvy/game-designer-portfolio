@@ -313,7 +313,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/tiles/poster.svg"
+                    posterSrc: "/assets/placeholder-image.svg"
                 },
                 processGallery: {
                     groupId: "tiles-process",
