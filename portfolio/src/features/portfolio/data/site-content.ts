@@ -138,7 +138,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
     },
     about: {
         title: "How I Approach Systems Design",
-        body: "I'm a mobile game designer with 3+ years of experience building engaging word games and PvP experiences. On Word Roll, I focus on FTUEs, event infrastructure, player economies, retention and engagement mechanics, and the balance that keeps casual games fun.\n\nI care about how games create “just one more round” moments — player psychology as much as mechanics.",
+        body: ""
     },
     workSection: {
         eyebrow: "Featured Work",
@@ -150,15 +150,15 @@ export const defaultPortfolioContent: PortfolioContentState = {
     },
     person: {
         name: "Abhishek Dutta",
-        role: "Systems & Feature Designer | LiveOps Expert",
-        tagline: "Driving engagement through data-driven systems design · LiveOps · Economy · Retention mechanics that convert",
-        email: "abhishek.dt.97@gmail.com",
-        phone: "+91-7980700802",
-        location: "Available worldwide · remote-friendly",
+        role: "Game Designer & AI Tools Developer",
+        tagline: "Test deployment update",
+        email: "test@example.com",
+        phone: "+1234567890",
+        location: "Remote",
         links: {
-            linkedin: "https://linkedin.com/in/abhishek-dt97",
-            resumePdf: "",
-        },
+            linkedin: "https://linkedin.com/in/test",
+            resumePdf: ""
+        }
     },
     projects: [
         {
