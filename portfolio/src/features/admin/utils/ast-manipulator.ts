@@ -110,6 +110,39 @@ function createStringProp(
   );
 }
 
+/** `caseStudies` keys use identifiers when valid JS identifiers (e.g. `tiles`), else string literals. */
+function caseStudySlugPropertyName(
+  factory: ts.NodeFactory,
+  slug: string,
+): ts.PropertyName {
+  if (/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(slug)) {
+    return factory.createIdentifier(slug);
+  }
+  return factory.createStringLiteral(slug);
+}
+
+function readCaseStudySlugFromPropertyName(
+  name: ts.PropertyName,
+): string | undefined {
+  if (ts.isIdentifier(name)) return name.text;
+  if (ts.isStringLiteral(name) || ts.isNoSubstitutionTemplateLiteral(name)) {
+    return name.text;
+  }
+  return undefined;
+}
+
+/** Draft fields for a new case study row (media block is added automatically). */
+export type CaseStudyDraftForAst = {
+  title: string;
+  subtitle: string;
+  problem: string;
+  approach: string;
+  constraints: string;
+  outcome: string;
+  contributions?: string;
+  links?: { label: string; href: string }[];
+};
+
 function projectDataToObjectLiteral(
   factory: ts.NodeFactory,
   data: ProjectItem,
@@ -356,9 +389,66 @@ export class ASTManipulator {
   }
 
   addProject(projectData: ProjectItem): void {
-    this.requireDefaultPortfolioRoot("ASTManipulator.addProject");
+    this.addProjectWithCaseStudy(projectData, {
+      title: projectData.title,
+      subtitle: "Draft — edit in admin",
+      problem: "Describe the problem or opportunity (edit in admin).",
+      approach: "Describe your approach (edit in admin).",
+      constraints: "List constraints and risks (edit in admin).",
+      outcome: "Summarize results and learnings (edit in admin).",
+      contributions: "",
+      links: [],
+    });
+  }
+
+  /**
+   * Adds a `projects[]` row and matching `caseStudies[slug]` with a media skeleton
+   * (hero poster + empty process gallery). Single AST write.
+   */
+  addProjectWithCaseStudy(
+    projectData: ProjectItem,
+    caseStudyDraft: CaseStudyDraftForAst,
+  ): void {
+    this.requireDefaultPortfolioRoot("ASTManipulator.addProjectWithCaseStudy");
+    const transformer = this.createDefaultContentRootTransformer((root, factory) => {
+      let next = this.addProjectToArray(root, projectData, factory);
+      next = this.insertCaseStudyEntry(
+        next,
+        projectData.slug,
+        { ...caseStudyDraft, title: caseStudyDraft.title || projectData.title },
+        factory,
+      );
+      return next;
+    });
+    const result = ts.transform(this.sourceFile, [transformer]);
+    try {
+      const next = result.transformed[0];
+      if (!next || !ts.isSourceFile(next)) {
+        throw new Error("AST transform did not return a SourceFile");
+      }
+      this.writeTransformedFile(next);
+      this.sourceFile = next;
+    } finally {
+      result.dispose();
+    }
+  }
+
+  /** Updates case study copy fields only; leaves `media` and `links` unchanged. */
+  updateCaseStudyScalars(
+    slug: string,
+    patch: {
+      title: string;
+      subtitle: string;
+      problem: string;
+      approach: string;
+      constraints: string;
+      outcome: string;
+      contributions?: string;
+    },
+  ): void {
+    this.requireDefaultPortfolioRoot("ASTManipulator.updateCaseStudyScalars");
     const transformer = this.createDefaultContentRootTransformer((root, factory) =>
-      this.addProjectToArray(root, projectData, factory),
+      this.patchCaseStudyScalarFieldsInRoot(root, slug, patch, factory),
     );
     const result = ts.transform(this.sourceFile, [transformer]);
     try {
@@ -411,9 +501,11 @@ export class ASTManipulator {
 
   deleteProject(slug: string): void {
     this.requireDefaultPortfolioRoot("ASTManipulator.deleteProject");
-    const transformer = this.createDefaultContentRootTransformer((root, factory) =>
-      this.removeProjectFromArray(root, slug, factory),
-    );
+    const transformer = this.createDefaultContentRootTransformer((root, factory) => {
+      let next = this.removeCaseStudyFromCaseStudies(root, slug, factory);
+      next = this.removeProjectFromArray(next, slug, factory);
+      return next;
+    });
     const result = ts.transform(this.sourceFile, [transformer]);
     try {
       const next = result.transformed[0];
@@ -678,91 +770,392 @@ export class ASTManipulator {
     imagePath: string,
     factory: ts.NodeFactory,
   ): ts.ObjectLiteralExpression {
-    // This would update the posterSrc in case studies for the given project slug
-    // For now, we'll implement a basic version that updates the projects array
     const props = rootObj.properties.map((p) => {
       if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
-
-      // Look for caseStudies property
-      if (p.name.text === "caseStudies" && ts.isObjectLiteralExpression(p.initializer)) {
-        const caseStudiesObj = p.initializer;
-        const caseStudyProps = caseStudiesObj.properties.map((csProp) => {
-          if (!ts.isPropertyAssignment(csProp)) return csProp;
-          
-          // Handle both identifier and string literal property names
-          let propName: string | undefined;
-          if (ts.isIdentifier(csProp.name)) {
-            propName = csProp.name.text;
-          } else if (ts.isStringLiteral(csProp.name)) {
-            propName = csProp.name.text;
-          }
-          
-          if (!propName) return csProp;
-          
-          // Check if this case study matches our slug
-          if (propName === slug && ts.isObjectLiteralExpression(csProp.initializer)) {
-            const caseStudy = csProp.initializer;
-            const updatedProps = caseStudy.properties.map((csField) => {
-              if (!ts.isPropertyAssignment(csField) || !ts.isIdentifier(csField.name)) return csField;
-              
-              // Update media.hero.posterSrc
-              if (csField.name.text === "media" && ts.isObjectLiteralExpression(csField.initializer)) {
-                const mediaObj = csField.initializer;
-                const mediaProps = mediaObj.properties.map((mediaProp) => {
-                  if (!ts.isPropertyAssignment(mediaProp) || !ts.isIdentifier(mediaProp.name)) return mediaProp;
-                  
-                  if (mediaProp.name.text === "hero" && ts.isObjectLiteralExpression(mediaProp.initializer)) {
-                    const heroObj = mediaProp.initializer;
-                    const heroProps = heroObj.properties.map((heroProp) => {
-                      if (!ts.isPropertyAssignment(heroProp) || !ts.isIdentifier(heroProp.name)) return heroProp;
-                      
-                      if (heroProp.name.text === "posterSrc") {
-                        return factory.updatePropertyAssignment(
-                          heroProp,
-                          heroProp.name,
-                          factory.createStringLiteral(imagePath),
-                        );
-                      }
-                      return heroProp;
-                    });
-                    
-                    return factory.updatePropertyAssignment(
-                      mediaProp,
-                      mediaProp.name,
-                      factory.updateObjectLiteralExpression(heroObj, heroProps),
-                    );
-                  }
-                  return mediaProp;
-                });
-                
-                return factory.updatePropertyAssignment(
-                  csField,
-                  csField.name,
-                  factory.updateObjectLiteralExpression(mediaObj, mediaProps),
-                );
-              }
-              return csField;
-            });
-            
-            return factory.updatePropertyAssignment(
-              csProp,
-              csProp.name,
-              factory.updateObjectLiteralExpression(caseStudy, updatedProps),
-            );
-          }
+      if (p.name.text !== "caseStudies" || !ts.isObjectLiteralExpression(p.initializer)) {
+        return p;
+      }
+      const caseStudiesObj = p.initializer;
+      let found = false;
+      const caseStudyProps = caseStudiesObj.properties.map((csProp) => {
+        if (!ts.isPropertyAssignment(csProp)) return csProp;
+        const propName = readCaseStudySlugFromPropertyName(csProp.name);
+        if (propName !== slug || !ts.isObjectLiteralExpression(csProp.initializer)) {
           return csProp;
-        });
-        
+        }
+        found = true;
         return factory.updatePropertyAssignment(
-          p,
-          p.name,
-          factory.updateObjectLiteralExpression(caseStudiesObj, caseStudyProps),
+          csProp,
+          csProp.name,
+          this.setPosterSrcOnCaseStudyLiteral(
+            csProp.initializer,
+            imagePath,
+            factory,
+          ),
+        );
+      });
+      if (!found) {
+        throw new Error(
+          `ASTManipulator.patchProjectImage: no case study with slug "${slug}" in ${this.filePath}`,
         );
       }
-      return p;
+      return factory.updatePropertyAssignment(
+        p,
+        p.name,
+        factory.updateObjectLiteralExpression(caseStudiesObj, caseStudyProps),
+      );
     });
-    
     return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private setPosterSrcOnCaseStudyLiteral(
+    caseStudy: ts.ObjectLiteralExpression,
+    imagePath: string,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    let hasMedia = false;
+    const mapped = caseStudy.properties.map((csField) => {
+      if (!ts.isPropertyAssignment(csField) || !ts.isIdentifier(csField.name)) {
+        return csField;
+      }
+      if (csField.name.text !== "media") return csField;
+      hasMedia = true;
+      if (!ts.isObjectLiteralExpression(csField.initializer)) return csField;
+      return factory.updatePropertyAssignment(
+        csField,
+        csField.name,
+        this.setPosterSrcOnMediaLiteral(csField.initializer, imagePath, factory),
+      );
+    });
+    if (!hasMedia) {
+      return factory.updateObjectLiteralExpression(caseStudy, [
+        ...mapped,
+        factory.createPropertyAssignment(
+          "media",
+          factory.createObjectLiteralExpression(
+            [
+              factory.createPropertyAssignment(
+                "hero",
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createPropertyAssignment(
+                      "posterSrc",
+                      factory.createStringLiteral(imagePath),
+                    ),
+                  ],
+                  true,
+                ),
+              ),
+            ],
+            true,
+          ),
+        ),
+      ]);
+    }
+    return factory.updateObjectLiteralExpression(caseStudy, mapped);
+  }
+
+  private setPosterSrcOnMediaLiteral(
+    mediaObj: ts.ObjectLiteralExpression,
+    imagePath: string,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    let hasHero = false;
+    const mediaProps = mediaObj.properties.map((mediaProp) => {
+      if (!ts.isPropertyAssignment(mediaProp) || !ts.isIdentifier(mediaProp.name)) {
+        return mediaProp;
+      }
+      if (mediaProp.name.text !== "hero") return mediaProp;
+      hasHero = true;
+      if (!ts.isObjectLiteralExpression(mediaProp.initializer)) return mediaProp;
+      const heroObj = mediaProp.initializer;
+      let hasPoster = false;
+      const heroProps = heroObj.properties.map((heroProp) => {
+        if (!ts.isPropertyAssignment(heroProp) || !ts.isIdentifier(heroProp.name)) {
+          return heroProp;
+        }
+        if (heroProp.name.text !== "posterSrc") return heroProp;
+        hasPoster = true;
+        return factory.updatePropertyAssignment(
+          heroProp,
+          heroProp.name,
+          factory.createStringLiteral(imagePath),
+        );
+      });
+      const nextHeroProps = hasPoster
+        ? heroProps
+        : [
+            ...heroProps,
+            factory.createPropertyAssignment(
+              "posterSrc",
+              factory.createStringLiteral(imagePath),
+            ),
+          ];
+      return factory.updatePropertyAssignment(
+        mediaProp,
+        mediaProp.name,
+        factory.updateObjectLiteralExpression(heroObj, nextHeroProps),
+      );
+    });
+    if (!hasHero) {
+      return factory.updateObjectLiteralExpression(mediaObj, [
+        ...mediaProps,
+        factory.createPropertyAssignment(
+          "hero",
+          factory.createObjectLiteralExpression(
+            [
+              factory.createPropertyAssignment(
+                "posterSrc",
+                factory.createStringLiteral(imagePath),
+              ),
+            ],
+            true,
+          ),
+        ),
+      ]);
+    }
+    return factory.updateObjectLiteralExpression(mediaObj, mediaProps);
+  }
+
+  private insertCaseStudyEntry(
+    rootObj: ts.ObjectLiteralExpression,
+    slug: string,
+    draft: CaseStudyDraftForAst,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const props = rootObj.properties.map((p) => {
+      if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
+      if (p.name.text !== "caseStudies" || !ts.isObjectLiteralExpression(p.initializer)) {
+        return p;
+      }
+      const csObj = p.initializer;
+      for (const cp of csObj.properties) {
+        if (!ts.isPropertyAssignment(cp)) continue;
+        if (readCaseStudySlugFromPropertyName(cp.name) === slug) {
+          throw new Error(
+            `ASTManipulator.insertCaseStudyEntry: case study "${slug}" already exists`,
+          );
+        }
+      }
+      const newProp = factory.createPropertyAssignment(
+        caseStudySlugPropertyName(factory, slug),
+        this.createCaseStudyLiteralFromDraft(slug, draft, factory),
+      );
+      return factory.updatePropertyAssignment(
+        p,
+        p.name,
+        factory.updateObjectLiteralExpression(csObj, [...csObj.properties, newProp]),
+      );
+    });
+    return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private createCaseStudyLiteralFromDraft(
+    slug: string,
+    draft: CaseStudyDraftForAst,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const processGroupId = `${slug}-process`;
+    const linkItems = (draft.links ?? []).map((l) =>
+      factory.createObjectLiteralExpression(
+        [
+          createStringProp(factory, "label", l.label),
+          createStringProp(factory, "href", l.href),
+        ],
+        true,
+      ),
+    );
+    const props: ts.PropertyAssignment[] = [
+      createStringProp(factory, "title", draft.title),
+      createStringProp(factory, "subtitle", draft.subtitle),
+      createStringProp(factory, "problem", draft.problem),
+      createStringProp(factory, "approach", draft.approach),
+      createStringProp(factory, "constraints", draft.constraints),
+      createStringProp(factory, "outcome", draft.outcome),
+    ];
+    if (draft.contributions !== undefined) {
+      props.push(createStringProp(factory, "contributions", draft.contributions));
+    }
+    props.push(
+      factory.createPropertyAssignment(
+        "links",
+        factory.createArrayLiteralExpression(linkItems, true),
+      ),
+      factory.createPropertyAssignment(
+        "media",
+        factory.createObjectLiteralExpression(
+          [
+            factory.createPropertyAssignment(
+              "hero",
+              factory.createObjectLiteralExpression(
+                [
+                  createStringProp(
+                    factory,
+                    "posterSrc",
+                    "/assets/placeholder-image.svg",
+                  ),
+                ],
+                true,
+              ),
+            ),
+            factory.createPropertyAssignment(
+              "processGallery",
+              factory.createObjectLiteralExpression(
+                [
+                  createStringProp(factory, "groupId", processGroupId),
+                  createStringProp(factory, "heading", "Design process"),
+                  factory.createPropertyAssignment(
+                    "items",
+                    factory.createArrayLiteralExpression([], true),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ],
+          true,
+        ),
+      ),
+    );
+    return factory.createObjectLiteralExpression(props, true);
+  }
+
+  private removeCaseStudyFromCaseStudies(
+    rootObj: ts.ObjectLiteralExpression,
+    slug: string,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const props = rootObj.properties.map((p) => {
+      if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
+      if (p.name.text !== "caseStudies" || !ts.isObjectLiteralExpression(p.initializer)) {
+        return p;
+      }
+      const filtered = p.initializer.properties.filter((cp) => {
+        if (!ts.isPropertyAssignment(cp)) return true;
+        return readCaseStudySlugFromPropertyName(cp.name) !== slug;
+      });
+      return factory.updatePropertyAssignment(
+        p,
+        p.name,
+        factory.updateObjectLiteralExpression(p.initializer, filtered),
+      );
+    });
+    return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private patchCaseStudyScalarFieldsInRoot(
+    rootObj: ts.ObjectLiteralExpression,
+    slug: string,
+    patch: {
+      title: string;
+      subtitle: string;
+      problem: string;
+      approach: string;
+      constraints: string;
+      outcome: string;
+      contributions?: string;
+    },
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const props = rootObj.properties.map((p) => {
+      if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
+      if (p.name.text !== "caseStudies" || !ts.isObjectLiteralExpression(p.initializer)) {
+        return p;
+      }
+      let found = false;
+      const csProps = p.initializer.properties.map((cp) => {
+        if (!ts.isPropertyAssignment(cp)) return cp;
+        if (readCaseStudySlugFromPropertyName(cp.name) !== slug) return cp;
+        if (!ts.isObjectLiteralExpression(cp.initializer)) return cp;
+        found = true;
+        return factory.updatePropertyAssignment(
+          cp,
+          cp.name,
+          this.patchCaseStudyBodyScalars(cp.initializer, patch, factory),
+        );
+      });
+      if (!found) {
+        throw new Error(
+          `ASTManipulator.updateCaseStudyScalars: no case study with slug "${slug}" in ${this.filePath}`,
+        );
+      }
+      return factory.updatePropertyAssignment(
+        p,
+        p.name,
+        factory.updateObjectLiteralExpression(p.initializer, csProps),
+      );
+    });
+    return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private patchCaseStudyBodyScalars(
+    caseStudy: ts.ObjectLiteralExpression,
+    patch: {
+      title: string;
+      subtitle: string;
+      problem: string;
+      approach: string;
+      constraints: string;
+      outcome: string;
+      contributions?: string;
+    },
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const scalarKeys = [
+      "title",
+      "subtitle",
+      "problem",
+      "approach",
+      "constraints",
+      "outcome",
+    ] as const;
+    const updates: Record<string, string> = {};
+    for (const k of scalarKeys) {
+      updates[k] = patch[k];
+    }
+    if (patch.contributions !== undefined) {
+      updates.contributions = patch.contributions;
+    }
+
+    const seen = new Set<string>();
+    const newProps: ts.ObjectLiteralElementLike[] = [];
+
+    for (const el of caseStudy.properties) {
+      if (!ts.isPropertyAssignment(el) || !ts.isIdentifier(el.name)) {
+        newProps.push(el);
+        continue;
+      }
+      const key = el.name.text;
+      if (key === "media" || key === "links") {
+        newProps.push(el);
+        seen.add(key);
+        continue;
+      }
+      if (key in updates) {
+        const v = updates[key];
+        if (v !== undefined) {
+          newProps.push(
+            factory.updatePropertyAssignment(
+              el,
+              el.name,
+              factory.createStringLiteral(v),
+            ),
+          );
+        }
+        seen.add(key);
+        continue;
+      }
+      newProps.push(el);
+      seen.add(key);
+    }
+
+    for (const [k, v] of Object.entries(updates)) {
+      if (!seen.has(k) && v !== undefined) {
+        newProps.push(createStringProp(factory, k, v));
+      }
+    }
+
+    return factory.updateObjectLiteralExpression(caseStudy, newProps);
   }
 
   private addGalleryImageToProject(

@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import type { ProjectItem } from "@/features/portfolio/data/site-content";
+import { getProjectListingImageSources } from "@/features/portfolio/utils/project-media";
 import { OptimizedImage } from "./OptimizedImage";
 import { 
   Utensils, 
@@ -25,6 +26,8 @@ import {
 interface ProjectCardAnimatedProps {
   project: ProjectItem;
   index: number;
+  /** When set (e.g. case study hero poster), used as primary card image with hero-image.* fallbacks. */
+  listingPosterSrc?: string | null;
 }
 
 // Get project-specific icon based on project slug/title
@@ -85,10 +88,18 @@ function getMetricIcon(metric: string) {
   return TrendingUp;
 }
 
-export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps) {
+export function ProjectCardAnimated({
+  project,
+  index,
+  listingPosterSrc,
+}: ProjectCardAnimatedProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const IconComponent = getProjectIcon(project.slug);
+  const { src, fallbackSrc, secondaryFallback } = getProjectListingImageSources(
+    project.slug,
+    listingPosterSrc,
+  );
 
   const cardVariants = {
     hidden: {
@@ -137,9 +148,9 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
           transition={{ delay: index * 0.1 + 0.1 }}
         >
           <OptimizedImage
-            src={`/assets/${project.slug}/hero-image.webp`}
-            fallbackSrc={`/assets/${project.slug}/hero-image.png`}
-            secondaryFallback={`/assets/${project.slug}/hero-image.jpg`}
+            src={src}
+            fallbackSrc={fallbackSrc}
+            secondaryFallback={secondaryFallback}
             alt={`${project.title} - Game Screenshot`}
             width={400}
             height={320}
@@ -282,103 +293,69 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
 // Helper function to extract metrics from blurb text with descriptive context
 function extractMetrics(blurb: string): string[] {
   const metrics: string[] = [];
-  
-  // Enhanced patterns that capture context with numbers
+
+  // Enhanced patterns that capture full context and meaningful metrics
   const contextualPatterns = [
-    // ARPDAU patterns
+    // Revenue patterns
+    { regex: /IAP\s+rev\/DAU\s*\+(\d+%)/i, template: (match: string) => `+${match} IAP Revenue` },
+    { regex: /Net\s+rev\/DAU\s*\+(\d+\.?\d*%)/i, template: (match: string) => `+${match} Net Revenue` },
     { regex: /ARPDAU[\s\+]*(\+?\d+%)/i, template: (match: string) => `${match} ARPDAU` },
-    
-    // LTV patterns  
-    { regex: /(\~?\+?\d+%\s?LTV\s?lift)/i, template: (match: string) => match },
-    
-    // Engagement patterns
-    { regex: /(engagement[\s\+]*\+?\d+%)/i, template: (match: string) => match },
-    { regex: /lifted\s+engagement\s+(\d+%)/i, template: (match: string) => `${match} engagement` },
-    
+
+    // LTV patterns
+    { regex: /D(\d+)\s+LTV\s*\+(\d+\.?\d*%)/i, template: (match: string, day: string) => `+${match} D${day} LTV` },
+    { regex: /(\+?\d+\.?\d*%\s?LTV\s?lift)/i, template: (match: string) => match },
+
     // Retention patterns
-    { regex: /(D1.*?retention[\s\+]*\+?\d+\s?bps)/i, template: (match: string) => match },
-    { regex: /(D1\s+.*?retention[\s\+]*\+?\d+\s?bps)/i, template: (match: string) => match },
-    { regex: /retention\s+(\+?\d+\s?bps)/i, template: (match: string) => `${match} retention` },
+    { regex: /D1RR\s*\+(\d+)\s*bps/i, template: (match: string) => `+${match}bps D1 Retention` },
+    { regex: /D(\d+)\s+.*?retention[\s\+]*\+?(\d+)\s*bps/i, template: (match: string, day: string) => `+${match}bps D${day} Retention` },
     
+    // Session and engagement
+    { regex: /Session\s+time\/user\s*\+(\d+\.?\d*%)/i, template: (match: string) => `+${match} Session Time` },
+    { regex: /engagement[\s\+]*\+?(\d+%)/i, template: (match: string) => `+${match} Engagement` },
+
+    // Conversion patterns
+    { regex: /new\s+payer\s+conversion\s*\+(\d+)\s*bps/i, template: (match: string) => `+${match}bps New Payers` },
+    { regex: /payer\s+purchases\s*\+(\d+\.?\d*%)/i, template: (match: string) => `+${match} Payer Purchases` },
+
     // Efficiency/productivity patterns
-    { regex: /(\d+%\s+.*?efficiency)/i, template: (match: string) => match },
-    { regex: /(\d+%\s+faster.*?planning)/i, template: (match: string) => match },
-    
-    // Generic percentage with context (look for nearby words)
-    { regex: /(\d+%)[^a-zA-Z]*([a-zA-Z]+)/, template: (match: string, context?: string) => {
-      if (context && !['and', 'the', 'of', 'in', 'to'].includes(context.toLowerCase())) {
-        return `${match} ${context}`;
-      }
-      return match;
-    }},
+    { regex: /eliminating\s+manual\s+reformatting/i, template: () => "Zero Manual Work" },
+    { regex: /(\d+)-person\s+dev\s+team/i, template: (match: string) => `${match} Team Adoption` },
+    { regex: /(\d+%)\s+.*?efficiency/i, template: (match: string) => `${match} Efficiency` },
+    { regex: /(\d+%)\s+faster/i, template: (match: string) => `${match} Faster` },
   ];
-  
+
   // Apply contextual patterns
   contextualPatterns.forEach(({ regex, template }) => {
     const matches = blurb.match(regex);
-    if (matches && matches[1]) {
-      // Handle single matches (simplified to avoid global regex complexity)
+    if (matches) {
       const result = template(matches[1], matches[2]);
-      if (!metrics.some(m => m.includes(matches[1].replace(/[^\w\d%]/g, '')))) {
+      if (result && !metrics.some(m => m.toLowerCase().includes(result.toLowerCase().substring(0, 10)))) {
         metrics.push(result);
       }
     }
   });
-  
-  // If no contextual metrics found, look for standalone numbers and try to add context
-  if (metrics.length === 0) {
-    // Standalone percentage with manual context assignment
-    const percentMatches = blurb.match(/([\+\-]?\d+%)/g);
-    if (percentMatches) {
-      percentMatches.forEach(percent => {
-        let contextualMetric = percent;
-        
-        // Add context based on surrounding text
-        if (blurb.toLowerCase().includes('arpdau') && blurb.indexOf('arpdau') < blurb.indexOf(percent) + 20) {
-          contextualMetric = `${percent} ARPDAU`;
-        } else if (blurb.toLowerCase().includes('engagement') && Math.abs(blurb.indexOf('engagement') - blurb.indexOf(percent)) < 20) {
-          contextualMetric = `${percent} engagement`;
-        } else if (blurb.toLowerCase().includes('efficiency')) {
-          contextualMetric = `${percent} efficiency`;
-        } else if (blurb.toLowerCase().includes('faster')) {
-          contextualMetric = `${percent} faster`;
-        } else {
-          contextualMetric = `${percent} improvement`;
-        }
-        
-        metrics.push(contextualMetric);
-      });
-    }
-    
-    // Basis points with context
-    const bpsMatches = blurb.match(/([\+\-]?\d+\s?bps)/gi);
-    if (bpsMatches) {
-      bpsMatches.forEach(bps => {
-        if (blurb.toLowerCase().includes('retention')) {
-          metrics.push(`${bps} retention`);
-        } else {
-          metrics.push(`${bps} lift`);
-        }
-      });
-    }
+
+  // If we found good contextual metrics, return them
+  if (metrics.length > 0) {
+    return metrics.slice(0, 3);
   }
-  
-  // Clean up and limit
-  const uniqueMetrics = [...new Set(metrics)].map(metric => 
-    metric.replace(/\s+/g, ' ').trim()
-  );
-  
-  return uniqueMetrics.slice(0, 3);
+
+  // Otherwise, return empty array to use fallback badges
+  return [];
 }
 
 // Fallback badges for projects without extractable metrics
 function getFallbackBadges(project: ProjectItem): string[] {
   const fallbacks: { [key: string]: string[] } = {
-    "ai-innovation": ["25% doc efficiency", "40% faster planning", "AI productivity tools"],
-    "kinoa-integration": ["SDK integration", "Event flows", "Player engagement"],
-    "tiles": ["Economy redesign", "Cosmetic rewards", "Player ownership"],
-    "bon-voyage": ["60-day retention", "Secondary currency", "Economy de-risking"],
+    "ai-innovation": ["Zero Manual Work", "8-Person Team", "AI Automation"],
+    "kinoa-integration": ["LiveOps Platform", "Real-time Events", "Data-driven Optimization"],
+    "tiles": ["Economy Redesign", "Cosmetic Rewards", "Player Ownership"],
+    "bon-voyage": ["+12% IAP Revenue", "+22bps D1 Retention", "Secondary Currency"],
+    "seasons": ["Seasonal Events", "Long-term Retention", "Progression Design"],
+    "food-fiesta": ["Event Design", "Player Engagement", "Feature Innovation"],
+    "wotd": ["Daily Engagement", "Word Game Design", "Player Retention"],
+    "ticket-mania": ["Reward Systems", "Player Motivation", "Game Economy"],
   };
   
-  return fallbacks[project.slug] || ["Core systems", "Player engagement", "Feature design"];
+  return fallbacks[project.slug] || ["Game Design", "Player Experience", "System Innovation"];
 }

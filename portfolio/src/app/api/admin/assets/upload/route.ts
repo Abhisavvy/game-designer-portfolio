@@ -5,14 +5,11 @@ import path from 'path';
 import { z } from 'zod';
 import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
 import { triggerHotReloadAndDeploy } from '@/features/admin/utils/hot-reload';
-
-const uploadSchema = z.object({
-  category: z.enum(['hero', 'gallery', 'process', 'profile']),
-  projectSlug: z.string().optional(),
-  altText: z.string().min(1, 'Alt text is required'),
-  caption: z.string().optional(),
-  usageContext: z.string().min(1, 'Usage context is required'),
-});
+import { adminAssetUploadMetadataSchema } from '@/features/admin/validation/admin-api-schemas';
+import {
+  buildAssetPublicUrl,
+  resolveUploadedFilename,
+} from '@/app/api/admin/assets/upload/upload-helpers';
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate metadata
-    const validatedMetadata = uploadSchema.parse(metadata);
+    const validatedMetadata = adminAssetUploadMetadataSchema.parse(metadata);
 
     // Validate file type
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
@@ -48,16 +45,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate filename
-    const timestamp = Date.now();
-    const extension = path.extname(file.name);
-    const baseName = path.basename(file.name, extension)
-      .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-    
-    const filename = `${baseName}-${timestamp}${extension}`;
+    const { filename } = resolveUploadedFilename({
+      category: validatedMetadata.category,
+      projectSlug: validatedMetadata.projectSlug,
+      originalFileName: file.name,
+    });
 
     // Determine upload path
     const uploadDir = validatedMetadata.projectSlug
@@ -76,9 +68,10 @@ export async function POST(request: NextRequest) {
     await writeFile(filePath, buffer);
 
     // Generate public URL
-    const publicUrl = validatedMetadata.projectSlug
-      ? `/assets/${validatedMetadata.projectSlug}/${filename}`
-      : `/assets/general/${filename}`;
+    const publicUrl = buildAssetPublicUrl(
+      validatedMetadata.projectSlug,
+      filename,
+    );
 
     // Update site-content.ts based on image category
     if (validatedMetadata.projectSlug) {

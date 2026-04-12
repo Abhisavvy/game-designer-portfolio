@@ -11,7 +11,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { OptimizedImage } from "./OptimizedImage";
 
 export function HomePageContent() {
-  const { person, projects, hero, about, workSection, footerCta, siteMeta } =
+  const { person, projects, hero, about, workSection, footerCta, siteMeta, caseStudies } =
     defaultPortfolioContent;
 
   return (
@@ -59,6 +59,9 @@ export function HomePageContent() {
                 key={project.slug}
                 project={project}
                 index={index}
+                listingPosterSrc={
+                  caseStudies[project.slug]?.media?.hero?.posterSrc
+                }
               />
             ))}
           </div>

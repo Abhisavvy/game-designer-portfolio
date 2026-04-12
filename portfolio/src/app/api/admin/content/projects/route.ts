@@ -3,18 +3,12 @@ import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
 import { triggerHotReloadAndDeploy } from '@/features/admin/utils/hot-reload';
 import path from 'path';
 import { z } from 'zod';
+import {
+  adminCreateProjectBodySchema,
+  adminProjectItemSchema,
+} from '@/features/admin/validation/admin-api-schemas';
 
 const SITE_CONTENT_PATH = path.join(process.cwd(), 'src/features/portfolio/data/site-content.ts');
-
-// Validation schema for project data
-const projectSchema = z.object({
-  slug: z.string().min(1, 'Slug is required'),
-  title: z.string().min(1, 'Title is required'),
-  tag: z.string().min(1, 'Tag is required'),
-  blurb: z.string().min(1, 'Blurb is required'),
-  href: z.string().min(1, 'Href is required'),
-  externalUrl: z.string().url('Valid external URL required').optional().or(z.literal('')),
-});
 
 export async function GET() {
   try {
@@ -43,31 +37,46 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { project } = await request.json();
-    
-    // Validate project data
-    const validatedProject = projectSchema.parse(project);
-    
-    // Check if slug already exists
+    const raw = await request.json();
+    const body =
+      raw && typeof raw === 'object' && 'project' in raw
+        ? raw
+        : { project: raw };
+    const { project, caseStudy: caseStudyDraft } =
+      adminCreateProjectBodySchema.parse(body);
+
+    const validatedProject = {
+      ...project,
+      externalUrl: project.externalUrl || '',
+    };
+
     const siteContent = await import('@/features/portfolio/data/site-content');
-    const existingProject = siteContent.defaultPortfolioContent.projects.find((p: any) => p.slug === validatedProject.slug);
-    
+    const existingProject = siteContent.defaultPortfolioContent.projects.find(
+      (p: { slug: string }) => p.slug === validatedProject.slug,
+    );
+
     if (existingProject) {
       return NextResponse.json(
         { error: 'Project with this slug already exists' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Add project using AST manipulation
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
-    astManipulator.addProject({
-      ...validatedProject,
-      externalUrl: validatedProject.externalUrl || '',
-    });
-    
-    // Trigger hot reload and deploy to Vercel
-    await triggerHotReloadAndDeploy(SITE_CONTENT_PATH, "Project updated");
+    if (caseStudyDraft) {
+      astManipulator.addProjectWithCaseStudy(validatedProject, {
+        ...caseStudyDraft,
+        title: caseStudyDraft.title || validatedProject.title,
+        links: caseStudyDraft.links ?? [],
+      });
+    } else {
+      astManipulator.addProject(validatedProject);
+    }
+
+    await triggerHotReloadAndDeploy(
+      SITE_CONTENT_PATH,
+      `Project created: ${validatedProject.slug}`,
+    );
 
     return NextResponse.json({ success: true, project: validatedProject });
   } catch (error) {
@@ -98,7 +107,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Validate project data
-    const validatedProject = projectSchema.parse(project);
+    const validatedProject = adminProjectItemSchema.parse(project);
     
     // Update project using AST manipulation
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);

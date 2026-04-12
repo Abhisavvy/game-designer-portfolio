@@ -11,18 +11,17 @@ import { ImageUploader } from './ImageUploader';
 import { PreviewPanel } from './PreviewPanel';
 import { GalleryManager } from './GalleryManager';
 import type { AdminProject, AdminCaseStudy } from '../types/admin';
-import { defaultPortfolioContent } from '@/features/portfolio/data/site-content';
-
-// Component to display current hero image with actual path from site-content.ts
-function CurrentHeroImageDisplay({ 
-  project, 
-  onResetToPlaceholder 
-}: { 
-  project: AdminProject; 
+function CurrentHeroImageDisplay({
+  project,
+  posterSrc,
+  onResetToPlaceholder,
+}: {
+  project: AdminProject;
+  /** Live value from loaded case study (same path used on the case study page + listing card). */
+  posterSrc?: string | null;
   onResetToPlaceholder: () => void;
 }) {
-  const caseStudy = defaultPortfolioContent.caseStudies[project.slug as keyof typeof defaultPortfolioContent.caseStudies];
-  const currentImageSrc = caseStudy?.media?.hero?.posterSrc || '/assets/placeholder-image.svg';
+  const currentImageSrc = posterSrc?.trim() || '/assets/placeholder-image.svg';
   const isPlaceholder = currentImageSrc.includes('placeholder-image.svg');
 
   return (
@@ -76,7 +75,9 @@ const projectSchema = z.object({
   tag: z.string().min(1, 'Tag is required'),
   blurb: z.string().min(1, 'Blurb is required').max(200, 'Blurb must be 200 characters or less'),
   href: z.string().min(1, 'Href is required'),
-  externalUrl: z.string().url('Valid URL required').optional().or(z.literal('')),
+  externalUrl: z
+    .union([z.literal(''), z.string().url('Valid URL required')])
+    .optional(),
 });
 
 const caseStudySchema = z.object({
@@ -227,7 +228,18 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
 
       if (response.ok) {
         const result = await response.json();
-        setCaseStudy(result.caseStudy);
+        if (result.applied) {
+          setCaseStudy((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  ...result.applied,
+                  links: prev.links,
+                  media: prev.media,
+                }
+              : prev,
+          );
+        }
         setMessage({ type: 'success', text: 'Case study saved successfully' });
       } else {
         const errorData = await response.json();
@@ -568,7 +580,8 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
             {/* Current Hero Image */}
             {project && (
               <CurrentHeroImageDisplay 
-                project={project} 
+                project={project}
+                posterSrc={caseStudy?.media?.hero?.posterSrc}
                 onResetToPlaceholder={() => {
                   // Reset hero image to placeholder
                   fetch('/api/admin/assets/reset-placeholder', {
@@ -606,10 +619,9 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
               {project && (
                 <GalleryManager
                   projectSlug={project.slug}
-                  initialItems={(() => {
-                    const caseStudy = defaultPortfolioContent.caseStudies[project.slug as keyof typeof defaultPortfolioContent.caseStudies];
-                    return caseStudy?.media?.processGallery?.items || [];
-                  })()}
+                  initialItems={
+                    caseStudy?.media?.processGallery?.items ?? []
+                  }
                   onItemsChange={async (items) => {
                     try {
                       const response = await fetch('/api/admin/content/gallery', {

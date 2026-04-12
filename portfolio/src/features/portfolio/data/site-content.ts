@@ -361,7 +361,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             ],
             media: {
                 hero: {
-                    posterSrc: "/assets/ai-innovation/custom-hero-banner.png"
+                    posterSrc: "/assets/ai-innovation/hero-image-new.svg"
                 },
                 processGallery: {
                     groupId: "ai-innovation-process",

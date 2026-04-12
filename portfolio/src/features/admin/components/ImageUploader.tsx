@@ -6,16 +6,9 @@ import { Upload, X, Image as ImageIcon, AlertCircle, CheckCircle } from 'lucide-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { adminAssetUploadMetadataSchema } from '@/features/admin/validation/admin-api-schemas';
 
-const metadataSchema = z.object({
-  category: z.enum(['hero', 'gallery', 'process', 'profile']),
-  projectSlug: z.string().optional(),
-  altText: z.string().min(1, 'Alt text is required for accessibility'),
-  caption: z.string().optional(),
-  usageContext: z.string().min(1, 'Usage context is required'),
-});
-
-type MetadataForm = z.infer<typeof metadataSchema>;
+type MetadataForm = z.infer<typeof adminAssetUploadMetadataSchema>;
 
 interface ImageUploaderProps {
   projectSlug?: string;
@@ -35,7 +28,7 @@ export function ImageUploader({
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const form = useForm<MetadataForm>({
-    resolver: zodResolver(metadataSchema),
+    resolver: zodResolver(adminAssetUploadMetadataSchema),
     defaultValues: {
       category,
       projectSlug: projectSlug || '',

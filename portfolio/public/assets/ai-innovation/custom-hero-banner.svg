@@ -25,7 +25,7 @@
   
   <!-- Main title -->
   <text x="600" y="120" text-anchor="middle" fill="#f1f5f9" font-family="Inter, system-ui, sans-serif" font-size="56" font-weight="700" letter-spacing="-0.02em">AI Innovation</text>
-  <text x="600" y="160" text-anchor="middle" fill="#94a3b8" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="400">Meeting Notes ’ Structured Specifications</text>
+  <text x="600" y="160" text-anchor="middle" fill="#94a3b8" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="400">Meeting Notes ï¿½ Structured Specifications</text>
   
   <!-- Left side: Chaotic meeting notes -->
   <g transform="translate(150, 250)">

@@ -38,7 +38,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
 
   // Helper function to conditionally disable animations
   const getAnimateProps = (animateProps: any) => {
-    if (reducedMotion) return {};
+    if (reducedMotion) return { opacity: 1, y: 0, scale: 1 };
     return animateProps;
   };
 
@@ -313,6 +313,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
         variants={containerVariants}
         initial="hidden"
         animate="visible"
+        style={reducedMotion ? { opacity: 1 } : {}}
       >
         {/* Profile Image Placeholder */}
         <motion.div
