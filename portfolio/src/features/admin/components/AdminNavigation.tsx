@@ -11,15 +11,20 @@ import {
   LayoutDashboard,
   Menu,
   X,
+  Link2,
 } from 'lucide-react';
 
 const navigationItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/personal', label: 'Personal', icon: User },
   { href: '/admin/projects', label: 'Projects', icon: FolderOpen },
+  { href: '/admin/projects/cv-sync', label: 'CV sync', icon: Link2 },
   { href: '/admin/assets', label: 'Assets', icon: Image },
   { href: '/admin/resume', label: 'Resume', icon: FileText },
 ] as const;
+
+/** Routes under `/admin/projects/*` that use their own nav entry (avoid double-active with Projects). */
+const ADMIN_PROJECT_NESTED_NAV_HREFS = ['/admin/projects/cv-sync'] as const;
 
 function normalizePath(path: string) {
   if (path.length > 1 && path.endsWith('/')) {
@@ -35,6 +40,14 @@ function isNavItemActive(pathname: string, href: string): boolean {
 
   if (h === '/admin') {
     return p === '/admin';
+  }
+
+  if (h === '/admin/projects') {
+    if (p === h) return true;
+    if (!p.startsWith(`${h}/`)) return false;
+    return !ADMIN_PROJECT_NESTED_NAV_HREFS.some(
+      (nested) => p === nested || p.startsWith(`${nested}/`),
+    );
   }
 
   return p === h || p.startsWith(`${h}/`);
