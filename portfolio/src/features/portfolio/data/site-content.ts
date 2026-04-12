@@ -318,14 +318,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "tiles-process",
                     heading: "Design process",
-                    items: [
-                        {
-                            thumb: "/assets/tiles/gallery-visual-design.svg",
-                            full: "/assets/tiles/gallery-visual-design.svg",
-                            alt: "Tile skin visual design and rarity differentiation",
-                            label: "Visual Design"
-                        }
-                    ]
+                    items: []
                 }
             }
         },
