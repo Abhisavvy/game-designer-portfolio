@@ -255,12 +255,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             label: "Results"
                         },
                         {
-                            thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008008677.png",
-                            full: "/assets/bon-voyage/seasons-iap-distribution-1776008008677.png",
-                            alt: "Seasons IAP Distribution",
-                            label: "Seasons IAP Distribution"
-                        },
-                        {
                             thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             full: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
                             alt: "Seasons IAP Distribution",
