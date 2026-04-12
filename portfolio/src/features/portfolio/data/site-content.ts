@@ -184,21 +184,30 @@ export const defaultPortfolioContent: PortfolioContentState = {
   },
   projects: [
     {
-      slug: "seasons",
-      title: "Seasons",
+      slug: "bon-voyage",
+      title: "Bon Voyage",
       tag: "Long-term Retention · Economy",
       blurb:
-        "60-day event with secondary currency — IAP rev/DAU +12%, D1RR +22 bps, session time +1.4%.",
-      href: "/work/seasons",
+        "60-day seasonal event with secondary currency — IAP rev/DAU +12%, D1RR +22 bps, session time +1.4%.",
+      href: "/work/bon-voyage",
       externalUrl: "",
     },
     {
       slug: "food-fiesta",
-      title: "Food Fiesta & Tiles",
-      tag: "Cross-mode Event · Cosmetics",
+      title: "Food Fiesta",
+      tag: "Cross-mode Event",
       blurb:
-        "Cross-mode event with cosmetic tile rewards — engagement +7.5% in D7+, rev/DAU +22%, rolling retention +50 bps.",
+        "Cross-mode event tying all game modes via bonus tiles — engagement +7.5% in D7+, rolling retention +50 bps.",
       href: "/work/food-fiesta",
+      externalUrl: "",
+    },
+    {
+      slug: "tiles",
+      title: "Tiles",
+      tag: "Cosmetic System · Economy",
+      blurb:
+        "First cosmetic reward system with Machinations-tuned gacha — payer spend +1200 coins, IAP conversion lift.",
+      href: "/work/tiles",
       externalUrl: "",
     },
     {
@@ -208,6 +217,15 @@ export const defaultPortfolioContent: PortfolioContentState = {
       blurb:
         "Ticket-based leaderboard driving swap usage and payer conversion — rev/DAU +7%, D1RR +170 bps, D7 LTV +10%.",
       href: "/work/ticket-mania",
+      externalUrl: "",
+    },
+    {
+      slug: "wotd",
+      title: "Word of the Day (WOTD)",
+      tag: "Feature Optimization",
+      blurb:
+        "Two-step interactive WOTD mechanic — D30 LTV +9.4%, D1RR +73 bps, engagement +0.63 moves/DAU.",
+      href: "/work/wotd",
       externalUrl: "",
     },
     {
@@ -228,19 +246,10 @@ export const defaultPortfolioContent: PortfolioContentState = {
       href: "/work/kinoa-integration",
       externalUrl: "",
     },
-    {
-      slug: "wotd",
-      title: "Word of the Day (WOTD)",
-      tag: "Feature Optimization",
-      blurb:
-        "Made WOTD interactive and learning-oriented — D1 rolling retention +140 bps, engagement +3%.",
-      href: "/work/wotd",
-      externalUrl: "",
-    },
   ],
   caseStudies: {
-    seasons: {
-      title: "Seasons",
+    "bon-voyage": {
+      title: "Bon Voyage",
       subtitle: "Long-term Retention · Economy Design · Word Roll",
       problem:
         "Two core gaps: (1) Long-term retention — a delta in D30/D1 ratio vs. competitors with long-horizon events. (2) Economy — coins were the only currency with many tap sources but few sinks, causing inflation over time.",
@@ -249,33 +258,33 @@ export const defaultPortfolioContent: PortfolioContentState = {
       constraints:
         "Live mobile title with existing economy. Secondary currency had to feel natural, not punitive. 60-day horizon required careful pacing to avoid early burnout or late-stage drop-off. Solo series engagement had to be monitored for cannibalization.",
       outcome:
-        "IAP rev/DAU +12% (100% confidence). D1RR +22 bps (99.8% confidence). Session time/user +1.4% (100% confidence). Net rev/DAU +1.8% (100% confidence). D50 LTV +3.6% (80% confidence). D30 new payer conversion +7 bps. Repeat payer purchases +3.2%, amount/purchase +8.6%. Non-payer wallet reduced 16% (intended economy de-risking). ~7% event completion rate vs. 9% target.",
+        "IAP rev/DAU +12% (100% confidence). D1RR +22 bps (99.8% confidence). Session time/user +1.4% (100% confidence). Net rev/DAU +1.8% (100% confidence). D50 LTV +3.6% (80% confidence). D30 new payer conversion +7 bps. Repeat payer purchases +3.2%, amount/purchase +8.6%. Non-payer wallet reduced 16% (intended economy de-risking). Event completion: 7% vs. 9% target — identified progression pacing as key tuning lever for future iterations.",
       contributions:
         "1. Designed the full 60-level progression curve, balancing key requirements against expected play frequency.\n2. Introduced gems as secondary currency — first non-coin currency in the game — to address inflation.\n3. Analyzed solo series cannibalization (4.1% engagement drop) and identified keys-earned differential as root cause.\n4. Validated FTUE CTR improvement (+190 bps) driven by gems FTUE flow.\n5. Monitored player decile engagement — found upsides across all deciles, not just P4–P8 target.",
       links: [],
       media: {
         hero: {
-          posterSrc: "/assets/seasons/poster.svg",
+          posterSrc: "/assets/bon-voyage/poster.svg",
         },
         processGallery: {
-          groupId: "seasons-process",
+          groupId: "bon-voyage-process",
           heading: "Design process",
           items: [
             {
-              thumb: "/assets/seasons/gallery-progression.svg",
-              full: "/assets/seasons/gallery-progression.svg",
+              thumb: "/assets/bon-voyage/gallery-progression.svg",
+              full: "/assets/bon-voyage/gallery-progression.svg",
               alt: "60-level progression curve and key requirements",
               label: "Progression",
             },
             {
-              thumb: "/assets/seasons/gallery-economy.svg",
-              full: "/assets/seasons/gallery-economy.svg",
+              thumb: "/assets/bon-voyage/gallery-economy.svg",
+              full: "/assets/bon-voyage/gallery-economy.svg",
               alt: "Gems economy design and coin de-risking model",
               label: "Economy",
             },
             {
-              thumb: "/assets/seasons/gallery-results.svg",
-              full: "/assets/seasons/gallery-results.svg",
+              thumb: "/assets/bon-voyage/gallery-results.svg",
+              full: "/assets/bon-voyage/gallery-results.svg",
               alt: "A/B test results dashboard showing IAP and retention lifts",
               label: "Results",
             },
@@ -284,18 +293,18 @@ export const defaultPortfolioContent: PortfolioContentState = {
       },
     },
     "food-fiesta": {
-      title: "Food Fiesta & Tiles",
-      subtitle: "Cross-mode Event · Cosmetic Rewards · Word Roll",
+      title: "Food Fiesta",
+      subtitle: "Cross-mode Event · Word Roll",
       problem:
-        "Players in later cohorts narrowed to a single preferred game mode, dropping into low-engagement buckets. Non-leaderboard days had a 1–2 move gap with no compelling content. Rewards were entirely coin-based, limiting economy levers.",
+        "Players in later cohorts narrowed to a single preferred game mode, dropping into low-engagement buckets. Non-leaderboard days had a 1–2 move gap with no compelling content.",
       approach:
-        "1. Built a Mon–Sat event tying all game modes together via DW/TW bonus tiles on the last letter of the gameboard.\n2. Introduced tile skins as the first cosmetic reward in the game — creating sinks beyond coins.\n3. Gated event unlock at lifetime 150 moves or D7+ cohort to target the right player segment.\n4. Designed progression levels unlocked by bonus tile collection, expected to drive power-up usage.",
+        "1. Built a Mon–Sat event tying all game modes together via DW/TW bonus tiles on the last letter of the gameboard.\n2. Gated event unlock at lifetime 150 moves or D7+ cohort to target the right player segment.\n3. Designed progression levels unlocked by bonus tile collection, expected to drive power-up usage.",
       constraints:
-        "Pre-allocation bias of ~3% in experiment setup. Multi-mode balance — had to ensure no single mode was disproportionately rewarded. Economy de-risking with cosmetics had to feel like genuine ownership, not just coin replacement.",
+        "Pre-allocation bias of ~3% in experiment setup. Multi-mode balance — had to ensure no single mode was disproportionately rewarded. Live mobile title coordination with existing events.",
       outcome:
-        "Engagement +7.5% (~2.4 moves) in D7+ cohort. Rev/DAU +22% (+8 cents) driven by IAP +100% (+6 cents) and ad rev +5% (+2 cents). Rolling retention +50 bps in D7+ (96% confidence). Power-up usage +26%, bingo rate +55 bps. High-engagement bucket (30+ moves) share +200 bps. IT ad impressions +7%, banner +8%. Payer (earn–spend)/DAU decreased by ~1,200 coins, driving IAP upsides.",
+        "Engagement +7.5% (~2.4 moves) in D7+ cohort. Rolling retention +50 bps in D7+ (96% confidence). Power-up usage +26%, bingo rate +55 bps. High-engagement bucket (30+ moves) share +200 bps. IT ad impressions +7%, banner +8%. Controlled for ~3% pre-allocation bias — early cohort D1 retention signals attributed to experiment setup, not feature impact.",
       contributions:
-        "1. Designed the cross-mode event structure with DW/TW bonus tile mechanic.\n2. Introduced tile skins as first-ever cosmetic reward system in Word Roll.\n3. Defined task structures and balanced rewards across progression levels.\n4. Analyzed engagement uplift across all game modes and identified Monday/Tuesday as peak event days.\n5. Monitored early-cohort retention signals (D1 down 62 bps — attributed to experiment bias, not feature impact).",
+        "1. Designed the cross-mode event structure with DW/TW bonus tile mechanic.\n2. Defined task structures and balanced rewards across progression levels.\n3. Analyzed engagement uplift across all game modes and identified Monday/Tuesday as peak event days.\n4. Monitored early-cohort retention signals and validated experiment bias attribution.",
       links: [],
       media: {
         hero: {
@@ -314,60 +323,61 @@ export const defaultPortfolioContent: PortfolioContentState = {
             {
               thumb: "/assets/food-fiesta/gallery-ui.svg",
               full: "/assets/food-fiesta/gallery-ui.svg",
-              alt: "UI mockups for Food Fiesta progression and tile rewards",
+              alt: "UI mockups for Food Fiesta progression",
               label: "UI",
             },
             {
               thumb: "/assets/food-fiesta/gallery-analytics.svg",
               full: "/assets/food-fiesta/gallery-analytics.svg",
-              alt: "Engagement and economy readouts across player cohorts",
+              alt: "Cross-mode engagement analysis",
               label: "Results",
             },
           ],
         },
       },
     },
-    "bon-voyage": {
-      title: "Bon Voyage",
-      subtitle: "Feature design · Word Roll",
+    tiles: {
+      title: "Tiles",
+      subtitle: "Cosmetic System · Economy Design · Word Roll",
       problem:
-        "Limited long-term progression and uneven economy design were holding retention versus competitors.",
+        "Rewards were entirely coin-based, limiting economy levers and player expression. No cosmetic systems existed to create meaningful sinks beyond coins or drive aspirational engagement.",
       approach:
-        "1. Long-running event as the primary reward source.\n2. Pace rewards to control progression and economy.\n3. Focus later-cohort players with shorter sessions.",
+        "1. Designed tile skins as the first cosmetic reward system in Word Roll — creating ownership and expression beyond functional upgrades.\n2. Built gacha-style acquisition system using Machinations for probability tuning and economy modeling.\n3. Integrated cosmetics as rewards for Food Fiesta event progression to drive cross-mode engagement.\n4. Designed rarity tiers and visual differentiation to create collection goals.",
       constraints:
-        "Economy de-risking, long-horizon balancing, coordination with product and analytics.",
+        "First cosmetic system in the game — had to establish visual language and player expectations. Economy de-risking with cosmetics had to feel like genuine ownership, not coin replacement. Gacha mechanics required careful probability tuning for player satisfaction vs. monetization.",
       outcome:
-        "Later-cohort LTV +4%, driven in part by IAP +12%.",
+        "Rev/DAU +22% (+8 cents) driven by IAP +100% (+6 cents) and ad rev +5% (+2 cents). Payer (earn–spend)/DAU decreased by ~1,200 coins, driving IAP upsides. Established cosmetic system foundation for future content expansions. Player feedback: high satisfaction with tile customization and collection mechanics.",
       contributions:
-        "1. Designed Bon Voyage event infrastructure for repeatable live ops.\n2. Defined level progression and reward curves to improve progression while de-risking the economy.",
+        "1. Introduced tile skins as first-ever cosmetic reward system in Word Roll.\n2. Designed gacha acquisition system with Machinations-tuned probability curves.\n3. Created rarity tiers and visual design language for cosmetic differentiation.\n4. Integrated cosmetics into Food Fiesta event as aspirational rewards.\n5. Established cosmetic system architecture for future expansions (character skins, board themes, etc.).",
       links: [],
       media: {
+        hero: {
+          posterSrc: "/assets/tiles/poster.svg",
+        },
         processGallery: {
-          groupId: "bon-voyage-process",
+          groupId: "tiles-process",
           heading: "Design process",
           items: [
             {
-              thumb: "/assets/bon-voyage/gallery-progression.svg",
-              full: "/assets/bon-voyage/gallery-progression.svg",
-              alt: "Long-horizon progression sketch for Bon Voyage",
-              label: "Progression",
+              thumb: "/assets/tiles/gallery-cosmetic-system.svg",
+              full: "/assets/tiles/gallery-cosmetic-system.svg",
+              alt: "Cosmetic system architecture and rarity tiers",
+              label: "System Design",
             },
             {
-              thumb: "/assets/bon-voyage/gallery-economy.svg",
-              full: "/assets/bon-voyage/gallery-economy.svg",
-              alt: "Economy pacing notes tied to reward sources",
-              label: "Economy",
+              thumb: "/assets/tiles/gallery-gacha-economy.svg",
+              full: "/assets/tiles/gallery-gacha-economy.svg",
+              alt: "Machinations model for gacha probability tuning",
+              label: "Economy Model",
+            },
+            {
+              thumb: "/assets/tiles/gallery-visual-design.svg",
+              full: "/assets/tiles/gallery-visual-design.svg",
+              alt: "Tile skin visual design and rarity differentiation",
+              label: "Visual Design",
             },
           ],
         },
-        showcases: [
-          {
-            id: "bon-voyage-demo",
-            posterSrc: "/assets/bon-voyage/showcase-poster.svg",
-            playLabel: "Watch demo",
-            ariaLabel: "Play Bon Voyage demonstration video",
-          },
-        ],
       },
     },
     "ai-innovation": {
