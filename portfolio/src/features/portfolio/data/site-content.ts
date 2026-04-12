@@ -281,12 +281,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
                     heading: "Design process",
                     items: [
                         {
-                            thumb: "/assets/food-fiesta/gallery-ui.svg",
-                            full: "/assets/food-fiesta/gallery-ui.svg",
-                            alt: "UI mockups for Food Fiesta progression",
-                            label: "UI"
-                        },
-                        {
                             thumb: "/assets/food-fiesta/gallery-analytics.svg",
                             full: "/assets/food-fiesta/gallery-analytics.svg",
                             alt: "Cross-mode engagement analysis",
