@@ -100,6 +100,7 @@ export function ImageUploader({
           formData.append('file', item.file);
           formData.append('metadata', JSON.stringify({
             ...data,
+            projectSlug: projectSlug || '',
             usageContext: `${data.usageContext} - ${item.file.name}`,
           }));
 
@@ -131,6 +132,25 @@ export function ImageUploader({
         type: 'success', 
         text: `Successfully uploaded ${results.length} file${results.length > 1 ? 's' : ''}` 
       });
+
+      // Update hero images in site-content.ts automatically
+      const heroImages = results.filter(asset => asset.metadata?.category === 'hero');
+      for (const heroAsset of heroImages) {
+        if (heroAsset.metadata?.projectSlug) {
+          try {
+            await fetch('/api/admin/assets/update-hero', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                projectSlug: heroAsset.metadata.projectSlug,
+                imagePath: heroAsset.publicUrl,
+              }),
+            });
+          } catch (error) {
+            console.warn('Failed to update hero image in site-content:', error);
+          }
+        }
+      }
 
       // Notify parent component
       results.forEach(asset => {

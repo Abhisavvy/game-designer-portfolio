@@ -373,6 +373,24 @@ export class ASTManipulator {
     }
   }
 
+  updateProjectImage(slug: string, imagePath: string): void {
+    this.requireDefaultPortfolioRoot("ASTManipulator.updateProjectImage");
+    const transformer = this.createDefaultContentRootTransformer((root, factory) =>
+      this.patchProjectImage(root, slug, imagePath, factory),
+    );
+    const result = ts.transform(this.sourceFile, [transformer]);
+    try {
+      const next = result.transformed[0];
+      if (!next || !ts.isSourceFile(next)) {
+        throw new Error("AST transform did not return a SourceFile");
+      }
+      this.writeTransformedFile(next);
+      this.sourceFile = next;
+    } finally {
+      result.dispose();
+    }
+  }
+
   deleteProject(slug: string): void {
     this.requireDefaultPortfolioRoot("ASTManipulator.deleteProject");
     const transformer = this.createDefaultContentRootTransformer((root, factory) =>
@@ -597,6 +615,89 @@ export class ASTManipulator {
         factory.updateArrayLiteralExpression(arr, elements),
       );
     });
+    return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private patchProjectImage(
+    rootObj: ts.ObjectLiteralExpression,
+    slug: string,
+    imagePath: string,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    // This would update the posterSrc in case studies for the given project slug
+    // For now, we'll implement a basic version that updates the projects array
+    const props = rootObj.properties.map((p) => {
+      if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
+      
+      // Look for caseStudies property
+      if (p.name.text === "caseStudies" && ts.isObjectLiteralExpression(p.initializer)) {
+        const caseStudiesObj = p.initializer;
+        const caseStudyProps = caseStudiesObj.properties.map((csProp) => {
+          if (!ts.isPropertyAssignment(csProp) || !ts.isIdentifier(csProp.name)) return csProp;
+          
+          // Check if this case study matches our slug
+          if (csProp.name.text === slug && ts.isObjectLiteralExpression(csProp.initializer)) {
+            const caseStudy = csProp.initializer;
+            const updatedProps = caseStudy.properties.map((csField) => {
+              if (!ts.isPropertyAssignment(csField) || !ts.isIdentifier(csField.name)) return csField;
+              
+              // Update media.hero.posterSrc
+              if (csField.name.text === "media" && ts.isObjectLiteralExpression(csField.initializer)) {
+                const mediaObj = csField.initializer;
+                const mediaProps = mediaObj.properties.map((mediaProp) => {
+                  if (!ts.isPropertyAssignment(mediaProp) || !ts.isIdentifier(mediaProp.name)) return mediaProp;
+                  
+                  if (mediaProp.name.text === "hero" && ts.isObjectLiteralExpression(mediaProp.initializer)) {
+                    const heroObj = mediaProp.initializer;
+                    const heroProps = heroObj.properties.map((heroProp) => {
+                      if (!ts.isPropertyAssignment(heroProp) || !ts.isIdentifier(heroProp.name)) return heroProp;
+                      
+                      if (heroProp.name.text === "posterSrc") {
+                        return factory.updatePropertyAssignment(
+                          heroProp,
+                          heroProp.name,
+                          factory.createStringLiteral(imagePath),
+                        );
+                      }
+                      return heroProp;
+                    });
+                    
+                    return factory.updatePropertyAssignment(
+                      mediaProp,
+                      mediaProp.name,
+                      factory.updateObjectLiteralExpression(heroObj, heroProps),
+                    );
+                  }
+                  return mediaProp;
+                });
+                
+                return factory.updatePropertyAssignment(
+                  csField,
+                  csField.name,
+                  factory.updateObjectLiteralExpression(mediaObj, mediaProps),
+                );
+              }
+              return csField;
+            });
+            
+            return factory.updatePropertyAssignment(
+              csProp,
+              csProp.name,
+              factory.updateObjectLiteralExpression(caseStudy, updatedProps),
+            );
+          }
+          return csProp;
+        });
+        
+        return factory.updatePropertyAssignment(
+          p,
+          p.name,
+          factory.updateObjectLiteralExpression(caseStudiesObj, caseStudyProps),
+        );
+      }
+      return p;
+    });
+    
     return factory.updateObjectLiteralExpression(rootObj, props);
   }
 

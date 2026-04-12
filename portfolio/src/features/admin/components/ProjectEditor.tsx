@@ -499,15 +499,77 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                 Upload images and media files for this project. Assets will be organized in the project folder.
               </p>
             </div>
+
+            {/* Current Hero Image */}
+            {project && (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h4 className="text-md font-medium text-gray-900 mb-3">Current Hero Image</h4>
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <img
+                      src={`/assets/${project.slug}/poster.svg`}
+                      alt={`${project.title} hero image`}
+                      className="w-32 h-20 object-cover rounded-lg border border-gray-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/assets/placeholder-image.svg';
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-600 mb-2">
+                      <strong>Current:</strong> /assets/{project.slug}/poster.svg
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Upload a new hero image below to replace this placeholder. 
+                      Recommended size: 800x600px or larger.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
             
-            <ImageUploader
-              projectSlug={project?.slug}
-              category="gallery"
-              onUploadComplete={(asset) => {
-                console.log('Asset uploaded:', asset);
-                // TODO: Update project data with new asset
-              }}
-            />
+            {/* Hero Image Upload */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <h4 className="text-md font-medium text-gray-900 mb-3">Upload New Hero Image</h4>
+              <ImageUploader
+                projectSlug={project?.slug}
+                category="hero"
+                maxFiles={1}
+                onUploadComplete={(asset) => {
+                  console.log('Hero image uploaded:', asset);
+                  setMessage({ type: 'success', text: 'Hero image uploaded! It will replace the placeholder automatically.' });
+                }}
+              />
+            </div>
+
+            {/* Gallery Images Upload */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <h4 className="text-md font-medium text-gray-900 mb-3">Gallery Images</h4>
+              <p className="text-sm text-gray-600 mb-3">
+                Upload additional images for case study galleries and process documentation.
+              </p>
+              <ImageUploader
+                projectSlug={project?.slug}
+                category="gallery"
+                maxFiles={10}
+                onUploadComplete={(asset) => {
+                  console.log('Gallery image uploaded:', asset);
+                  setMessage({ type: 'success', text: 'Gallery image uploaded successfully!' });
+                }}
+              />
+            </div>
+
+            {/* Usage Guide */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">Image Management Guide</h4>
+              <ul className="text-sm text-blue-800 space-y-1">
+                <li>• <strong>Hero Images:</strong> Replace project card placeholders (recommended: 800x600px)</li>
+                <li>• <strong>Gallery Images:</strong> For case study process documentation and screenshots</li>
+                <li>• <strong>Automatic Organization:</strong> Images saved to /public/assets/{project?.slug || '[project]'}/</li>
+                <li>• <strong>Instant Updates:</strong> Changes reflect immediately in portfolio preview</li>
+                <li>• <strong>Accessibility:</strong> Always provide descriptive alt text for screen readers</li>
+              </ul>
+            </div>
           </div>
         )}
 

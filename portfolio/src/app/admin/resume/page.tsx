@@ -49,6 +49,48 @@ export default function ResumeManagementPage() {
     }
   };
 
+  const handlePDFUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.pdf')) {
+      setMessage({ type: 'error', text: 'Please upload a PDF file' });
+      return;
+    }
+
+    try {
+      setImporting(true);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('metadata', JSON.stringify({
+        category: 'profile',
+        altText: 'Resume PDF',
+        usageContext: 'Latest resume document for download',
+      }));
+
+      const response = await fetch('/api/admin/assets/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setMessage({ 
+          type: 'success', 
+          text: `Resume PDF uploaded successfully. Available at: ${result.asset.publicUrl}` 
+        });
+      } else {
+        const error = await response.json();
+        setMessage({ type: 'error', text: error.error || 'Failed to upload PDF' });
+      }
+    } catch (error) {
+      console.error('PDF upload error:', error);
+      setMessage({ type: 'error', text: 'Failed to upload PDF resume' });
+    } finally {
+      setImporting(false);
+    }
+  };
+
   const exportResumeData = async () => {
     try {
       setExporting(true);
@@ -150,14 +192,14 @@ export default function ResumeManagementPage() {
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center space-x-3 mb-4">
           <Upload className="text-orange-600" size={24} />
-          <h2 className="text-xl font-semibold text-gray-900">Import from Reactive Resume</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Import Resume Data</h2>
         </div>
         
         <p className="text-gray-600 mb-4">
-          Upload your Reactive Resume JSON export to validate consistency with your portfolio data.
+          Upload your Reactive Resume JSON export or PDF resume to validate consistency with your portfolio data.
         </p>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Upload Reactive Resume JSON
@@ -169,14 +211,29 @@ export default function ResumeManagementPage() {
               disabled={importing}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 disabled:opacity-50"
             />
+            <p className="text-xs text-gray-500 mt-1">For consistency validation</p>
           </div>
 
-          {importing && (
-            <div className="text-sm text-gray-600">
-              Importing and validating resume data...
-            </div>
-          )}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Upload PDF Resume
+            </label>
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handlePDFUpload}
+              disabled={importing}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
+            />
+            <p className="text-xs text-gray-500 mt-1">Store your latest resume PDF</p>
+          </div>
         </div>
+
+        {importing && (
+          <div className="text-sm text-gray-600 mt-4">
+            Processing resume data...
+          </div>
+        )}
       </div>
 
       {/* Consistency Issues */}

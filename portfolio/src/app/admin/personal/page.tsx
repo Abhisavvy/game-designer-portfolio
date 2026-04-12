@@ -153,7 +153,7 @@ export default function PersonalInfoPage() {
                 id="personal-name"
                 type="text"
                 {...register('name')}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.name ? (
                 <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
@@ -168,7 +168,7 @@ export default function PersonalInfoPage() {
                 id="personal-role"
                 type="text"
                 {...register('role')}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.role ? (
                 <p className="mt-1 text-sm text-red-500">{errors.role.message}</p>
@@ -234,7 +234,7 @@ export default function PersonalInfoPage() {
                 id="personal-email"
                 type="email"
                 {...register('email')}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.email ? (
                 <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
@@ -249,7 +249,7 @@ export default function PersonalInfoPage() {
                 id="personal-phone"
                 type="tel"
                 {...register('phone')}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.phone ? (
                 <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>

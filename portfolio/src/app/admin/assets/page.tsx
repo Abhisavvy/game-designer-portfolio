@@ -104,6 +104,34 @@ export default function AssetsManagementPage() {
         </p>
       </div>
 
+      {/* Current Project Images Overview */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Current Project Images</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          {['bon-voyage', 'food-fiesta', 'tiles', 'word-roll-events', 'ai-innovation', 'kinoa-integration', 'ticket-mania'].map((slug) => (
+            <div key={slug} className="text-center">
+              <div className="relative">
+                <img
+                  src={`/assets/${slug}/poster.svg`}
+                  alt={`${slug} hero`}
+                  className="w-full h-20 object-cover rounded-lg border border-gray-300 mb-2"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/assets/placeholder-image.svg';
+                  }}
+                />
+                <div className="absolute top-1 right-1 bg-orange-500 text-white text-xs px-1 rounded">
+                  SVG
+                </div>
+              </div>
+              <p className="text-xs text-gray-600 truncate">{slug}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm text-gray-600 mt-4">
+          <strong>Orange badges</strong> indicate placeholder images. Upload new images via project editors to replace them.
+        </p>
+      </div>
+
       {/* Upload Section */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Upload New Assets</h2>
