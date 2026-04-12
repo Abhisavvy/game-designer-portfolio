@@ -88,12 +88,17 @@ career-workspace/
 2. **Comprehensive Feature Implementation**: Gallery management, auto-deployment, asset cleanup all at once
 3. **Real-world Validation**: Always test on actual Vercel deployment, not just localhost
 4. **Clear Documentation**: Step-by-step guides and implementation summaries
+5. **Path Consistency**: When implementing upload/download features, ensure file paths match exactly
 
 ### What to Avoid
 1. **Partial Solutions**: Don't implement gallery upload without reorder/delete
 2. **Localhost-Only Testing**: Always verify changes reach production
 3. **Cache Conflicts**: Never run build while dev server is running
 4. **Incomplete Error Handling**: Fix all ESLint errors before claiming completion
+5. **Path Mismatches**: Upload endpoints must save files where download functions expect them
+
+### Recent Fixes Applied
+- **Resume Upload Issue (2026-04-12)**: PDF uploads were saving to `/assets/general/` but download expected `/ABHISHEK DUTTA RESUME.pdf`. Created dedicated `/api/admin/resume/upload` endpoint that saves directly to the expected location.
 
 ## Future Considerations
 
