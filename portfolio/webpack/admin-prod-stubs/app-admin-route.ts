@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 
 /**
- * Production stub for App Route handlers under `src/app/api/admin/` (`route.ts`, `route.js`, …).
- *
- * Verbs stay defined so the Route Handler module shape matches Next.js expectations;
- * responses are always 404 JSON without bundling real admin implementation.
+ * Production stub for Route Handlers under `src/app/admin/` (`route.ts`, `route.js`, …).
+ * Mirrors `api-route.ts` so HTTP verbs stay defined without bundling real admin handlers.
  */
 async function adminOmitted() {
   return NextResponse.json({ error: "Not found" }, { status: 404 });

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "test:admin-stubs": "node webpack/scripts/verify-admin-stub-loader.mjs",
     "start": "next start",
     "lint": "next lint"
   },
