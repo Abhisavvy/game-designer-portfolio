@@ -1,0 +1,123 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#0f172a"/>
+  
+  <!-- Subtle grid overlay -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#1e293b" stroke-width="0.5" opacity="0.3"/>
+    </pattern>
+    
+    <!-- Orange gradient definitions -->
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fb923c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ea580c;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="orangeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fb923c;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#ea580c;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#fb923c;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="600" fill="url(#grid)"/>
+  
+  <!-- Main title -->
+  <text x="600" y="120" text-anchor="middle" fill="#f1f5f9" font-family="Inter, system-ui, sans-serif" font-size="56" font-weight="700" letter-spacing="-0.02em">AI Innovation</text>
+  <text x="600" y="160" text-anchor="middle" fill="#94a3b8" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="400">Meeting Notes ’ Structured Specifications</text>
+  
+  <!-- Left side: Chaotic meeting notes -->
+  <g transform="translate(150, 250)">
+    <!-- Container -->
+    <rect x="0" y="0" width="300" height="200" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    
+    <!-- Title -->
+    <text x="150" y="35" text-anchor="middle" fill="#e2e8f0" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="600">Meeting Notes</text>
+    
+    <!-- Messy content lines -->
+    <g opacity="0.8">
+      <!-- Random scattered text lines -->
+      <rect x="25" y="60" width="180" height="4" rx="2" fill="#64748b"/>
+      <rect x="25" y="75" width="120" height="4" rx="2" fill="#64748b"/>
+      <rect x="25" y="90" width="200" height="4" rx="2" fill="#64748b"/>
+      <rect x="25" y="105" width="90" height="4" rx="2" fill="#64748b"/>
+      <rect x="25" y="120" width="160" height="4" rx="2" fill="#64748b"/>
+      <rect x="25" y="135" width="140" height="4" rx="2" fill="#64748b"/>
+      <rect x="25" y="150" width="100" height="4" rx="2" fill="#64748b"/>
+      <rect x="25" y="165" width="180" height="4" rx="2" fill="#64748b"/>
+    </g>
+    
+    <!-- Scattered elements showing chaos -->
+    <circle cx="240" cy="70" r="3" fill="#ef4444" opacity="0.7"/>
+    <circle cx="260" cy="100" r="3" fill="#f59e0b" opacity="0.7"/>
+    <circle cx="250" cy="130" r="3" fill="#ef4444" opacity="0.7"/>
+    <rect x="230" y="150" width="6" height="6" fill="#8b5cf6" opacity="0.7"/>
+  </g>
+  
+  <!-- Center: Transformation arrow with AI element -->
+  <g transform="translate(500, 340)">
+    <!-- Main arrow -->
+    <path d="M0 10 L160 10 M150 0 L160 10 L150 20" stroke="url(#orangeGrad)" stroke-width="3" fill="none"/>
+    
+    <!-- AI processing circle -->
+    <circle cx="80" cy="10" r="30" fill="url(#orangeGrad)" opacity="0.9"/>
+    <text x="80" y="18" text-anchor="middle" fill="#ffffff" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="700">AI</text>
+    
+    <!-- Subtle glow effect -->
+    <circle cx="80" cy="10" r="35" fill="none" stroke="url(#orangeGlow)" stroke-width="1" opacity="0.5"/>
+    
+    <!-- Processing dots -->
+    <circle cx="50" cy="-15" r="2" fill="#fb923c" opacity="0.8">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="110" cy="-20" r="2" fill="#ea580c" opacity="0.6">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="60" cy="40" r="2" fill="#fb923c" opacity="0.7">
+      <animate attributeName="opacity" values="0.5;0.9;0.5" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="35" r="2" fill="#ea580c" opacity="0.9">
+      <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Right side: Structured specifications -->
+  <g transform="translate(750, 250)">
+    <!-- Container -->
+    <rect x="0" y="0" width="300" height="200" rx="16" fill="#1e293b" stroke="url(#orangeGrad)" stroke-width="2"/>
+    
+    <!-- Title -->
+    <text x="150" y="35" text-anchor="middle" fill="#e2e8f0" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="600">Structured Specs</text>
+    
+    <!-- Organized sections -->
+    <g opacity="0.9">
+      <!-- Section headers with orange accent -->
+      <rect x="25" y="60" width="4" height="20" fill="url(#orangeGrad)"/>
+      <text x="40" y="75" fill="#e2e8f0" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600">Problem Statement</text>
+      
+      <rect x="25" y="90" width="4" height="20" fill="url(#orangeGrad)"/>
+      <text x="40" y="105" fill="#e2e8f0" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600">Business Goals</text>
+      
+      <rect x="25" y="120" width="4" height="20" fill="url(#orangeGrad)"/>
+      <text x="40" y="135" fill="#e2e8f0" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600">Design Goals</text>
+      
+      <rect x="25" y="150" width="4" height="20" fill="url(#orangeGrad)"/>
+      <text x="40" y="165" fill="#e2e8f0" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600">User Flows</text>
+      
+      <!-- Content lines -->
+      <rect x="180" y="68" width="90" height="3" rx="1.5" fill="#fb923c" opacity="0.7"/>
+      <rect x="180" y="98" width="70" height="3" rx="1.5" fill="#fb923c" opacity="0.7"/>
+      <rect x="180" y="128" width="80" height="3" rx="1.5" fill="#fb923c" opacity="0.7"/>
+      <rect x="180" y="158" width="60" height="3" rx="1.5" fill="#fb923c" opacity="0.7"/>
+    </g>
+    
+    <!-- Success indicator -->
+    <circle cx="260" cy="180" r="12" fill="url(#orangeGrad)"/>
+    <path d="M254 180 L258 184 L266 176" stroke="#ffffff" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- Bottom tagline -->
+  <rect x="300" y="520" width="600" height="50" rx="25" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="600" y="550" text-anchor="middle" fill="#94a3b8" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="500">Transforming Chaos into Clarity</text>
+</svg>
