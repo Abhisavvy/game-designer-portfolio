@@ -13,6 +13,7 @@ interface OptimizedImageProps {
   className?: string;
   placeholder?: React.ReactNode;
   priority?: boolean;
+  sizes?: string;
 }
 
 export function OptimizedImage({ 
@@ -24,7 +25,8 @@ export function OptimizedImage({
   height, 
   className = "", 
   placeholder,
-  priority = false 
+  priority = false,
+  sizes 
 }: OptimizedImageProps) {
   const [currentSrc, setCurrentSrc] = useState(src);
   const [imageError, setImageError] = useState(false);
@@ -62,6 +64,7 @@ export function OptimizedImage({
         width={width}
         height={height}
         priority={priority}
+        sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"}
         className={`object-cover transition-all duration-300 ${
           imageLoading ? 'opacity-20' : 'opacity-100'
         }`}

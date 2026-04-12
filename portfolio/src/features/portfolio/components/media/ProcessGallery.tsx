@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CaseStudyGalleryItem } from "../../data/case-study-media";
@@ -129,12 +130,12 @@ export function ProcessGallery({ groupId, heading, items }: Props) {
             className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 text-left outline-none ring-amber-500/80 focus-visible:ring-2"
             onClick={() => openAt(i)}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={item.thumb}
               alt={item.alt}
-              loading="lazy"
-              className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 50vw, 33vw"
+              className="object-cover transition duration-300 group-hover:scale-105"
             />
             <span className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-black/70 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
               <span className="text-xs font-semibold uppercase tracking-wide text-white">

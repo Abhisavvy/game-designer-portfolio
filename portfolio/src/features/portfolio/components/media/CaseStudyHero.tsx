@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { CaseStudyMedia } from "../../data/case-study-media";
 import { usePrefersReducedMotion, useViewportMinMd } from "./useMediaPreferences";
 
@@ -28,9 +29,13 @@ export function CaseStudyHero({ hero }: { hero: Hero }) {
           <source src={hero.videoSrc} type="video/mp4" />
         </video>
       ) : (
-        <div
-          className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${hero.posterSrc})` }}
+        <Image
+          src={hero.posterSrc}
+          alt="Case study hero image"
+          fill
+          sizes="100vw"
+          priority
+          className="absolute inset-0 z-0 object-cover"
         />
       )}
       <div

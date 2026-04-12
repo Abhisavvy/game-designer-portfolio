@@ -120,8 +120,8 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
         ref={ref}
         className="group relative cursor-pointer"
         variants={cardVariants}
-        initial="visible"
-        animate="visible"
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
         whileHover={{ y: -8 }}
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
       >
@@ -143,6 +143,7 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
             alt={`${project.title} - Game Screenshot`}
             width={400}
             height={320}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="w-full h-full object-cover"
             placeholder={
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800/50 to-zinc-900/70">

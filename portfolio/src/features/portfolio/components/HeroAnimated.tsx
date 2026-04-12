@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { OptimizedImage } from "./OptimizedImage";
+import { usePrefersReducedMotion } from "./media/useMediaPreferences";
 import { 
   Gamepad2, 
   Zap, 
@@ -33,15 +34,29 @@ interface HeroAnimatedProps {
 
 export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  
+  const reducedMotion = usePrefersReducedMotion();
+
+  // Helper function to conditionally disable animations
+  const getAnimateProps = (animateProps: any) => {
+    if (reducedMotion) return {};
+    return animateProps;
+  };
+
+  const getTransitionProps = (transitionProps: any) => {
+    if (reducedMotion) return { duration: 0 };
+    return transitionProps;
+  };
+
   useEffect(() => {
+    if (reducedMotion) return;
+    
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-    
+
     window.addEventListener("mousemove", updateMousePosition);
     return () => window.removeEventListener("mousemove", updateMousePosition);
-  }, []);
+  }, [reducedMotion]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -88,16 +103,16 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
         {/* Organic floating elements inspired by mobile gaming */}
         <motion.div
           className="absolute w-64 h-64 bg-gradient-to-r from-orange-600/8 to-orange-500/12 rounded-[40%_60%_70%_30%] blur-3xl"
-          animate={{
+          animate={getAnimateProps({
             x: mousePosition.x * 0.02,
             y: mousePosition.y * 0.02,
             borderRadius: ["40% 60% 70% 30%", "60% 40% 30% 70%", "40% 60% 70% 30%"],
-          }}
-          transition={{ 
-            type: "spring", 
+          })}
+          transition={getTransitionProps({
+            type: "spring",
             damping: 50,
             borderRadius: { duration: 8, repeat: Infinity, ease: "easeInOut" }
-          }}
+          })}
           style={{
             top: "20%",
             left: "10%",
@@ -141,14 +156,14 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
         {/* Portfolio-relatable animated icons */}
         <motion.div
           className="absolute top-16 right-24 text-orange-500/20"
-          animate={{
+          animate={getAnimateProps({
             rotate: [0, 360],
             scale: [1, 1.1, 1],
-          }}
-          transition={{
+          })}
+          transition={getTransitionProps({
             rotate: { duration: 20, repeat: Infinity, ease: "linear" },
             scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-          }}
+          })}
         >
           <Settings className="w-8 h-8" />
         </motion.div>
@@ -296,7 +311,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
       <motion.div
         className="relative z-10 text-center px-6 max-w-5xl mx-auto pb-20"
         variants={containerVariants}
-        initial="visible"
+        initial="hidden"
         animate="visible"
       >
         {/* Profile Image Placeholder */}
@@ -312,6 +327,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
               width={128}
               height={128}
               priority={true}
+              sizes="128px"
               className="relative w-full h-full rounded-full border-2 border-orange-500/30 object-cover"
               placeholder={
                 <div className="w-full h-full bg-zinc-800/50 backdrop-blur-sm border-2 border-orange-500/30 rounded-full flex items-center justify-center">
@@ -380,9 +396,9 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
-              document.getElementById('featured-work')?.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
+              document.getElementById('featured-work')?.scrollIntoView({
+                behavior: reducedMotion ? 'auto' : 'smooth',
+                block: 'start'
               });
             }}
           >
@@ -401,8 +417,8 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
       >
         <motion.div
           className="flex flex-col items-center justify-center space-y-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          animate={getAnimateProps({ y: [0, 10, 0] })}
+          transition={getTransitionProps({ repeat: Infinity, duration: 2, ease: "easeInOut" })}
         >
           <span className="text-sm text-center font-medium">Scroll to explore</span>
           <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex items-center justify-center">

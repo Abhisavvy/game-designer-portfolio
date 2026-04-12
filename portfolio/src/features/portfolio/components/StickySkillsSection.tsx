@@ -144,13 +144,13 @@ function CompactSkillCard({ skill, index }: CompactSkillCardProps) {
   return (
     <motion.div
       className="group relative"
-      initial={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.5,
         delay: index * 0.1,
       }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: "-40px" }}
       whileHover={{ y: -2 }}
     >
       <div className="h-auto min-h-[140px] p-3 bg-zinc-800/60 border border-zinc-700/50 rounded-lg transition-all duration-300 group-hover:border-orange-500/50 group-hover:bg-zinc-800/80 flex flex-col">
