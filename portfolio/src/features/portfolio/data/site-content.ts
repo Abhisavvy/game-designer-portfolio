@@ -324,6 +324,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/tiles/screenshot-2026-04-12-at-10-50-46-pm-1776014937820.png",
                             alt: "Machinations diagram",
                             label: "Gallery - Screenshot 2026-04-12 at 10.50.46\u202FPM.png"
+                        },
+                        {
+                            thumb: "/assets/tiles/feedback-win-1776014988056.png",
+                            full: "/assets/tiles/feedback-win-1776014988056.png",
+                            alt: "Tile Grant feedback",
+                            label: "gallery - Feedback_Win.png"
                         }
                     ]
                 }
