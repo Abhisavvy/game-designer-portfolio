@@ -274,7 +274,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/placeholder-image.svg"
+                    posterSrc: "/assets/food-fiesta/screenshot-2026-04-12-at-10-37-41-pm-1776013716174.png"
                 },
                 processGallery: {
                     groupId: "food-fiesta-process",
