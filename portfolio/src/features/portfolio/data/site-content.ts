@@ -438,7 +438,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "wotd-process",
                     heading: "Design process",
-                    items: []
+                    items: [{
+                            thumb: "/assets/wotd/screenshot-2026-04-12-17-07-47-253-in-playsimple-wordbingo-1776018434844.jpg",
+                            full: "/assets/wotd/screenshot-2026-04-12-17-07-47-253-in-playsimple-wordbingo-1776018434844.jpg",
+                            alt: "WOTD Step 1",
+                            label: "WOTD - Screenshot_2026-04-12-17-07-47-253_in.playsimple.wordbingo.jpg"
+                        }]
                 }
             }
         },
