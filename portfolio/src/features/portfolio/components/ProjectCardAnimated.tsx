@@ -137,9 +137,9 @@ export function ProjectCardAnimated({ project, index }: ProjectCardAnimatedProps
           transition={{ delay: index * 0.1 + 0.1 }}
         >
           <OptimizedImage
-            src={`/assets/${project.title.toLowerCase().replace(/\s+/g, '-')}/hero-image.webp`}
-            fallbackSrc={`/assets/${project.title.toLowerCase().replace(/\s+/g, '-')}/hero-image.png`}
-            secondaryFallback={`/assets/${project.title.toLowerCase().replace(/\s+/g, '-')}/hero-image.jpg`}
+            src={`/assets/${project.slug}/hero-image.webp`}
+            fallbackSrc={`/assets/${project.slug}/hero-image.png`}
+            secondaryFallback={`/assets/${project.slug}/hero-image.jpg`}
             alt={`${project.title} - Game Screenshot`}
             width={400}
             height={320}
@@ -376,7 +376,7 @@ function getFallbackBadges(project: ProjectItem): string[] {
     "ai-innovation": ["25% doc efficiency", "40% faster planning", "AI productivity tools"],
     "kinoa-integration": ["SDK integration", "Event flows", "Player engagement"],
     "tiles": ["Economy redesign", "Cosmetic rewards", "Player ownership"],
-    "bon-voyage": ["Social mechanics", "PvP features", "Player collaboration"],
+    "bon-voyage": ["60-day retention", "Secondary currency", "Economy de-risking"],
   };
   
   return fallbacks[project.slug] || ["Core systems", "Player engagement", "Feature design"];

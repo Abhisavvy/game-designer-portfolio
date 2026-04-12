@@ -233,7 +233,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
       title: "AI & Innovation",
       tag: "Productivity Tools · AI",
       blurb:
-        "Meeting Note Taker and Feature Spec Dashboard — structured meeting output to spec-ready content, eliminating manual bifurcation.",
+        "Feature Spec Dashboard + Spec Maker pipeline — automated meeting note bifurcation to spec-ready content, eliminating manual reformatting.",
       href: "/work/ai-innovation",
       externalUrl: "",
     },
@@ -384,17 +384,17 @@ export const defaultPortfolioContent: PortfolioContentState = {
       title: "AI & Innovation",
       subtitle: "Productivity Tools · Feature Spec Pipeline",
       problem:
-        "Unstructured meeting output created bottlenecks: manual bifurcation of decisions vs. specs vs. stakeholder updates. Context was lost when team members joined later in pre-production. Duplicate work — same content rewritten for email, specs, and presentations.",
+        "Unstructured meeting output created bottlenecks: manual bifurcation of decisions vs. specs vs. stakeholder updates. Context was lost when team members joined later in pre-production. Duplicate work — same content rewritten for email, specs, and presentations. Teams struggled to turn messy Granola meeting notes into organized, actionable content.",
       approach:
-        "1. Built Feature Spec Dashboard — ingests Granola meeting notes, bifurcates into structured sections (problem statements, vision, goals, flows), and produces mail-ready and spec-ready output.\n2. Built Spec Maker — takes structured input from the Dashboard (or raw notes) and generates complete spec documents in markdown.\n3. Template-driven extraction ensures output aligns with standard section headers so Spec Maker doesn't have to infer structure.",
+        "1. Built Feature Spec Dashboard — ingests meeting notes from Granola (or similar), bifurcates into structured sections (problem statements, vision, goals, flows), and produces both mail-ready summaries and spec-ready content.\n2. Built Spec Maker — takes structured input from Dashboard or raw meeting data and generates complete spec documents in markdown (with future PPTX support planned).\n3. Template-driven extraction using standard section headers ensures output aligns with spec format so Spec Maker doesn't need to infer structure.\n4. Created single source of truth pipeline: Meeting → Dashboard → Spec Maker → Complete Documentation.",
       constraints:
-        "Team adoption across 8-person dev team. Meeting note quality varies by source. Spec template had to be flexible enough for different feature types while maintaining consistent structure.",
+        "Team adoption across 8-person dev team. Meeting note quality varies by source (Granola vs manual). Spec template had to be flexible for different feature types while maintaining consistency. Integration with existing workflows and tools.",
       outcome:
-        "Single source of truth from meetings — one extraction feeds both email and spec pipeline. Consistent structure across all specs. Reduced time from meeting completion to spec-ready data with minimal manual reformatting. Adopted as team standard workflow.",
+        "Eliminated manual bifurcation of meeting content. Single extraction now feeds both stakeholder emails and spec pipeline instead of rewriting same content multiple places. Reduced time from meeting completion to spec-ready data with minimal manual reformatting. Provided context retention for team members joining mid-production. Adopted as standard team workflow with consistent structure across all feature specs.",
       contributions:
-        "1. Identified the meeting-to-spec pipeline gap and designed the two-tool architecture (Dashboard → Spec Maker).\n2. Built Feature Spec Dashboard with Granola integration, data bifurcation, and mail/spec output.\n3. Designed template-driven extraction aligned to standard spec sections.\n4. Built Spec Maker for structured-input-to-full-spec generation.\n5. Drove team adoption and established as standard workflow across development team.",
+        "1. Identified the meeting-to-spec pipeline gap and architected the two-tool solution (Dashboard → Spec Maker).\n2. Built Feature Spec Dashboard with Granola integration, automated data bifurcation, and dual output (mail + spec-ready).\n3. Designed template-driven extraction system aligned to standard spec sections (Problem, Vision, Goals, Flows).\n4. Built Spec Maker for structured-input-to-complete-spec generation with markdown output.\n5. Established format consistency so all team specs follow same structure and sections.\n6. Drove adoption across development team and integrated into standard pre-production workflow.",
       links: [
-        { label: "Feature Spec Dashboard", url: "https://abhishekdutta1-project.vercel.app/" },
+        { label: "Feature Spec Dashboard", href: "https://abhishekdutta1-project.vercel.app/" },
       ],
       media: {
         hero: {
@@ -468,7 +468,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
       constraints:
         "UX clarity, session fit, collaboration with UX and engineering.",
       outcome:
-        "D1 rolling retention +140 bps; engagement +3%.",
+        "D30 LTV +9.4% (high confidence, or +6.04% removing outliers). D1RR +73 bps (high confidence). Engagement +0.63 moves/DAU (high confidence). Step 1 completion: 55% of DAU. Step 2 completion: 34% of DAU. Solo Series saw -0.27 moves/DAU (attributed to pre-post bias and variant experiment interference). No impact on DBH mode where feature was inactive.",
       contributions:
         "1. Concepted the mechanic.\n2. Built the daily WOTD list with meanings.\n3. Partnered with UX on flows.",
       links: [],
@@ -487,41 +487,6 @@ export const defaultPortfolioContent: PortfolioContentState = {
       contributions:
         "1. Designed the ticket-collection mechanic and gameboard integration.\n2. Analyzed booster purchase decline — identified LB screen top-of-funnel drop and swap pricing conflict as root causes.\n3. Identified FTUE navigational dead-end issue and proposed optimization.\n4. Flagged bot chase logic as suboptimal for new mechanic — proposed future iteration.\n5. Drove decision to ramp variant to 100% based on strong IAP and retention signals.",
       links: [],
-    },
-    tiles: {
-      title: "Tiles (Cosmetic Rewards)",
-      subtitle: "Economy Design · Cosmetic System · Word Roll",
-      problem:
-        "Rewards were entirely coin-based, limiting economy levers. No cosmetic layer existed to create ownership or drive non-currency engagement.",
-      approach:
-        "1. Introduced tile skins as the first cosmetic reward in Word Roll.\n2. Designed tile drops tied to Food Fiesta event progression.\n3. Used Machinations to model gacha fairness and event-specific exclusivity.\n4. Created sinks beyond coins to de-risk the coin economy and support IAP context.",
-      constraints:
-        "Gacha fairness perception. Event exclusivity had to feel rewarding, not punitive. Machinations tooling for economy tuning. Cosmetics had to complement, not replace, existing coin rewards.",
-      outcome:
-        "Part of the Food Fiesta results: payer (earn–spend) decreased by ~1,200 coins driving IAP upsides. Created genuine ownership layer beyond currency. Enabled future cosmetic expansion.",
-      contributions:
-        "1. Designed the tile cosmetic system and gacha mechanics using Machinations.\n2. Implemented event-specific tile drops for exclusivity and progression incentives.\n3. Balanced cosmetic rewards against existing coin economy to avoid cannibalization.",
-      links: [],
-      media: {
-        processGallery: {
-          groupId: "tiles-process",
-          heading: "Systems & tooling",
-          items: [
-            {
-              thumb: "/assets/word-roll/gallery-machinations.svg",
-              full: "/assets/word-roll/gallery-machinations.svg",
-              alt: "Machinations economy diagram for tile gacha tuning",
-              label: "Model",
-            },
-            {
-              thumb: "/assets/word-roll/gallery-rewards.svg",
-              full: "/assets/word-roll/gallery-rewards.svg",
-              alt: "Reward structure for tiles versus coin sinks",
-              label: "Rewards",
-            },
-          ],
-        },
-      },
     },
   },
 };
