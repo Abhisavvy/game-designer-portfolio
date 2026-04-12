@@ -363,7 +363,7 @@ export default function ResumeManagementPage() {
             <ol className="list-decimal list-inside space-y-1 mt-1">
               <li>Open Reactive Resume application</li>
               <li>Go to Import/Export section</li>
-              <li>Choose "Import from JSON"</li>
+              <li>Choose &quot;Import from JSON&quot;</li>
               <li>Paste the generated JSON or upload the downloaded file</li>
               <li>Review and adjust the imported data</li>
               <li>Export as PDF when ready</li>
@@ -375,7 +375,7 @@ export default function ResumeManagementPage() {
             <ol className="list-decimal list-inside space-y-1 mt-1">
               <li>Open your resume in Reactive Resume</li>
               <li>Go to Import/Export section</li>
-              <li>Choose "Export to JSON"</li>
+              <li>Choose &quot;Export to JSON&quot;</li>
               <li>Download the JSON file</li>
               <li>Upload it here to validate consistency</li>
             </ol>

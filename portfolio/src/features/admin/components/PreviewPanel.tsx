@@ -148,7 +148,7 @@ export function PreviewPanel({ previewUrl = '/' }: PreviewPanelProps) {
           <p className="font-medium mb-2">Preview Tips:</p>
           <ul className="space-y-1 text-xs">
             <li>• Changes may take a moment to reflect in the preview</li>
-            <li>• Use "Open in new tab" for full interactive testing</li>
+            <li>• Use &quot;Open in new tab&quot; for full interactive testing</li>
             <li>• Mobile preview shows typical smartphone dimensions (375px)</li>
             <li>• Tablet preview shows typical tablet dimensions (768px)</li>
           </ul>

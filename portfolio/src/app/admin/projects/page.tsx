@@ -185,7 +185,7 @@ export default function ProjectsManagementPage() {
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-blue-900 mb-2">Project Management Tips</h3>
         <ul className="text-sm text-blue-800 space-y-1">
-          <li>• Use descriptive slugs for SEO-friendly URLs (e.g., "word-roll-events")</li>
+          <li>• Use descriptive slugs for SEO-friendly URLs (e.g., &quot;word-roll-events&quot;)</li>
           <li>• Keep blurbs concise but compelling (2-3 sentences max)</li>
           <li>• Tags help categorize projects (Game Design, AI Tools, etc.)</li>
           <li>• External URLs are optional but useful for live demos or case studies</li>

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { unlink } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
+import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
+import { triggerHotReloadAndDeploy } from '@/features/admin/utils/hot-reload';
+
+const SITE_CONTENT_PATH = path.join(process.cwd(), 'src/features/portfolio/data/site-content.ts');
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -42,6 +46,16 @@ export async function DELETE(request: NextRequest) {
 
     // Delete the file
     await unlink(filePath);
+
+    // Remove references from site-content.ts
+    if (projectSlug) {
+      const publicPath = `/assets/${projectSlug}/${filename}`;
+      const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
+      astManipulator.removeImageReferences(publicPath);
+      
+      // Trigger hot reload and deploy to Vercel
+      await triggerHotReloadAndDeploy(SITE_CONTENT_PATH, `Asset deleted: ${filename}`);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

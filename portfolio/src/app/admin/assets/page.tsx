@@ -246,7 +246,7 @@ export default function AssetsManagementPage() {
         
         <div className="mt-4 flex items-center justify-between">
           <p className="text-sm text-gray-600">
-            <strong>Orange badges</strong> indicate placeholder images, <strong>green badges</strong> indicate actual project images. Click "Reset" to change any image back to placeholder.
+            <strong>Orange badges</strong> indicate placeholder images, <strong>green badges</strong> indicate actual project images. Click &quot;Reset&quot; to change any image back to placeholder.
           </p>
           <div className="flex space-x-2">
             <button
@@ -381,7 +381,7 @@ export default function AssetsManagementPage() {
           <li>• Always provide alt text for accessibility compliance</li>
           <li>• Organize assets by project using the project slug</li>
           <li>• Optimize images before upload (recommended: WebP format, &lt;1MB)</li>
-          <li>• Use consistent naming conventions (e.g., "project-hero-image.webp")</li>
+          <li>• Use consistent naming conventions (e.g., &quot;project-hero-image.webp&quot;)</li>
         </ul>
       </div>
     </div>

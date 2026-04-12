@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
+import { triggerHotReloadAndDeploy } from '@/features/admin/utils/hot-reload';
 import path from 'path';
 
 const SITE_CONTENT_PATH = path.join(process.cwd(), 'src/features/portfolio/data/site-content.ts');
@@ -21,6 +22,9 @@ export async function POST(request: NextRequest) {
       // Reset hero image to a generic placeholder
       const placeholderPath = `/assets/placeholder-image.svg`;
       astManipulator.updateProjectImage(projectSlug, placeholderPath);
+      
+      // Trigger hot reload and deploy to Vercel
+      await triggerHotReloadAndDeploy(SITE_CONTENT_PATH, `Placeholder reset for ${projectSlug}`);
     }
 
     return NextResponse.json({ 

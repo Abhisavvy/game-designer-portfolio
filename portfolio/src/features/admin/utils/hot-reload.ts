@@ -1,9 +1,10 @@
 /**
- * Utility to trigger Next.js hot reload after file changes
+ * Utility to trigger Next.js hot reload after file changes and deploy to Vercel
  */
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import { deployToVercel } from './git-deploy';
 
 export async function triggerHotReload(filePath: string): Promise<void> {
   try {
@@ -20,5 +21,19 @@ export async function triggerHotReload(filePath: string): Promise<void> {
     console.log(`Hot reload triggered for: ${filePath}`);
   } catch (error) {
     console.warn('Failed to trigger hot reload:', error);
+  }
+}
+
+export async function triggerHotReloadAndDeploy(filePath: string, deployMessage?: string): Promise<void> {
+  // First trigger hot reload for local development
+  await triggerHotReload(filePath);
+  
+  // Then deploy to Vercel for production
+  try {
+    await deployToVercel({ message: deployMessage });
+    console.log('Successfully deployed to Vercel');
+  } catch (error) {
+    console.error('Deployment failed:', error);
+    // Don't throw - we want the local changes to still work even if deployment fails
   }
 }

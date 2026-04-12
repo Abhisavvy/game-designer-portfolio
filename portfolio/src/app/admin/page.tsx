@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAdminData } from '@/features/admin/hooks/useAdminData';
 import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
+import { DeploymentStatus } from '@/features/admin/components/DeploymentStatus';
 import { User, FolderOpen, Image as ImageIcon, FileText, AlertCircle } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -146,6 +147,8 @@ export default function AdminDashboard() {
           </Link>
         </div>
       </div>
+
+      <DeploymentStatus className="max-w-2xl" />
     </div>
   );
 }

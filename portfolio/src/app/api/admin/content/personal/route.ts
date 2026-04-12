@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { ASTManipulator } from "@/features/admin/utils/ast-manipulator";
-import { triggerHotReload } from "@/features/admin/utils/hot-reload";
+import { triggerHotReloadAndDeploy } from "@/features/admin/utils/hot-reload";
 import type { AdminPersonalInfo } from "@/features/admin/types/admin";
 import { defaultPortfolioContent } from "@/features/portfolio/data/site-content";
 import path from "path";
@@ -83,8 +83,8 @@ export async function PUT(request: NextRequest) {
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
     astManipulator.updatePersonalInfo(payload);
     
-    // Trigger hot reload to update the live site
-    await triggerHotReload(SITE_CONTENT_PATH);
+    // Trigger hot reload and deploy to Vercel
+    await triggerHotReloadAndDeploy(SITE_CONTENT_PATH, "Personal information updated");
 
     return NextResponse.json({ success: true });
   } catch (error) {

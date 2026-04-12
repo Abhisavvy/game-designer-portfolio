@@ -230,7 +230,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/bon-voyage/poster.svg",
+                    posterSrc: "/assets/placeholder-image.svg"
                 },
                 processGallery: {
                     groupId: "bon-voyage-process",
@@ -240,23 +240,41 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             thumb: "/assets/bon-voyage/gallery-progression.svg",
                             full: "/assets/bon-voyage/gallery-progression.svg",
                             alt: "60-level progression curve and key requirements",
-                            label: "Progression",
+                            label: "Progression"
                         },
                         {
                             thumb: "/assets/bon-voyage/gallery-economy.svg",
                             full: "/assets/bon-voyage/gallery-economy.svg",
                             alt: "Gems economy design and coin de-risking model",
-                            label: "Economy",
+                            label: "Economy"
                         },
                         {
-                            thumb: "/assets/bon-voyage/gallery-results.svg",
-                            full: "/assets/bon-voyage/gallery-results.svg",
+                            thumb: "/assets/bon-voyage/gallery-progression.svg",
+                            full: "/assets/bon-voyage/gallery-progression.svg",
                             alt: "A/B test results dashboard showing IAP and retention lifts",
-                            label: "Results",
+                            label: "Results"
                         },
-                    ],
-                },
-            },
+                        {
+                            thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008008677.png",
+                            full: "/assets/bon-voyage/seasons-iap-distribution-1776008008677.png",
+                            alt: "Seasons IAP Distribution",
+                            label: "Seasons IAP Distribution"
+                        },
+                        {
+                            thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008239290.png",
+                            full: "/assets/bon-voyage/seasons-iap-distribution-1776008239290.png",
+                            alt: "Seasons IAP Distribution",
+                            label: "Seasons IAP Distribution"
+                        },
+                        {
+                            thumb: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
+                            full: "/assets/bon-voyage/seasons-iap-distribution-1776008812087.png",
+                            alt: "Seasons IAP Distribution",
+                            label: "Seasons IAP Distribution"
+                        }
+                    ]
+                }
+            }
         },
         "food-fiesta": {
             title: "Food Fiesta",

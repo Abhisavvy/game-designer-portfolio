@@ -610,10 +610,33 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
                     const caseStudy = defaultPortfolioContent.caseStudies[project.slug as keyof typeof defaultPortfolioContent.caseStudies];
                     return caseStudy?.media?.processGallery?.items || [];
                   })()}
-                  onItemsChange={(items) => {
-                    // Update gallery items in site-content.ts
-                    console.log('Gallery items updated:', items);
-                    setMessage({ type: 'success', text: 'Gallery updated! Changes will reflect on the live site.' });
+                  onItemsChange={async (items) => {
+                    try {
+                      const response = await fetch('/api/admin/content/gallery', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          projectSlug: project.slug,
+                          items: items,
+                        }),
+                      });
+
+                      if (!response.ok) {
+                        throw new Error('Failed to update gallery');
+                      }
+
+                      const result = await response.json();
+                      setMessage({ 
+                        type: 'success', 
+                        text: `Gallery updated! ${result.itemCount} items saved. Changes will reflect on the live site.` 
+                      });
+                    } catch (error) {
+                      console.error('Failed to update gallery:', error);
+                      setMessage({ 
+                        type: 'error', 
+                        text: 'Failed to update gallery. Please try again.' 
+                      });
+                    }
                   }}
                 />
               )}

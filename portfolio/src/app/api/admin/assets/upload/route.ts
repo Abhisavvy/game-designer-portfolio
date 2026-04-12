@@ -4,7 +4,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import { z } from 'zod';
 import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
-import { triggerHotReload } from '@/features/admin/utils/hot-reload';
+import { triggerHotReloadAndDeploy } from '@/features/admin/utils/hot-reload';
 
 const uploadSchema = z.object({
   category: z.enum(['hero', 'gallery', 'process', 'profile']),
@@ -98,8 +98,8 @@ export async function POST(request: NextRequest) {
           console.log(`Added gallery image for project ${validatedMetadata.projectSlug}: ${publicUrl}`);
         }
         
-        // Trigger hot reload to update the live site
-        await triggerHotReload(siteContentPath);
+        // Trigger hot reload and deploy to Vercel
+        await triggerHotReloadAndDeploy(siteContentPath, `${validatedMetadata.category} image uploaded`);
       } catch (error) {
         console.error('Failed to update site-content.ts:', error);
         // Don't fail the upload, just log the error
