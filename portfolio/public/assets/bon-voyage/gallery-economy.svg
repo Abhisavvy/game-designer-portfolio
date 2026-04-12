@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-hidden="true">
-  <rect width="800" height="600" fill="#1c1917"/>
-  <rect x="100" y="400" width="120" height="120" fill="#44403c"/>
-  <rect x="260" y="340" width="120" height="180" fill="#57534e"/>
-  <rect x="420" y="280" width="120" height="240" fill="#78716c"/>
-  <rect x="580" y="220" width="120" height="300" fill="#a8a29e"/>
-  <text x="400" y="560" text-anchor="middle" fill="#78716c" font-family="system-ui" font-size="18">Economy pacing placeholder</text>
-</svg>
