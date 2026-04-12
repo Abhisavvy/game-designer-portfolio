@@ -39,18 +39,31 @@ export interface AdminPersonalInfo {
   bio: string;
 }
 
+export type CVBulletFormat = "tight" | "standard" | "narrative";
+
+export type CVBulletConfidence = "high" | "medium" | "low";
+
 export interface CVBullet {
-  format: "tight" | "standard" | "narrative";
+  id: string;
+  format: CVBulletFormat;
   content: string;
-  approved: boolean;
+  /** Where the bullet was derived from (case study section, blurb, etc.). */
+  source: string;
+  confidence: CVBulletConfidence;
+  approved?: boolean;
 }
 
+export type ConsistencyIssueSeverity = "high" | "medium" | "low";
+
 export interface ConsistencyIssue {
+  type: string;
+  severity: ConsistencyIssueSeverity;
+  projectSlug: string;
   field: string;
-  cvValue: string;
-  portfolioValue: string;
-  severity: "warning" | "error";
-  suggestion: string;
+  message: string;
+  suggestion?: string;
+  cvValue?: string;
+  portfolioValue?: string;
 }
 
 export interface ImageMetadata {

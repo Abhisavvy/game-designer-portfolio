@@ -61,15 +61,18 @@ A development-only admin panel for comprehensive portfolio content management, p
 - **Contact Details**: Email, phone, LinkedIn
 - **Bio/Summary**: Professional summary text
 - **Profile Photo**: Upload with alt text and caption
+- **CV Sync Side Panel**: Collapsible panel showing matching CV sections and suggested updates (non-intrusive)
 
 #### 2. Projects Management
 - **Project List**: Drag-to-reorder interface
 - **Add/Edit Project**: 
-  - Basic info (title, tag, blurb)
-  - Hero image upload with metadata
-  - Full case study editor (problem, approach, constraints, outcome, contributions)
-  - External links and media gallery
-- **Delete Project**: With confirmation dialog
+  - **Primary Tab**: Basic info (title, tag, blurb)
+  - **Case Study Tab**: Full editor (problem, approach, constraints, outcome, contributions)
+  - **Assets Tab**: Hero image upload with metadata, external links, media gallery
+  - **CV Sync Tab**: Auto-suggest matching CV bullets (tight/standard/narrative formats), consistency checker
+- **Progressive Disclosure**: CV sync features in dedicated tab to prevent cognitive overload on primary editing flow
+- **Non-Blocking Validation**: Consistency warnings appear as badges/indicators, don't prevent saving
+- **Delete Project**: With confirmation dialog and CV bullet cleanup suggestions
 
 #### 3. Assets Upload System
 - **Hero Images**: Drag-drop zones for each project
@@ -108,6 +111,14 @@ A development-only admin panel for comprehensive portfolio content management, p
 - **Atomic Operations**: All-or-nothing updates to prevent corruption
 - **Backup on Change**: Git-based versioning for all modifications
 
+### Cross-Link Rule Compliance (Critical Workspace Requirement)
+- **CV-Portfolio Sync**: When editing portfolio case study copy, automatically propose matching CV bullet updates (and vice versa)
+- **Consistency Validation**: Check feature names, dates, and tech stack alignment across Reactive Resume, `career-content/` folder, and Next.js portfolio
+- **Glossary Drift Detection**: Flag inconsistencies in names, dates, numbers between CV, portfolio, and optional career-content files
+- **Reactive Resume Integration**: Provide export functionality for CV bullets in Reactive Resume JSON format
+- **Bidirectional Updates**: Changes in admin panel trigger CV bullet suggestions, changes in CV trigger suggested portfolio updates via import validation
+- **Career Content Integration**: Optional read/write support for YAML/Markdown source snippets in `career-content/` folder for AI-assisted edits
+
 ### Image Management
 - **Organized Storage**: `/public/assets/[project-slug]/` structure
 - **Automatic Optimization**: Next.js image optimization integration
@@ -125,6 +136,11 @@ A development-only admin panel for comprehensive portfolio content management, p
 │   ├── upload.ts        # Image upload handler
 │   ├── delete.ts        # Asset deletion
 │   └── list.ts          # Asset inventory
+├── cv-sync/
+│   ├── generate-bullets.ts    # Generate CV bullets from case studies
+│   ├── validate-consistency.ts # Check CV-portfolio alignment
+│   ├── import-resume.ts       # Import and parse Reactive Resume JSON
+│   └── export-resume.ts       # Export Reactive Resume JSON
 └── preview/
     └── render.ts        # Preview generation
 ```
@@ -170,12 +186,14 @@ A development-only admin panel for comprehensive portfolio content management, p
 - Projects CRUD functionality
 - Basic image upload system
 - Real-time preview integration
+- **CV bullet generation system** (critical workspace requirement)
 
 ### Phase 3: Enhanced Features
 - Multi-device responsive preview
 - Advanced image management with metadata
 - Drag-and-drop reordering
 - Content validation and safeguards
+- **Consistency validation system** and **Reactive Resume JSON export**
 
 ### Phase 4: Polish & Scalability
 - Export/import functionality
@@ -197,6 +215,53 @@ A development-only admin panel for comprehensive portfolio content management, p
 - **Validation**: Type checking and content validation before saves
 - **Rollback**: Easy revert via git history
 
+## CV-Portfolio Synchronization (Workspace Rule Compliance)
+
+### Cross-Link Rule Implementation
+Following the critical workspace requirement from `.cursor/rules/career-materials.mdc`:
+
+#### Automatic CV Bullet Generation
+- **When editing case studies**: Admin panel automatically generates matching CV bullets in three formats:
+  - **Tight**: One line, ~90 characters (e.g., "Designed Food Fiesta cross-mode event — 71% monetization increase")
+  - **Standard**: Full STAR-style implication (e.g., "Designed Food Fiesta event mechanics featuring balanced gacha systems, generating 71% monetization increase")
+  - **Narrative**: 2-3 bullets for featured role block with detailed context
+- **CV Bullet Contract**: All generated bullets follow **action + scope + result** format from career-materials rule
+- **Mapping Constraint**: Each major case study generates 1-2 CV bullets maximum (primary + optional secondary)
+- **Privacy Compliance**: Never invent metrics, employers, titles, or features - only use user-entered facts. Use qualitative outcomes or explicit "TBD" when numbers are missing
+- **Human Approval Required**: All generated bullets require explicit user approval before use
+- **Export to Reactive Resume**: Generate JSON format for direct import into Reactive Resume
+
+#### Consistency Validation System
+- **Feature Names**: Ensure "Word Roll" (capital W, capital R) consistency across all content
+- **Dates Alignment**: Validate project timelines match between CV and portfolio
+- **Metrics Consistency**: Flag when numbers differ between CV bullets and case study outcomes
+- **Tech Stack Sync**: Ensure tools and technologies listed consistently
+
+#### Bidirectional Sync Workflow
+1. **Portfolio → CV**: When editing case studies, show generated CV bullets for copy/paste into Reactive Resume
+   - **Suggest-Only**: Generated bullets are presented for manual copy/paste, never auto-applied
+   - **User Control**: All CV updates require explicit user action in Reactive Resume
+2. **CV → Portfolio**: Import Reactive Resume JSON to validate portfolio alignment
+   - **Validation Mode**: Compare imported CV data against portfolio content to flag inconsistencies
+   - **Suggest-Only**: Highlight drift and recommend portfolio updates, never auto-modify `site-content.ts`
+   - **Manual Apply**: User reviews suggestions and manually applies desired changes
+3. **Drift Detection**: Highlight inconsistencies with specific recommendations
+   - **Non-Blocking**: Validation warnings don't prevent saving, only inform user
+   - **Contextual**: Show exactly which fields differ and suggest specific fixes
+4. **Bulk Sync**: Mass alignment functionality with safety controls
+   - **Preview Mode**: Show all proposed changes before applying any
+   - **Selective Apply**: User can choose which consistency fixes to apply
+   - **Git Backup**: All bulk changes create automatic git commits for rollback
+
+#### Integration with Reactive Resume
+- **JSON Export**: Generate Reactive Resume-compatible JSON with updated bullets
+- **Schema Compatibility**: Target current Reactive Resume repository version (mirror `reactive-resume/` submodule in workspace)
+- **Section Mapping**: Generated bullets populate `experience[].highlights[]` arrays in employment sections
+- **Import Validation**: Read existing Reactive Resume exports to check alignment
+- **Version Detection**: Validate imported JSON schema version and warn of compatibility issues
+- **PDF Reminder**: Prompt to export PDF from Reactive Resume after content changes
+- **DOCX Support**: Note when Word format needed and remind to proofread layout
+
 ## Success Criteria
 
 ### Functional Requirements
@@ -205,6 +270,9 @@ A development-only admin panel for comprehensive portfolio content management, p
 - ✅ Real-time preview across device sizes
 - ✅ Add/remove projects with full content management
 - ✅ Zero security risk (development-only access)
+- ✅ **CV-Portfolio sync compliance**: Auto-generate matching CV bullets when editing case studies
+- ✅ **Consistency validation**: Flag feature names, dates, metrics drift between CV and portfolio
+- ✅ **Reactive Resume integration**: Export JSON format for direct CV import
 
 ### User Experience
 - ✅ Intuitive interface requiring no technical knowledge

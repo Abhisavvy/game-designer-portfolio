@@ -355,6 +355,42 @@ export class ASTManipulator {
     }
   }
 
+  addProject(projectData: ProjectItem): void {
+    this.requireDefaultPortfolioRoot("ASTManipulator.addProject");
+    const transformer = this.createDefaultContentRootTransformer((root, factory) =>
+      this.addProjectToArray(root, projectData, factory),
+    );
+    const result = ts.transform(this.sourceFile, [transformer]);
+    try {
+      const next = result.transformed[0];
+      if (!next || !ts.isSourceFile(next)) {
+        throw new Error("AST transform did not return a SourceFile");
+      }
+      this.writeTransformedFile(next);
+      this.sourceFile = next;
+    } finally {
+      result.dispose();
+    }
+  }
+
+  deleteProject(slug: string): void {
+    this.requireDefaultPortfolioRoot("ASTManipulator.deleteProject");
+    const transformer = this.createDefaultContentRootTransformer((root, factory) =>
+      this.removeProjectFromArray(root, slug, factory),
+    );
+    const result = ts.transform(this.sourceFile, [transformer]);
+    try {
+      const next = result.transformed[0];
+      if (!next || !ts.isSourceFile(next)) {
+        throw new Error("AST transform did not return a SourceFile");
+      }
+      this.writeTransformedFile(next);
+      this.sourceFile = next;
+    } finally {
+      result.dispose();
+    }
+  }
+
   private patchProjectsArray(
     rootObj: ts.ObjectLiteralExpression,
     slug: string,
@@ -496,6 +532,71 @@ export class ASTManipulator {
       return p;
     });
 
+    return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private addProjectToArray(
+    rootObj: ts.ObjectLiteralExpression,
+    projectData: ProjectItem,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const props = rootObj.properties.map((p) => {
+      if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
+      if (p.name.text !== "projects" || !ts.isArrayLiteralExpression(p.initializer)) {
+        return p;
+      }
+      
+      const arr = p.initializer;
+      const newProjectLiteral = projectDataToObjectLiteral(factory, projectData);
+      const elements = [...arr.elements, newProjectLiteral];
+      
+      return factory.updatePropertyAssignment(
+        p,
+        p.name,
+        factory.updateArrayLiteralExpression(arr, elements),
+      );
+    });
+    return factory.updateObjectLiteralExpression(rootObj, props);
+  }
+
+  private removeProjectFromArray(
+    rootObj: ts.ObjectLiteralExpression,
+    slug: string,
+    factory: ts.NodeFactory,
+  ): ts.ObjectLiteralExpression {
+    const props = rootObj.properties.map((p) => {
+      if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
+      if (p.name.text !== "projects" || !ts.isArrayLiteralExpression(p.initializer)) {
+        return p;
+      }
+      
+      const arr = p.initializer;
+      let found = false;
+      const elements = arr.elements.filter((el) => {
+        if (!ts.isObjectLiteralExpression(el)) return true;
+        const fields = readObjectStringFields(el, {
+          strictKeys: ["slug"],
+          strictContext: `projects[] entry while removing slug "${slug}"`,
+        });
+        if (fields.slug === slug) {
+          found = true;
+          return false; // Remove this element
+        }
+        return true;
+      });
+      
+      if (!found) {
+        throw new Error(
+          `ASTManipulator.deleteProject: no project with slug "${slug}" in ${this.filePath}`,
+        );
+      }
+      
+      return factory.updatePropertyAssignment(
+        p,
+        p.name,
+        factory.updateArrayLiteralExpression(arr, elements),
+      );
+    });
     return factory.updateObjectLiteralExpression(rootObj, props);
   }
 
