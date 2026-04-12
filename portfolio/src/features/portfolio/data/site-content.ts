@@ -279,12 +279,14 @@ export const defaultPortfolioContent: PortfolioContentState = {
                 processGallery: {
                     groupId: "food-fiesta-process",
                     heading: "Design process",
-                    items: [{
+                    items: [
+                        {
                             thumb: "/assets/food-fiesta/foodfiesta-01-1776013765627.png",
                             full: "/assets/food-fiesta/foodfiesta-01-1776013765627.png",
                             alt: "Main screen",
                             label: "Main screen - FoodFiesta_01.png"
-                        }]
+                        }
+                    ]
                 }
             }
         },
