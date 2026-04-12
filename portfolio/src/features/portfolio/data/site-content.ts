@@ -252,6 +252,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/bon-voyage/screenshot-2026-04-12-17-03-22-856-in-playsimple-wordbingo-1776013202745.jpg",
                             alt: "Intro screen",
                             label: "Gallery - Screenshot_2026-04-12-17-03-22-856_in.playsimple.wordbingo.jpg"
+                        },
+                        {
+                            thumb: "/assets/bon-voyage/feedback-win-xpcollection-1776013416918.png",
+                            full: "/assets/bon-voyage/feedback-win-xpcollection-1776013416918.png",
+                            alt: "Feedback from outro",
+                            label: "Gallery - Feedback_Win_XPCollection.png"
                         }
                     ]
                 }
