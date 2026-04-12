@@ -246,6 +246,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/bon-voyage/bon-voyage-h2p-1776012964512.png",
                             alt: "main screen",
                             label: "gallery - bon voyage h2p.png"
+                        },
+                        {
+                            thumb: "/assets/bon-voyage/screenshot-2026-04-12-17-03-22-856-in-playsimple-wordbingo-1776013202745.jpg",
+                            full: "/assets/bon-voyage/screenshot-2026-04-12-17-03-22-856-in-playsimple-wordbingo-1776013202745.jpg",
+                            alt: "Intro screen",
+                            label: "Gallery - Screenshot_2026-04-12-17-03-22-856_in.playsimple.wordbingo.jpg"
                         }
                     ]
                 }
