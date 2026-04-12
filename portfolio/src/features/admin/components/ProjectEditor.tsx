@@ -7,6 +7,8 @@ import { z } from 'zod';
 import { Save, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { CVSyncPanel } from './CVSyncPanel';
+import { ImageUploader } from './ImageUploader';
+import { PreviewPanel } from './PreviewPanel';
 import type { AdminProject, AdminCaseStudy } from '../types/admin';
 
 const projectSchema = z.object({
@@ -92,23 +94,13 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
           setProject(foundProject);
           projectForm.reset(foundProject);
           
-          // TODO: Load case study data when case study API is implemented
-          // For now, create mock case study structure
-          const mockCaseStudy: AdminCaseStudy = {
-            title: foundProject.title,
-            subtitle: foundProject.blurb,
-            problem: '',
-            approach: '',
-            constraints: '',
-            outcome: '',
-            contributions: '',
-            links: [],
-            media: {
-              hero: { posterSrc: '' },
-            },
-          };
-          setCaseStudy(mockCaseStudy);
-          caseStudyForm.reset(mockCaseStudy);
+          // Load case study data
+          const caseStudyResponse = await fetch(`/api/admin/content/case-studies?projectSlug=${projectSlug}`);
+          if (caseStudyResponse.ok) {
+            const caseStudyData = await caseStudyResponse.json();
+            setCaseStudy(caseStudyData.caseStudy);
+            caseStudyForm.reset(caseStudyData.caseStudy);
+          }
         } else {
           setMessage({ type: 'error', text: 'Project not found' });
         }
@@ -157,9 +149,36 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
   };
 
   const saveCaseStudy = async (data: CaseStudyFormData) => {
-    // TODO: Implement case study saving when API is ready
-    console.log('Case study data:', data);
-    setMessage({ type: 'success', text: 'Case study saved (mock)' });
+    if (!project?.slug) {
+      setMessage({ type: 'error', text: 'Project must be saved before adding case study' });
+      return;
+    }
+
+    try {
+      setSaving(true);
+      
+      const response = await fetch('/api/admin/content/case-studies', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectSlug: project.slug,
+          caseStudy: data,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setCaseStudy(result.caseStudy);
+        setMessage({ type: 'success', text: 'Case study saved successfully' });
+      } else {
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: errorData.error || 'Failed to save case study' });
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to save case study' });
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
@@ -241,7 +260,9 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
         {activeTab === 'basic' && (
           <form onSubmit={projectForm.handleSubmit(saveProject)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -471,22 +492,37 @@ export function ProjectEditor({ projectSlug }: ProjectEditorProps) {
         )}
 
         {activeTab === 'assets' && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Project Assets</h3>
+              <p className="text-gray-600">
+                Upload images and media files for this project. Assets will be organized in the project folder.
+              </p>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Assets Upload</h3>
-            <p className="text-gray-600 mb-4">
-              Image upload and asset management will be implemented in the next phase.
-            </p>
+            
+            <ImageUploader
+              projectSlug={project?.slug}
+              category="gallery"
+              onUploadComplete={(asset) => {
+                console.log('Asset uploaded:', asset);
+                // TODO: Update project data with new asset
+              }}
+            />
           </div>
         )}
 
-        {activeTab === 'cv-sync' && caseStudy && (
-          <CVSyncPanel caseStudy={caseStudy} />
-        )}
+            {activeTab === 'cv-sync' && caseStudy && (
+              <CVSyncPanel caseStudy={caseStudy} />
+            )}
+          </div>
+        </div>
+
+        {/* Preview Panel */}
+        <div className="lg:col-span-1">
+          <PreviewPanel 
+            previewUrl={project?.href ? `http://localhost:3000${project.href}` : 'http://localhost:3000'}
+          />
+        </div>
       </div>
     </div>
   );
