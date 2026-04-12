@@ -450,6 +450,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
                             full: "/assets/wotd/screenshot-2026-04-12-20-48-09-471-in-playsimple-wordbingo-1776018461814.jpg",
                             alt: "Step 2",
                             label: "Gallery - Screenshot_2026-04-12-20-48-09-471_in.playsimple.wordbingo.jpg"
+                        },
+                        {
+                            thumb: "/assets/wotd/screenshot-2026-04-12-20-50-48-397-in-playsimple-wordbingo-1776018493285.jpg",
+                            full: "/assets/wotd/screenshot-2026-04-12-20-50-48-397-in-playsimple-wordbingo-1776018493285.jpg",
+                            alt: "Step 3",
+                            label: "Gallery - Screenshot_2026-04-12-20-50-48-397_in.playsimple.wordbingo.jpg"
                         }
                     ]
                 }
