@@ -53,16 +53,17 @@ export function HomePageContent() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
+          <div className="flex flex-wrap -mx-3 lg:-mx-4">
             {projects.map((project, index) => (
-              <ProjectCardAnimated
-                key={project.slug}
-                project={project}
-                index={index}
-                listingPosterSrc={
-                  caseStudies[project.slug]?.media?.hero?.posterSrc
-                }
-              />
+              <div key={project.slug} className="w-full md:w-1/2 lg:w-1/3 px-3 lg:px-4 mb-6 lg:mb-8">
+                <ProjectCardAnimated
+                  project={project}
+                  index={index}
+                  listingPosterSrc={
+                    caseStudies[project.slug]?.media?.hero?.posterSrc
+                  }
+                />
+              </div>
             ))}
           </div>
         </div>
