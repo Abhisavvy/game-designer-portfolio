@@ -137,7 +137,7 @@ export const defaultPortfolioContent: PortfolioContentState = {
     },
     about: {
         title: "How I Approach Systems Design",
-        body: ""
+        body: "My design philosophy centers on creating systems that genuinely serve players while driving business results. I start every project by deeply understanding player motivations and pain points through data analysis and user research.\n\nWhen designing features like LiveOps events or economy systems, I focus on three core principles: clarity (players immediately understand the value), progression (meaningful advancement that respects their time), and sustainability (systems that enhance rather than exploit engagement).\n\nI believe the best game systems feel invisible to players — they create natural opportunities for discovery, social connection, and mastery without feeling manipulative. This player-first approach has consistently delivered both engagement improvements and monetization growth across my projects at PlaySimple Games."
     },
     workSection: {
         eyebrow: "Featured Work",
@@ -149,14 +149,14 @@ export const defaultPortfolioContent: PortfolioContentState = {
     },
     person: {
         name: "Abhishek Dutta",
-        role: "Game Designer & AI Tools Developer",
+        role: "Game Designer & AI Tools Developer", 
         tagline: "Game designer who ships AI/tools work when relevant",
-        email: "test@example.com",
-        phone: "+1234567890",
-        location: "Remote",
+        email: "abhishek.dt.97@gmail.com",
+        phone: "+91 7980700802",
+        location: "Bengaluru, India",
         links: {
-            linkedin: "https://linkedin.com/in/test",
-            resumePdf: ""
+            linkedin: "https://www.linkedin.com/in/abhishek-dt97",
+            resumePdf: "/ABHISHEK DUTTA RESUME.pdf"
         }
     },
     projects: [
