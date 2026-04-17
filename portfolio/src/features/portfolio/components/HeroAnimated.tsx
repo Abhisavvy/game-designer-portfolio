@@ -333,6 +333,8 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
               priority={true}
               sizes="128px"
               className="relative w-full h-full rounded-full border-2 border-orange-500/30 object-cover object-center"
+              progressive={true}
+              enableFormatOptimization={true}
               placeholder={
                 <div className="w-full h-full bg-zinc-800/50 backdrop-blur-sm border-2 border-orange-500/30 rounded-full flex items-center justify-center">
                   <Users className="w-12 h-12 text-orange-300/60" />

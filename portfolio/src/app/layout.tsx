@@ -5,6 +5,7 @@ import { SiteFooter } from "@/features/portfolio/components/SiteFooter";
 import { SiteHeader } from "@/features/portfolio/components/SiteHeader";
 import { SiteMetaSync } from "@/features/portfolio/components/SiteMetaSync";
 import { SkipNavigation } from "@/components/SkipNavigation";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { defaultPortfolioContent } from "@/features/portfolio/data/site-content";
 import "./globals.css";
 
@@ -95,19 +96,39 @@ export default function RootLayout({
         {/* Font preconnect for faster Google Fonts loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Theme initialization script to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('portfolio-theme') || 'dark';
+                  const resolvedTheme = theme === 'system' 
+                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                    : theme;
+                  document.documentElement.setAttribute('data-theme', resolvedTheme);
+                } catch (e) {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                }
+              })();
+            `,
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased font-sans`}
       >
-        <Providers>
-          <SkipNavigation />
-          <SiteMetaSync />
-          <SiteHeader />
-          <main id="main-content" className="min-h-screen bg-zinc-950 pt-14">
-            {children}
-          </main>
-          <SiteFooter />
-        </Providers>
+        <ThemeProvider defaultTheme="dark">
+          <Providers>
+            <SkipNavigation />
+            <SiteMetaSync />
+            <SiteHeader />
+            <main id="main-content" className="min-h-screen bg-background pt-14">
+              {children}
+            </main>
+            <SiteFooter />
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -2,17 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light theme colors */
 :root {
+  --background: #ffffff;
+  --foreground: #18181b;
+  --muted: #71717a;
+  --accent: #ea580c;
+  --primary: #ea580c;
+  --secondary: #f97316;
+  --border: #e4e4e7;
+  --input: #f4f4f5;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --muted-foreground: #71717a;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --ring: #ea580c;
+  --radius: 0.5rem;
+}
+
+/* Dark theme colors */
+[data-theme="dark"] {
   --background: #0a0a0b;
   --foreground: #f4f4f5;
   --muted: #a1a1aa;
-  --accent: #6366f1;
+  --accent: #ea580c;
+  --primary: #ea580c;
+  --secondary: #f97316;
+  --border: #27272a;
+  --input: #18181b;
+  --card: #18181b;
+  --card-foreground: #f4f4f5;
+  --popover: #18181b;
+  --popover-foreground: #f4f4f5;
+  --muted-foreground: #a1a1aa;
+  --accent-foreground: #18181b;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --ring: #ea580c;
+  --radius: 0.5rem;
+}
+
+* {
+  border-color: var(--border);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth theme transitions */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 /* Enhanced keyboard navigation and accessibility */
