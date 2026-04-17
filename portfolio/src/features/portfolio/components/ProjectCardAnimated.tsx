@@ -1,8 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { usePrefersReducedMotion } from "./media/useMediaPreferences";
+import { motion } from "framer-motion";
+import { useAnimationTrigger } from "@/hooks/useIntersectionObserver";
 import Link from "next/link";
 import type { ProjectItem } from "@/features/portfolio/data/site-content";
 import { getProjectListingImageSources } from "@/features/portfolio/utils/project-media";
@@ -94,19 +93,20 @@ export function ProjectCardAnimated({
   index,
   listingPosterSrc,
 }: ProjectCardAnimatedProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-  const reducedMotion = usePrefersReducedMotion();
+  const { ref, shouldAnimate, prefersReducedMotion } = useAnimationTrigger({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
   const IconComponent = getProjectIcon(project.slug);
 
   // Helper function to conditionally disable animations
   const getAnimateProps = (animateProps: any) => {
-    if (reducedMotion) return { opacity: 1, y: 0, scale: 1, x: 0, rotate: 0 };
+    if (prefersReducedMotion) return { opacity: 1, y: 0, scale: 1, x: 0, rotate: 0 };
     return animateProps;
   };
 
   const getTransitionProps = (transitionProps: any) => {
-    if (reducedMotion) return { duration: 0 };
+    if (prefersReducedMotion) return { duration: 0 };
     return transitionProps;
   };
   const { src, fallbackSrc, secondaryFallback } = getProjectListingImageSources(
@@ -145,8 +145,8 @@ export function ProjectCardAnimated({
         className="group relative cursor-pointer w-full"
         variants={cardVariants}
         initial="hidden"
-        animate={getAnimateProps(isInView ? "visible" : "hidden")}
-        whileHover={!reducedMotion ? { y: -8 } : {}}
+        animate={getAnimateProps(shouldAnimate ? "visible" : "hidden")}
+        whileHover={!prefersReducedMotion ? { y: -8 } : {}}
         transition={getTransitionProps({ type: "spring", damping: 25, stiffness: 200 })}
       >
         <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] lg:aspect-[16/10] min-h-[280px] bg-gradient-to-br from-zinc-900 to-black rounded-2xl overflow-hidden border border-zinc-700/50 transition-all duration-500 group-hover:border-orange-500/50 group-hover:shadow-2xl group-hover:shadow-orange-500/15">
@@ -157,7 +157,7 @@ export function ProjectCardAnimated({
         <motion.div
           className="absolute inset-0"
           initial={{ opacity: 0 }}
-          animate={getAnimateProps(isInView ? { opacity: 1 } : { opacity: 0 })}
+          animate={getAnimateProps(shouldAnimate ? { opacity: 1 } : { opacity: 0 })}
           transition={getTransitionProps({ delay: index * 0.1 + 0.1 })}
         >
           <OptimizedImage
@@ -192,7 +192,7 @@ export function ProjectCardAnimated({
         <motion.div
           className="absolute top-4 left-4 z-10"
           initial={{ scale: 0, rotate: -180 }}
-          animate={getAnimateProps(isInView ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 })}
+          animate={getAnimateProps(shouldAnimate ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 })}
           transition={getTransitionProps({ delay: index * 0.1 + 0.2, type: "spring", damping: 15 })}
         >
           <div className="p-2 bg-orange-600/40 backdrop-blur-sm border border-orange-500/50 rounded-full drop-shadow-md">
@@ -204,7 +204,7 @@ export function ProjectCardAnimated({
         <motion.div
           className="absolute top-4 right-4 z-10 max-w-[60%]"
           initial={{ x: 20, opacity: 0 }}
-          animate={getAnimateProps(isInView ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 })}
+          animate={getAnimateProps(shouldAnimate ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 })}
           transition={getTransitionProps({ delay: index * 0.1 + 0.3 })}
         >
           <span className="px-3 py-1 bg-orange-600/40 backdrop-blur-sm border border-orange-500/50 rounded-full text-orange-200 text-sm font-medium drop-shadow-md truncate block">
@@ -226,7 +226,7 @@ export function ProjectCardAnimated({
               overflow: 'hidden'
             }}
             initial={{ y: 20, opacity: 0 }}
-            animate={getAnimateProps(isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 })}
+            animate={getAnimateProps(shouldAnimate ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 })}
             transition={getTransitionProps({ delay: index * 0.1 + 0.4 })}
           >
             {project.title}
@@ -241,7 +241,7 @@ export function ProjectCardAnimated({
               overflow: 'hidden'
             }}
             initial={{ y: 20, opacity: 0 }}
-            animate={getAnimateProps(isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 })}
+            animate={getAnimateProps(shouldAnimate ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 })}
             transition={getTransitionProps({ delay: index * 0.1 + 0.5 })}
           >
             {project.blurb}
@@ -251,7 +251,7 @@ export function ProjectCardAnimated({
           <motion.div
             className="flex flex-wrap gap-2 mt-4"
             initial={{ y: 20, opacity: 0 }}
-            animate={getAnimateProps(isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 })}
+            animate={getAnimateProps(shouldAnimate ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 })}
             transition={getTransitionProps({ delay: index * 0.1 + 0.6 })}
           >
             {(() => {

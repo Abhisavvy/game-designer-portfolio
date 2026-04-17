@@ -14,3 +14,71 @@ body {
   background: var(--background);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
+
+/* Enhanced keyboard navigation and accessibility */
+*:focus {
+  outline: none;
+}
+
+/* Focus styles for interactive elements */
+a, button, [tabindex]:not([tabindex="-1"]) {
+  @apply focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-zinc-950;
+}
+
+/* Skip navigation - screen reader only until focused */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only.focus\:not-sr-only:focus,
+.focus-within\:not-sr-only:focus-within .sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Smooth scrolling for keyboard navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable shimmer animation for reduced motion */
+  .animate-pulse::before {
+    animation: none !important;
+  }
+}

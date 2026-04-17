@@ -1,11 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { ProjectCardAnimated } from "../ProjectCardAnimated";
+import { ProjectCardSkeleton } from "@/components/SkeletonLoader";
 import { defaultPortfolioContent } from "../../data/site-content";
 
 export function WorkSection() {
   const { projects, workSection, caseStudies } = defaultPortfolioContent;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time for demonstration
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section
@@ -36,17 +48,25 @@ export function WorkSection() {
         </motion.div>
 
         <div className="flex flex-wrap -mx-3 lg:-mx-4">
-          {projects.map((project, index) => (
-            <div key={project.slug} className="w-full md:w-1/2 lg:w-1/3 px-3 lg:px-4 mb-6 lg:mb-8">
-              <ProjectCardAnimated
-                project={project}
-                index={index}
-                listingPosterSrc={
-                  caseStudies[project.slug]?.media?.hero?.posterSrc
-                }
-              />
-            </div>
-          ))}
+          {isLoading ? (
+            // Show skeleton loading states
+            Array.from({ length: 6 }, (_, index) => (
+              <ProjectCardSkeleton key={`skeleton-${index}`} />
+            ))
+          ) : (
+            // Show actual content
+            projects.map((project, index) => (
+              <div key={project.slug} className="w-full md:w-1/2 lg:w-1/3 px-3 lg:px-4 mb-6 lg:mb-8">
+                <ProjectCardAnimated
+                  project={project}
+                  index={index}
+                  listingPosterSrc={
+                    caseStudies[project.slug]?.media?.hero?.posterSrc
+                  }
+                />
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>
