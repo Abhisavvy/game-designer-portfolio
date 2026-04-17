@@ -13,7 +13,12 @@ import {
   Trophy,
   Coins,
   Clock,
-  LineChart
+  LineChart,
+  Users,
+  Database,
+  Smartphone,
+  Package,
+  Target
 } from "lucide-react";
 
 interface HeroAnimatedProps {
@@ -24,7 +29,7 @@ interface HeroAnimatedProps {
 
 export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps) {
   const reducedMotion = usePrefersReducedMotion();
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | undefined>(undefined);
   
   // Motion values for mouse position - no React re-renders on mouse move
   const mouseX = useMotionValue(0);
