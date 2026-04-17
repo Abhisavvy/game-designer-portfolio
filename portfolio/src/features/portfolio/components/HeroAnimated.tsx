@@ -1,21 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { OptimizedImage } from "./OptimizedImage";
 import { usePrefersReducedMotion } from "./media/useMediaPreferences";
 import { 
-  Gamepad2, 
-  Zap, 
-  Target, 
-  TrendingUp,
   Settings,
-  Activity,
-  BarChart3,
-  Users,
-  Database,
-  Smartphone,
-  Package,
   Calendar,
   DollarSign,
   RefreshCcw,
@@ -33,8 +23,18 @@ interface HeroAnimatedProps {
 }
 
 export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const reducedMotion = usePrefersReducedMotion();
+  const rafRef = useRef<number>();
+  
+  // Motion values for mouse position - no React re-renders on mouse move
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  // Calculated transforms using motion values for optimal performance
+  const blob1X = useMotionTemplate`${mouseX}px * 0.02`;
+  const blob1Y = useMotionTemplate`${mouseY}px * 0.02`;
+  const blob2X = useMotionTemplate`${mouseX}px * -0.01`;
+  const blob2Y = useMotionTemplate`${mouseY}px * -0.01`;
 
   // Helper function to conditionally disable animations
   const getAnimateProps = (animateProps: any) => {
@@ -51,12 +51,25 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
     if (reducedMotion) return;
     
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      // Use requestAnimationFrame to coalesce mouse events and reduce main thread work
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      
+      rafRef.current = requestAnimationFrame(() => {
+        mouseX.set(e.clientX);
+        mouseY.set(e.clientY);
+      });
     };
 
     window.addEventListener("mousemove", updateMousePosition);
-    return () => window.removeEventListener("mousemove", updateMousePosition);
-  }, [reducedMotion]);
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [reducedMotion, mouseX, mouseY]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -102,54 +115,39 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
       <div className="absolute inset-0 overflow-hidden">
         {/* Organic floating elements inspired by mobile gaming */}
         <motion.div
-          className="absolute w-64 h-64 bg-gradient-to-r from-orange-600/8 to-orange-500/12 rounded-[40%_60%_70%_30%] blur-3xl"
+          className="absolute w-64 h-64 bg-gradient-to-r from-orange-600/8 to-orange-500/12 rounded-full blur-3xl"
           animate={getAnimateProps({
-            x: mousePosition.x * 0.02,
-            y: mousePosition.y * 0.02,
-            borderRadius: ["40% 60% 70% 30%", "60% 40% 30% 70%", "40% 60% 70% 30%"],
+            scale: [1, 1.1, 1],
+            rotate: [0, 180, 360],
           })}
           transition={getTransitionProps({
-            type: "spring",
-            damping: 50,
-            borderRadius: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
           })}
           style={{
             top: "20%",
             left: "10%",
+            x: reducedMotion ? 0 : blob1X,
+            y: reducedMotion ? 0 : blob1Y,
           }}
         />
         <motion.div
-          className="absolute w-96 h-96 bg-gradient-to-r from-orange-500/5 to-orange-400/8 rounded-[70% 30% 50% 50%] blur-3xl"
-          animate={{
-            x: mousePosition.x * -0.01,
-            y: mousePosition.y * -0.01,
-            borderRadius: ["70% 30% 50% 50%", "30% 70% 50% 50%", "70% 30% 50% 50%"],
-          }}
-          transition={{ 
-            type: "spring", 
-            damping: 30,
-            borderRadius: { duration: 10, repeat: Infinity, ease: "easeInOut" }
-          }}
+          className="absolute w-96 h-96 bg-gradient-to-r from-orange-500/5 to-orange-400/8 rounded-full blur-3xl"
+          animate={getAnimateProps({
+            scale: [1, 0.9, 1],
+            rotate: [0, -90, 0],
+          })}
+          transition={getTransitionProps({
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut"
+          })}
           style={{
             top: "60%",
             right: "10%",
-          }}
-        />
-        <motion.div
-          className="absolute w-48 h-48 bg-gradient-to-r from-orange-400/8 to-orange-300/12 rounded-[60% 40% 40% 60%] blur-2xl"
-          animate={{
-            x: mousePosition.x * 0.015,
-            y: mousePosition.y * 0.015,
-            borderRadius: ["60% 40% 40% 60%", "40% 60% 60% 40%", "60% 40% 40% 60%"],
-          }}
-          transition={{ 
-            type: "spring", 
-            damping: 40,
-            borderRadius: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-          }}
-          style={{
-            bottom: "20%",
-            left: "20%",
+            x: reducedMotion ? 0 : blob2X,
+            y: reducedMotion ? 0 : blob2Y,
           }}
         />
 
@@ -170,15 +168,15 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
 
         <motion.div
           className="absolute top-32 left-24 text-orange-400/25"
-          animate={{
+          animate={getAnimateProps({
             y: [-8, 8, -8],
             opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{
+          })}
+          transition={getTransitionProps({
             duration: 5,
             repeat: Infinity,
             ease: "easeInOut",
-          }}
+          })}
         >
           <Calendar className="w-6 h-6" />
         </motion.div>
@@ -376,7 +374,7 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
                 key={pill}
                 className="group"
                 variants={pillVariants}
-                whileHover={{ scale: 1.02 }}
+                whileHover={!reducedMotion ? { scale: 1.02 } : {}}
                 custom={index}
               >
                 <div className="flex items-center space-x-2 px-4 py-2 bg-zinc-900/80 border border-orange-500/30 rounded-lg text-white font-normal text-sm hover:border-orange-500/60 transition-colors backdrop-blur-sm">
@@ -394,8 +392,8 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
         >
           <motion.button
             className="group relative px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full text-black font-semibold text-lg transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/25"
-            whileHover={{ scale: 1.02, y: -2 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={!reducedMotion ? { scale: 1.02, y: -2 } : {}}
+            whileTap={!reducedMotion ? { scale: 0.98 } : {}}
             onClick={() => {
               document.getElementById('featured-work')?.scrollIntoView({
                 behavior: reducedMotion ? 'auto' : 'smooth',
@@ -425,8 +423,8 @@ export function HeroAnimated({ headline, subline, statPills }: HeroAnimatedProps
           <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex items-center justify-center">
             <motion.div
               className="w-1 h-3 bg-gray-200 rounded-full"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
+              animate={getAnimateProps({ y: [0, 12, 0] })}
+              transition={getTransitionProps({ repeat: Infinity, duration: 1.5 })}
             />
           </div>
         </motion.div>

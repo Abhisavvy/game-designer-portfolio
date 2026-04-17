@@ -16,7 +16,7 @@ export function useViewportMinMd() {
 }
 
 export function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(true); // Safe default to prevent motion flash
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const fn = () => setReduced(mq.matches);

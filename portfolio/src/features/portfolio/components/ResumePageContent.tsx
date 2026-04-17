@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { usePrefersReducedMotion } from "./media/useMediaPreferences";
 import { defaultPortfolioContent } from "../data/site-content";
 import { 
   Mail, 
@@ -18,6 +19,7 @@ import { FaLinkedin } from "react-icons/fa";
 
 export function ResumePageContent() {
   const { person } = defaultPortfolioContent;
+  const reducedMotion = usePrefersReducedMotion();
 
   const handleDownloadPDF = () => {
     // Download the pre-made PDF file
@@ -91,8 +93,8 @@ export function ResumePageContent() {
           <motion.button
             onClick={handleDownloadPDF}
             className="mt-6 inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full text-black font-semibold hover:shadow-lg transition-all duration-300"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={!reducedMotion ? { scale: 1.02 } : {}}
+            whileTap={!reducedMotion ? { scale: 0.98 } : {}}
           >
             <Download className="w-4 h-4" />
             <span>Download PDF</span>

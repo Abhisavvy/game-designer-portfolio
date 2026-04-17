@@ -2,15 +2,14 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { usePrefersReducedMotion } from "./media/useMediaPreferences";
 import { 
   Target, 
   RefreshCcw, 
   DollarSign, 
   BarChart3, 
   Brain,
-  TrendingUp,
   Users,
-  Calendar,
   Gamepad2
 } from "lucide-react";
 
@@ -56,13 +55,15 @@ const skills: Skill[] = [
 
 export function StickySkillsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  // Disable parallax transforms when reduced motion is preferred
+  const backgroundY = useTransform(scrollYProgress, [0, 1], reducedMotion ? ["0%", "0%"] : ["0%", "50%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], reducedMotion ? ["0%", "0%"] : ["0%", "20%"]);
 
   return (
     <section ref={containerRef} className="relative bg-zinc-950 py-16 overflow-hidden">

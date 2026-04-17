@@ -165,6 +165,9 @@ class ProductionAdminStubPlugin {
 }
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: ['lucide-react']
+  },
   webpack: (config, { dev }) => {
     if (!dev) {
       config.plugins.push(new ProductionAdminStubPlugin());
