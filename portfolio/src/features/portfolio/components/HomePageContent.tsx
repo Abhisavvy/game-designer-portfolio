@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { HeroAnimated } from "./HeroAnimated";
 import { defaultPortfolioContent } from "../data/site-content";
 
-// Dynamic imports for below-the-fold sections
+// Dynamic imports for below-the-fold sections  
 const StickySkillsSection = dynamic(() => import("./StickySkillsSection").then(mod => ({ default: mod.StickySkillsSection })), {
   ssr: true
 });
