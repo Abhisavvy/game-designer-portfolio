@@ -65,7 +65,7 @@ export default function AdminDashboard() {
           className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg hover:border-orange-200 hover:-translate-y-1"
         >
           <div className="flex items-center space-x-4">
-            <div className="rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-all">
+            <div className="rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 p-3 group-hover:from-orange-600 group-hover:to-orange-700 transition-all">
               <User className="text-white" size={24} />
             </div>
             <div>
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
           className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg hover:border-orange-200 hover:-translate-y-1"
         >
           <div className="flex items-center space-x-4">
-            <div className="rounded-xl bg-gradient-to-br from-green-500 to-green-600 p-3 group-hover:from-green-600 group-hover:to-green-700 transition-all">
+            <div className="rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 p-3 group-hover:from-orange-600 group-hover:to-orange-700 transition-all">
               <FolderOpen className="text-white" size={24} />
             </div>
             <div>
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
           className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg hover:border-orange-200 hover:-translate-y-1"
         >
           <div className="flex items-center space-x-4">
-            <div className="rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 p-3 group-hover:from-purple-600 group-hover:to-purple-700 transition-all">
+            <div className="rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 p-3 group-hover:from-orange-600 group-hover:to-orange-700 transition-all">
               <ImageIcon className="text-white" size={24} />
             </div>
             <div>

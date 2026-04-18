@@ -118,7 +118,7 @@ export default function PersonalInfoPage() {
       <AdminBreadcrumb />
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
             <Save className="w-6 h-6 text-white" />
           </div>
           <div>

@@ -201,6 +201,62 @@ export default function AssetsManagementPage() {
     }
   };
 
+  const resetAllPlaceholders = async () => {
+    const projectSlugs = defaultPortfolioContent.projects.map(p => p.slug);
+    const projectCount = projectSlugs.length;
+    
+    // Typed confirmation for destructive action
+    const userInput = prompt(
+      `⚠️ DESTRUCTIVE ACTION WARNING ⚠️\n\n` +
+      `This will reset ALL ${projectCount} project images back to placeholder images.\n` +
+      `This action cannot be undone.\n\n` +
+      `To confirm, type "RESET" (all caps):`
+    );
+    
+    if (userInput !== "RESET") {
+      if (userInput !== null) {
+        alert('Action cancelled. You must type "RESET" exactly to confirm.');
+      }
+      return;
+    }
+
+    try {
+      let successful = 0;
+      let failed = 0;
+
+      for (const slug of projectSlugs) {
+        try {
+          const response = await fetch('/api/admin/assets/reset-placeholder', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ projectSlug: slug, resetType: 'hero' }),
+          });
+
+          if (response.ok) {
+            successful++;
+          } else {
+            failed++;
+          }
+        } catch (error) {
+          console.error(`Failed to reset placeholder for ${slug}:`, error);
+          failed++;
+        }
+      }
+
+      alert(
+        `Reset complete!\n` +
+        `✅ Successful: ${successful} projects\n` +
+        `❌ Failed: ${failed} projects`
+      );
+      
+      // Reload to show updated placeholders
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to reset all placeholders:', error);
+      alert('Failed to reset placeholders. Please try again.');
+    }
+  };
+
   const copyAssetPath = async (publicUrl: string) => {
     try {
       // Method 1: Modern Clipboard API (preferred)
@@ -304,7 +360,7 @@ export default function AssetsManagementPage() {
       <AdminBreadcrumb />
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
             <ImageIcon className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -317,7 +373,7 @@ export default function AssetsManagementPage() {
       </div>
 
       {/* Current Project Images Overview */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+      <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Current Project Images</h2>
         <ProjectImagesOverview onResetPlaceholder={resetPlaceholder} />
         
@@ -327,13 +383,10 @@ export default function AssetsManagementPage() {
           </p>
           <div className="flex space-x-2">
             <button
-              onClick={() => {
-                const projectSlugs = defaultPortfolioContent.projects.map(p => p.slug);
-                projectSlugs.forEach(slug => resetPlaceholder(slug));
-              }}
-              className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded-md hover:bg-red-100 transition-colors border border-red-200"
+              onClick={resetAllPlaceholders}
+              className="px-4 py-2 text-sm bg-red-50 text-red-700 rounded-md hover:bg-red-100 transition-colors border border-red-200 font-medium"
             >
-              Reset All to Placeholders
+              ⚠️ Reset All to Placeholders
             </button>
           </div>
         </div>
@@ -372,9 +425,18 @@ export default function AssetsManagementPage() {
               onChange={(e) => setFilter(prev => ({ ...prev, projectSlug: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
-              <option value="">All Projects</option>
-              <option value="general">General Assets</option>
-              {/* Add dynamic project options here */}
+              <option value="">All Projects ({assets.length})</option>
+              <option value="general">
+                General Assets ({assets.filter(a => !a.projectSlug || a.projectSlug === 'general').length})
+              </option>
+              {defaultPortfolioContent.projects.map((project) => {
+                const projectAssetCount = assets.filter(a => a.projectSlug === project.slug).length;
+                return (
+                  <option key={project.slug} value={project.slug}>
+                    {project.title} ({projectAssetCount})
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
