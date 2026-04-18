@@ -33,19 +33,19 @@ export function AboutSection() {
                 <OptimizedImage
                   src={about.image}
                   alt={`${about.title} - Workspace Image`}
-                  width={800}
-                  height={600}
-                  className="w-full h-auto aspect-[4/3] sm:aspect-[3/2] lg:aspect-[4/3] object-cover rounded-2xl 
+                  width={600}
+                  height={800}
+                  className="w-full h-auto aspect-[3/4] sm:aspect-[2/3] lg:aspect-[3/4] object-cover object-top rounded-2xl 
                            shadow-2xl shadow-black/50 transition-transform duration-500 group-hover:scale-[1.02]"
                   priority={true}
                   progressive={true}
                   enableFormatOptimization={true}
                   placeholder={
-                    <div className="aspect-[4/3] sm:aspect-[3/2] lg:aspect-[4/3] bg-zinc-800/50 rounded-2xl border border-zinc-700/50 flex items-center justify-center">
+                    <div className="aspect-[3/4] sm:aspect-[2/3] lg:aspect-[3/4] bg-zinc-800/50 rounded-2xl border border-zinc-700/50 flex items-center justify-center">
                       <div className="text-center">
                         <User className="w-16 h-16 text-orange-400/40 mx-auto mb-3" />
                         <div className="text-orange-300/60 font-medium text-sm">Your Photo Here</div>
-                        <div className="text-gray-500 text-xs mt-2">Professional headshot or<br />game design workspace</div>
+                        <div className="text-gray-500 text-xs mt-2">Professional photo or<br />full body workspace shot</div>
                       </div>
                     </div>
                   }
