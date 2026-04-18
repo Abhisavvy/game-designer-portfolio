@@ -214,25 +214,25 @@ function assertPersonalInfoPatchable(
   filePath: string,
 ): void {
   const prefix = `ASTManipulator.updatePersonalInfo:`;
-  const wantsBio = data.bio !== undefined;
+  const wantsAbout = data.aboutTitle !== undefined || data.aboutBody !== undefined || data.aboutImage !== undefined;
   const wantsLinkedin = data.linkedin !== undefined;
   const wantedScalars = PERSON_SCALAR_KEYS.filter((k) => data[k] !== undefined);
 
-  if (!wantsBio && wantedScalars.length === 0 && !wantsLinkedin) {
+  if (!wantsAbout && wantedScalars.length === 0 && !wantsLinkedin) {
     return;
   }
 
-  if (wantsBio) {
+  if (wantsAbout) {
     const about = findIdentifierPropertyAssignment(root, "about");
     if (!about || !ts.isObjectLiteralExpression(about.initializer)) {
       throw new Error(
-        `${prefix} cannot patch bio: missing "about" object in default portfolio content (${filePath})`,
+        `${prefix} cannot patch about: missing "about" object in default portfolio content (${filePath})`,
       );
     }
     const body = findIdentifierPropertyAssignment(about.initializer, "body");
     if (!body) {
       throw new Error(
-        `${prefix} cannot patch bio: missing "about.body" property in default portfolio content (${filePath})`,
+        `${prefix} cannot patch about: missing "about.body" property in default portfolio content (${filePath})`,
       );
     }
   }
@@ -598,7 +598,6 @@ export class ASTManipulator {
     personalData: Partial<AdminPersonalInfo>,
     factory: ts.NodeFactory,
   ): ts.ObjectLiteralExpression {
-    const bioText = personalData.bio;
     const {
       name,
       role,
@@ -607,6 +606,9 @@ export class ASTManipulator {
       email,
       phone,
       linkedin,
+      aboutTitle,
+      aboutBody,
+      aboutImage,
     } = personalData;
     const hasPersonPatch =
       name !== undefined ||
@@ -616,27 +618,47 @@ export class ASTManipulator {
       email !== undefined ||
       phone !== undefined ||
       linkedin !== undefined;
-    const hasBio = bioText !== undefined;
-    if (!hasPersonPatch && !hasBio) return rootObj;
+    const hasAboutPatch = 
+      aboutTitle !== undefined ||
+      aboutBody !== undefined ||
+      aboutImage !== undefined;
+    if (!hasPersonPatch && !hasAboutPatch) return rootObj;
 
     const props = rootObj.properties.map((p) => {
       if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) return p;
 
-      if (p.name.text === "about" && hasBio && ts.isObjectLiteralExpression(p.initializer)) {
+      if (p.name.text === "about" && hasAboutPatch && ts.isObjectLiteralExpression(p.initializer)) {
         const aboutObj = p.initializer;
         const aboutProps = aboutObj.properties.map((ap) => {
-          if (
-            !ts.isPropertyAssignment(ap) ||
-            !ts.isIdentifier(ap.name) ||
-            ap.name.text !== "body"
-          ) {
+          if (!ts.isPropertyAssignment(ap) || !ts.isIdentifier(ap.name)) {
             return ap;
           }
-          return factory.updatePropertyAssignment(
-            ap,
-            ap.name,
-            factory.createStringLiteral(bioText),
-          );
+          
+          if (ap.name.text === "title" && aboutTitle !== undefined) {
+            return factory.updatePropertyAssignment(
+              ap,
+              ap.name,
+              factory.createStringLiteral(aboutTitle),
+            );
+          }
+          
+          if (ap.name.text === "body" && aboutBody !== undefined) {
+            return factory.updatePropertyAssignment(
+              ap,
+              ap.name,
+              factory.createStringLiteral(aboutBody),
+            );
+          }
+          
+          if (ap.name.text === "image" && aboutImage !== undefined) {
+            return factory.updatePropertyAssignment(
+              ap,
+              ap.name,
+              factory.createStringLiteral(aboutImage),
+            );
+          }
+          
+          return ap;
         });
         return factory.updatePropertyAssignment(
           p,

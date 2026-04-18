@@ -165,6 +165,28 @@ class ProductionAdminStubPlugin {
 }
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
   experimental: {
     optimizePackageImports: ['lucide-react']
   },

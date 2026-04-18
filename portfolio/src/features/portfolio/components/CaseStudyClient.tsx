@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ChevronRight, Hash } from "lucide-react";
 import { defaultPortfolioContent } from "../data/site-content";
 import { CaseStudyHero } from "./media/CaseStudyHero";
@@ -83,8 +83,8 @@ export function CaseStudyClient({ slug }: { slug: string }) {
   const refUrl = defaultPortfolioContent.siteMeta.referencePortfolioUrl;
   const [activeSection, setActiveSection] = useState('');
 
-  // Define sections for table of contents
-  const sections = [
+  // Define sections for table of contents (memoized to prevent useEffect re-runs)
+  const sections = useMemo(() => [
     { id: 'overview', title: 'Overview' },
     { id: 'problem', title: 'Problem Statement' },
     { id: 'solution', title: 'Solution' },
@@ -92,7 +92,7 @@ export function CaseStudyClient({ slug }: { slug: string }) {
     { id: 'results', title: 'Results' },
     ...(study?.contributions?.trim() ? [{ id: 'contributions', title: 'My Contributions' }] : []),
     ...(study?.links?.length > 0 ? [{ id: 'links', title: 'Links' }] : []),
-  ];
+  ], [study?.contributions, study?.links?.length]);
 
   // Intersection observer for active section tracking
   useEffect(() => {

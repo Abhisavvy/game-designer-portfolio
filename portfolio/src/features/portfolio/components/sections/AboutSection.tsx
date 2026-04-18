@@ -25,8 +25,8 @@ export function AboutSection() {
           {/* Left side - Image placeholder */}
           <div className="order-2 md:order-1">
             <OptimizedImage
-              src="/assets/general/workspace/game-design-workspace.webp"
-              alt="Abhishek's Game Design Workspace"
+              src={about.image}
+              alt={`${about.title} - Workspace Image`}
               width={600}
               height={450}
               className="aspect-[4/3] w-full h-full object-cover object-center rounded-2xl border border-zinc-700/50 overflow-hidden"

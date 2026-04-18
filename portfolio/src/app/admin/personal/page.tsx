@@ -16,7 +16,9 @@ const personalInfoSchema = z.object({
   email: z.string().email('Valid email required'),
   phone: z.string().min(1, 'Phone is required'),
   linkedin: z.string().url('Valid LinkedIn URL required'),
-  bio: z.string().optional(),
+  aboutTitle: z.string().min(1, 'About section title is required'),
+  aboutBody: z.string().min(1, 'About section content is required'),
+  aboutImage: z.string().min(1, 'About section image is required'),
 });
 
 type PersonalInfoForm = z.infer<typeof personalInfoSchema>;
@@ -218,20 +220,6 @@ export default function PersonalInfoPage() {
             ) : null}
           </div>
 
-          <div className="mt-4">
-            <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="personal-bio">
-              Bio/Summary
-            </label>
-            <textarea
-              id="personal-bio"
-              rows={4}
-              {...register('bio')}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            {errors.bio ? (
-              <p className="mt-1 text-sm text-red-500">{errors.bio.message}</p>
-            ) : null}
-          </div>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
@@ -284,6 +272,66 @@ export default function PersonalInfoPage() {
             {errors.linkedin ? (
               <p className="mt-1 text-sm text-red-500">{errors.linkedin.message}</p>
             ) : null}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+          <h2 className="mb-6 text-xl font-semibold text-slate-900">About Section (&quot;How I Approach Systems Design&quot;)</h2>
+
+          <div className="space-y-4">
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="about-title">
+                Section Title
+              </label>
+              <input
+                id="about-title"
+                type="text"
+                {...register('aboutTitle')}
+                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 hover:border-slate-400"
+                style={{ color: '#0f172a' }}
+                placeholder="How I Approach Systems Design"
+              />
+              {errors.aboutTitle ? (
+                <p className="mt-1 text-sm text-red-500">{errors.aboutTitle.message}</p>
+              ) : null}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="about-body">
+                Section Content
+              </label>
+              <textarea
+                id="about-body"
+                rows={6}
+                {...register('aboutBody')}
+                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 hover:border-slate-400 resize-vertical"
+                style={{ color: '#0f172a' }}
+                placeholder="Describe your approach to systems design..."
+              />
+              {errors.aboutBody ? (
+                <p className="mt-1 text-sm text-red-500">{errors.aboutBody.message}</p>
+              ) : null}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700" htmlFor="about-image">
+                Section Image URL
+              </label>
+              <input
+                id="about-image"
+                type="text"
+                {...register('aboutImage')}
+                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 hover:border-slate-400"
+                style={{ color: '#0f172a' }}
+                placeholder="/assets/general/workspace/game-design-workspace.webp"
+              />
+              {errors.aboutImage ? (
+                <p className="mt-1 text-sm text-red-500">{errors.aboutImage.message}</p>
+              ) : null}
+              <p className="mt-2 text-sm text-gray-600">
+                💡 Upload images via <a href="/admin/assets" className="text-orange-600 hover:text-orange-700 underline">Assets Manager</a> first, then copy the path here.
+              </p>
+            </div>
           </div>
         </div>
 

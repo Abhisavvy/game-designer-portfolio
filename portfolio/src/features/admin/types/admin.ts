@@ -36,7 +36,9 @@ export interface AdminPersonalInfo {
   email: string;
   phone: string;
   linkedin: string;
-  bio: string;
+  aboutTitle: string;
+  aboutBody: string;
+  aboutImage: string;
 }
 
 export type CVBulletFormat = "tight" | "standard" | "narrative";

@@ -18,7 +18,11 @@ interface FieldError {
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
-export function ContactForm() {
+interface ContactFormProps {
+  recipientEmail: string;
+}
+
+export function ContactForm({ recipientEmail }: ContactFormProps) {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -104,8 +108,8 @@ export function ContactForm() {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // For now, create a mailto link as fallback
-      const mailtoUrl = `mailto:${encodeURIComponent('abhishek.dt.97@gmail.com')}?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
-        `Hi Abhishek,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      const mailtoUrl = `mailto:${encodeURIComponent(recipientEmail)}?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+        `Hi,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       )}`;
       
       window.location.href = mailtoUrl;

@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { defaultPortfolioContent } from "../data/site-content";
 import { User, Briefcase, Mail, FileText } from "lucide-react";
-import { SimpleThemeToggle } from "@/components/ThemeToggle";
 
 const nav = [
   { href: "/#work", label: "Work", icon: Briefcase },  
@@ -17,10 +16,7 @@ export function SiteHeader() {
   const brand = defaultPortfolioContent.siteMeta.siteName;
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-orange-500/30 
-                      bg-gradient-to-r from-orange-600/95 to-orange-500/95 
-                      dark:from-orange-600/90 dark:to-orange-500/90 
-                      backdrop-blur-md transition-colors">
+    <header className="fixed top-0 z-50 w-full border-b border-orange-500/30 bg-gradient-to-r from-orange-600/95 to-orange-500/95 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
         <Link
           href="/"
@@ -64,7 +60,6 @@ export function SiteHeader() {
               <span className="md:hidden sr-only">{item.label}</span>
             </Link>
           ))}
-          <SimpleThemeToggle />
         </nav>
       </div>
     </header>

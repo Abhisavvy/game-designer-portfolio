@@ -92,7 +92,7 @@ export function OptimizedImage({
   // Show placeholder if all images failed to load or no src
   if (imageError || !currentSrc) {
     return (
-      <div className={`flex items-center justify-center bg-zinc-800/50 dark:bg-zinc-800/50 ${className}`}>
+      <div className={`flex items-center justify-center bg-zinc-800/50 ${className}`}>
         {placeholder}
       </div>
     );
@@ -119,8 +119,8 @@ export function OptimizedImage({
       {imageLoading && (
         <div className={`absolute inset-0 ${
           progressive 
-            ? 'bg-gradient-to-br from-zinc-200 to-zinc-300 dark:from-zinc-700 dark:to-zinc-800 animate-pulse' 
-            : 'bg-zinc-800/20 dark:bg-zinc-800/20 flex items-center justify-center'
+            ? 'bg-gradient-to-br from-zinc-700 to-zinc-800 animate-pulse' 
+            : 'bg-zinc-800/20 flex items-center justify-center'
         }`}>
           {!progressive && (
             <div className="animate-spin w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full" />

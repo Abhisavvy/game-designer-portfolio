@@ -20,7 +20,9 @@ const personalBodySchema = z.object({
   email: z.string().email("Valid email required"),
   phone: z.string().min(1, "Phone is required"),
   linkedin: z.string().url("Valid LinkedIn URL required"),
-  bio: z.string().optional(),
+  aboutTitle: z.string().min(1, "About title is required"),
+  aboutBody: z.string().min(1, "About body is required"),
+  aboutImage: z.string().min(1, "About image is required"),
 });
 
 const putBodySchema = z.object({
@@ -38,7 +40,9 @@ export async function GET() {
       email: c.person.email,
       phone: c.person.phone,
       linkedin: c.person.links.linkedin,
-      bio: c.about.body ?? "",
+      aboutTitle: c.about.title,
+      aboutBody: c.about.body,
+      aboutImage: c.about.image,
     };
 
     return NextResponse.json({ personal });
@@ -75,10 +79,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const { personal } = parsed.data;
-    const payload: AdminPersonalInfo = {
-      ...personal,
-      bio: personal.bio ?? "",
-    };
+    const payload: AdminPersonalInfo = personal;
 
     const astManipulator = new ASTManipulator(SITE_CONTENT_PATH);
     astManipulator.updatePersonalInfo(payload);
