@@ -66,7 +66,7 @@ export function StickySkillsSection() {
   const textY = useTransform(scrollYProgress, [0, 1], reducedMotion ? ["0%", "0%"] : ["0%", "20%"]);
 
   return (
-    <section ref={containerRef} className="relative bg-zinc-950 py-16 overflow-hidden">
+    <section id="skills" ref={containerRef} className="relative bg-zinc-950 py-16 overflow-hidden" style={{ scrollMarginTop: '3.5rem' }}>
       {/* Parallax background */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-orange-900/15 via-zinc-950 to-orange-800/20"

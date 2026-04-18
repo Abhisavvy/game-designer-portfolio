@@ -3,10 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { defaultPortfolioContent } from "../data/site-content";
-import { User, Briefcase, Mail, FileText } from "lucide-react";
+import { User, Briefcase, Mail, FileText, Zap } from "lucide-react";
 
 const nav = [
   { href: "/#work", label: "Work", icon: Briefcase },  
+  { href: "/#skills", label: "Skills", icon: Zap },
   { href: "/#about", label: "About", icon: User },
   { href: "/resume", label: "Resume", icon: FileText },
   { href: "/#contact", label: "Contact", icon: Mail },

@@ -101,32 +101,28 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
       return;
     }
 
-    setStatus('loading');
-
     try {
-      // Simulate API call - replace with your actual endpoint
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // For now, create a mailto link as fallback
+      // Create mailto link with form data
       const mailtoUrl = `mailto:${encodeURIComponent(recipientEmail)}?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
         `Hi,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       )}`;
       
+      // Open email client immediately (no fake delay)
       window.location.href = mailtoUrl;
       
       setStatus('success');
-      setStatusMessage('Thank you! Your message has been sent. I\'ll get back to you soon.');
+      setStatusMessage('Opening your email client... If it doesn\'t open automatically, you can email me directly at ' + recipientEmail);
       
-      // Reset form
+      // Reset form after user has had time to see the message
       setTimeout(() => {
         setFormData({ name: '', email: '', subject: '', message: '' });
         setStatus('idle');
         setStatusMessage('');
-      }, 5000);
+      }, 8000); // Longer timeout since no fake loading
       
     } catch (error) {
       setStatus('error');
-      setStatusMessage('Sorry, there was an error sending your message. Please try again.');
+      setStatusMessage('Unable to open email client. Please email me directly at ' + recipientEmail);
     }
   };
 
@@ -276,7 +272,7 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
         {/* Submit Button */}
         <motion.button
           type="submit"
-          disabled={status === 'loading' || status === 'success'}
+          disabled={status === 'success'}
           className={`w-full px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 
                      ${status === 'success' 
                        ? 'bg-green-600 text-white' 
@@ -288,15 +284,13 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
           whileTap={status === 'idle' ? { scale: 0.98 } : {}}
         >
           <div className="flex items-center justify-center space-x-2">
-            {status === 'loading' && <Loader2 className="w-5 h-5 animate-spin" />}
             {status === 'success' && <CheckCircle className="w-5 h-5" />}
             {status === 'error' && <AlertCircle className="w-5 h-5" />}
             {status === 'idle' && <Send className="w-5 h-5" />}
             <span>
-              {status === 'loading' ? 'Sending...' :
-               status === 'success' ? 'Message Sent!' :
+              {status === 'success' ? 'Email Client Opened!' :
                status === 'error' ? 'Try Again' :
-               'Send Message'}
+               'Open Email App'}
             </span>
           </div>
         </motion.button>
