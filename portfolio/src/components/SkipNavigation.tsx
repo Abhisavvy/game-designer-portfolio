@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * Skip navigation links for screen readers and keyboard users
  * Allows bypassing repetitive navigation to reach main content

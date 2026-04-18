@@ -37,7 +37,7 @@ export function AboutSection() {
                   height={800}
                   className="w-full h-auto aspect-[3/4] sm:aspect-[2/3] lg:aspect-[3/4] object-cover object-top rounded-2xl 
                            shadow-2xl shadow-black/50 transition-transform duration-500 group-hover:scale-[1.02]"
-                  priority={true}
+                  loading="lazy"
                   progressive={true}
                   enableFormatOptimization={true}
                   placeholder={

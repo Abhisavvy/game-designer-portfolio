@@ -1,5 +1,3 @@
-"use client";
-
 import { defaultPortfolioContent } from "../data/site-content";
 
 export function SiteFooter() {

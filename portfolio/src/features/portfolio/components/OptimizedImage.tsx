@@ -13,6 +13,7 @@ interface OptimizedImageProps {
   className?: string;
   placeholder?: React.ReactNode;
   priority?: boolean;
+  loading?: "lazy" | "eager";
   sizes?: string;
   /** Enable WebP/AVIF format detection */
   enableFormatOptimization?: boolean;
@@ -30,6 +31,7 @@ export function OptimizedImage({
   className = "", 
   placeholder,
   priority = false,
+  loading = "lazy",
   sizes,
   enableFormatOptimization = true,
   progressive = false
@@ -106,6 +108,7 @@ export function OptimizedImage({
         width={width}
         height={height}
         priority={priority}
+        loading={priority ? undefined : loading}
         sizes={sizes ?? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
         className={`object-cover object-center transition-all duration-300 ${
           progressive && imageLoading ? 'opacity-0' : imageLoading ? 'opacity-20' : 'opacity-100'
