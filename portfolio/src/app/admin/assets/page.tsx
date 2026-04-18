@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ImageUploader } from '@/features/admin/components/ImageUploader';
 import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
-import { Image as ImageIcon, Trash2, Download, Filter, Search } from 'lucide-react';
+import { Image as ImageIcon, Trash2, Download, Filter, Search, Copy, Check } from 'lucide-react';
 import { defaultPortfolioContent } from '@/features/portfolio/data/site-content';
 
 // Component to show actual project images from site-content.ts
@@ -117,6 +117,7 @@ interface Asset {
 export default function AssetsManagementPage() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
+  const [copiedPath, setCopiedPath] = useState<string | null>(null);
   const [filter, setFilter] = useState<{
     projectSlug: string;
     search: string;
@@ -197,6 +198,26 @@ export default function AssetsManagementPage() {
     } catch (error) {
       console.error('Failed to reset placeholder:', error);
       alert('Failed to reset placeholder');
+    }
+  };
+
+  const copyAssetPath = async (publicUrl: string) => {
+    try {
+      await navigator.clipboard.writeText(publicUrl);
+      setCopiedPath(publicUrl);
+      // Clear the copied state after 2 seconds
+      setTimeout(() => setCopiedPath(null), 2000);
+    } catch (error) {
+      console.error('Failed to copy path:', error);
+      // Fallback: select text for manual copy
+      const textArea = document.createElement('textarea');
+      textArea.value = publicUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopiedPath(publicUrl);
+      setTimeout(() => setCopiedPath(null), 2000);
     }
   };
 
@@ -335,6 +356,17 @@ export default function AssetsManagementPage() {
                 {/* Overlay with actions */}
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <div className="flex space-x-2">
+                    <button
+                      onClick={() => copyAssetPath(asset.publicUrl)}
+                      className={`p-2 rounded-full transition-colors ${
+                        copiedPath === asset.publicUrl
+                          ? 'bg-green-500 text-white'
+                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }`}
+                      title={copiedPath === asset.publicUrl ? "Path copied!" : "Copy image path"}
+                    >
+                      {copiedPath === asset.publicUrl ? <Check size={16} /> : <Copy size={16} />}
+                    </button>
                     <a
                       href={asset.publicUrl}
                       target="_blank"
@@ -377,6 +409,8 @@ export default function AssetsManagementPage() {
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-blue-900 mb-2">Asset Management Tips</h3>
         <ul className="text-sm text-blue-800 space-y-1">
+          <li>• <strong>Copy Path:</strong> Hover over any image and click the blue copy button to copy the path</li>
+          <li>• <strong>Usage:</strong> Paste the copied path into forms (like About Section Image URL)</li>
           <li>• Use descriptive filenames for better organization</li>
           <li>• Always provide alt text for accessibility compliance</li>
           <li>• Organize assets by project using the project slug</li>
