@@ -53,7 +53,11 @@ export function ThemeProvider({
       }
 
       setResolvedTheme(resolved);
-      document.documentElement.setAttribute('data-theme', resolved);
+      
+      // Only update if different to prevent unnecessary DOM changes
+      if (document.documentElement.getAttribute('data-theme') !== resolved) {
+        document.documentElement.setAttribute('data-theme', resolved);
+      }
     };
 
     updateTheme();

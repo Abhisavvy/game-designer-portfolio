@@ -91,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark">
       <head>
         {/* Font preconnect for faster Google Fonts loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -106,9 +106,13 @@ export default function RootLayout({
                   const resolvedTheme = theme === 'system' 
                     ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
                     : theme;
-                  document.documentElement.setAttribute('data-theme', resolvedTheme);
+                  if (document.documentElement.getAttribute('data-theme') !== resolvedTheme) {
+                    document.documentElement.setAttribute('data-theme', resolvedTheme);
+                  }
                 } catch (e) {
-                  document.documentElement.setAttribute('data-theme', 'dark');
+                  if (!document.documentElement.getAttribute('data-theme')) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                  }
                 }
               })();
             `,
