@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, unlink } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import { z } from 'zod';
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const metadata = JSON.parse(formData.get('metadata') as string);
+    const metadataRaw = formData.get('metadata');
 
     if (!file) {
       return NextResponse.json(
@@ -24,14 +24,45 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate metadata
-    const validatedMetadata = adminAssetUploadMetadataSchema.parse(metadata);
+    // Validate and parse metadata
+    let metadata;
+    try {
+      if (typeof metadataRaw !== 'string') {
+        return NextResponse.json(
+          { error: 'Invalid metadata format - must be JSON string' },
+          { status: 400 }
+        );
+      }
+      metadata = JSON.parse(metadataRaw);
+    } catch (parseError) {
+      return NextResponse.json(
+        { error: 'Invalid metadata JSON format' },
+        { status: 400 }
+      );
+    }
+
+    // Validate metadata structure
+    let validatedMetadata;
+    try {
+      validatedMetadata = adminAssetUploadMetadataSchema.parse(metadata);
+    } catch (zodError) {
+      return NextResponse.json(
+        { 
+          error: 'Invalid metadata fields',
+          details: zodError instanceof Error ? zodError.message : 'Validation failed'
+        },
+        { status: 400 }
+      );
+    }
 
     // Validate file type
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only JPEG, PNG, WebP, and PDF are allowed.' },
+        { 
+          error: 'Invalid file type. Only JPEG, PNG, WebP, and PDF are allowed.',
+          details: `Received: ${file.type || 'unknown'} (${file.name})`
+        },
         { status: 400 }
       );
     }
@@ -61,21 +92,24 @@ export async function POST(request: NextRequest) {
       await mkdir(uploadDir, { recursive: true });
     }
 
-    // Write file
-    const filePath = path.join(uploadDir, filename);
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filePath, buffer);
-
     // Generate public URL
     const publicUrl = buildAssetPublicUrl(
       validatedMetadata.projectSlug,
       filename,
     );
 
-    // Update site-content.ts based on image category
-    if (validatedMetadata.projectSlug) {
-      try {
+    // Prepare file data
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const filePath = path.join(uploadDir, filename);
+    const tempFilePath = path.join(uploadDir, `temp_${Date.now()}_${filename}`);
+
+    try {
+      // Step 1: Write to temporary file first
+      await writeFile(tempFilePath, buffer);
+
+      // Step 2: Update site-content.ts based on image category (must succeed for atomic operation)
+      if (validatedMetadata.projectSlug) {
         const siteContentPath = path.join(process.cwd(), 'src/features/portfolio/data/site-content.ts');
         const astManipulator = new ASTManipulator(siteContentPath);
         
@@ -91,12 +125,38 @@ export async function POST(request: NextRequest) {
           console.log(`Added gallery image for project ${validatedMetadata.projectSlug}: ${publicUrl}`);
         }
         
-        // Trigger hot reload and deploy to Vercel
-        await triggerHotReloadAndDeploy(siteContentPath, `${validatedMetadata.category} image uploaded`);
-      } catch (error) {
-        console.error('Failed to update site-content.ts:', error);
-        // Don't fail the upload, just log the error
+        // Step 3: Deploy content changes
+        await triggerHotReloadAndDeploy(siteContentPath, `${validatedMetadata.category} image uploaded for ${validatedMetadata.projectSlug}`);
       }
+
+      // Step 4: Only now move temp file to final location (atomic operation complete)
+      await writeFile(filePath, buffer);
+      
+      // Clean up temp file
+      try {
+        await unlink(tempFilePath);
+      } catch (cleanupError) {
+        console.warn('Failed to cleanup temp file:', cleanupError);
+        // Don't fail the operation for cleanup issues
+      }
+
+    } catch (error) {
+      // Rollback: Delete temp file if content update failed
+      try {
+        await unlink(tempFilePath);
+      } catch (cleanupError) {
+        console.warn('Failed to cleanup temp file after error:', cleanupError);
+      }
+      
+      // Return proper error response
+      console.error('Upload failed during content update:', error);
+      return NextResponse.json(
+        { 
+          error: 'Failed to update content. Upload aborted.',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        },
+        { status: 500 }
+      );
     }
 
     // Return asset info

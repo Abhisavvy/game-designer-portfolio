@@ -203,21 +203,77 @@ export default function AssetsManagementPage() {
 
   const copyAssetPath = async (publicUrl: string) => {
     try {
-      await navigator.clipboard.writeText(publicUrl);
-      setCopiedPath(publicUrl);
-      // Clear the copied state after 2 seconds
-      setTimeout(() => setCopiedPath(null), 2000);
+      // Method 1: Modern Clipboard API (preferred)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(publicUrl);
+        setCopiedPath(publicUrl);
+        setTimeout(() => setCopiedPath(null), 2000);
+        return;
+      }
+      
+      // Method 2: Legacy fallback for older browsers or insecure contexts
+      if (document.execCommand) {
+        const textArea = document.createElement('textarea');
+        textArea.value = publicUrl;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        textArea.setAttribute('readonly', '');
+        document.body.appendChild(textArea);
+        
+        // Select and copy
+        textArea.select();
+        textArea.setSelectionRange(0, 99999); // For mobile devices
+        
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+          setCopiedPath(publicUrl);
+          setTimeout(() => setCopiedPath(null), 2000);
+          return;
+        }
+      }
+      
+      // Method 3: Manual selection fallback
+      throw new Error('Copy not supported - please select manually');
+      
     } catch (error) {
       console.error('Failed to copy path:', error);
-      // Fallback: select text for manual copy
-      const textArea = document.createElement('textarea');
-      textArea.value = publicUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setCopiedPath(publicUrl);
-      setTimeout(() => setCopiedPath(null), 2000);
+      
+      // Show user-friendly error and manual selection
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = publicUrl;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '50%';
+        textArea.style.top = '50%';
+        textArea.style.transform = 'translate(-50%, -50%)';
+        textArea.style.padding = '10px';
+        textArea.style.border = '2px solid #3b82f6';
+        textArea.style.borderRadius = '4px';
+        textArea.style.zIndex = '9999';
+        textArea.style.fontSize = '14px';
+        textArea.setAttribute('readonly', '');
+        document.body.appendChild(textArea);
+        
+        textArea.select();
+        textArea.setSelectionRange(0, 99999);
+        
+        // Show instruction
+        alert('Copy failed. Path is selected - press Ctrl+C (Cmd+C on Mac) to copy manually.');
+        
+        // Clean up after user interaction
+        setTimeout(() => {
+          if (document.body.contains(textArea)) {
+            document.body.removeChild(textArea);
+          }
+        }, 5000);
+        
+      } catch (fallbackError) {
+        console.error('All copy methods failed:', fallbackError);
+        alert(`Copy failed. Please copy manually: ${publicUrl}`);
+      }
     }
   };
 
@@ -353,17 +409,19 @@ export default function AssetsManagementPage() {
                   />
                 </div>
                 
-                {/* Overlay with actions */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <div className="flex space-x-2">
+                {/* Actions - Always visible on mobile/touch, hover enhanced on desktop */}
+                <div className="absolute top-2 right-2">
+                  <div className="flex flex-col space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1 
+                                  opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => copyAssetPath(asset.publicUrl)}
-                      className={`p-2 rounded-full transition-colors ${
+                      className={`p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] sm:min-w-[32px] sm:min-h-[32px] flex items-center justify-center ${
                         copiedPath === asset.publicUrl
-                          ? 'bg-green-500 text-white'
-                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                          ? 'bg-green-500 text-white shadow-lg'
+                          : 'bg-blue-500 text-white hover:bg-blue-600 shadow-lg'
                       }`}
                       title={copiedPath === asset.publicUrl ? "Path copied!" : "Copy image path"}
+                      aria-label={copiedPath === asset.publicUrl ? "Path copied!" : "Copy image path"}
                     >
                       {copiedPath === asset.publicUrl ? <Check size={16} /> : <Copy size={16} />}
                     </button>
@@ -371,15 +429,19 @@ export default function AssetsManagementPage() {
                       href={asset.publicUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+                      className="p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors shadow-lg
+                                 min-w-[44px] min-h-[44px] sm:min-w-[32px] sm:min-h-[32px] flex items-center justify-center"
                       title="View full size"
+                      aria-label="View full size image"
                     >
                       <Download size={16} />
                     </a>
                     <button
                       onClick={() => deleteAsset(asset.filename, asset.projectSlug)}
-                      className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                      className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-lg
+                                 min-w-[44px] min-h-[44px] sm:min-w-[32px] sm:min-h-[32px] flex items-center justify-center"
                       title="Delete asset"
+                      aria-label="Delete asset"
                     >
                       <Trash2 size={16} />
                     </button>

@@ -33,7 +33,7 @@ export function resolveUploadedFilename(options: {
   const filename =
     options.category === "hero" && options.projectSlug
       ? `hero-image${safeExt}`
-      : `${baseName}-${timestamp}${extension}`;
+      : `${baseName}-${timestamp}${safeExt}`;
   return { filename };
 }
 

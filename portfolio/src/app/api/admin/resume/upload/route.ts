@@ -15,10 +15,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file type
-    if (!file.name.endsWith('.pdf')) {
+    // Validate file size (10MB limit for resume)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
       return NextResponse.json(
-        { error: 'Only PDF files are allowed' },
+        { error: `File too large. Maximum size is ${Math.round(maxSize / (1024 * 1024))}MB` },
+        { status: 400 }
+      );
+    }
+
+    // Validate file type (both extension and MIME type)
+    const isValidExtension = file.name.toLowerCase().endsWith('.pdf');
+    const isValidMimeType = file.type === 'application/pdf' || file.type === 'application/x-pdf';
+    
+    if (!isValidExtension || !isValidMimeType) {
+      return NextResponse.json(
+        { 
+          error: 'Invalid file format. Only PDF files are allowed.',
+          details: `Received: ${file.type || 'unknown type'}, filename: ${file.name}`
+        },
         { status: 400 }
       );
     }
