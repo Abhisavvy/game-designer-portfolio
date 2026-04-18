@@ -115,7 +115,6 @@ export function OptimizedImage({
         }`}
         onLoad={() => setImageLoading(false)}
         onError={handleImageError}
-        onLoadingComplete={() => setImageLoading(false)}
       />
       
       {/* Enhanced loading state with shimmer for progressive mode */}

@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function validateConsistency(resumeInfo: any) {
+async function validateConsistency(resumeInfo: Record<string, unknown>) {
   const issues = [];
   
   try {
@@ -123,16 +123,17 @@ async function validateConsistency(resumeInfo: any) {
       linkedin: siteContent.defaultPortfolioContent.person?.links?.linkedin || '',
     };
 
-    // Check name consistency
-    if (resumeInfo.personal.name && portfolioPersonal.name) {
-      if (resumeInfo.personal.name.trim() !== portfolioPersonal.name.trim()) {
+    // Check name consistency  
+    const personal = resumeInfo.personal as { name?: string; email?: string; linkedin?: string; location?: string };
+    if (personal?.name && portfolioPersonal.name) {
+      if (personal.name.trim() !== portfolioPersonal.name.trim()) {
         issues.push({
           type: 'personal_info',
           severity: 'medium' as const,
           projectSlug: 'general',
           field: 'name',
           message: 'Name differs between CV and portfolio',
-          cvValue: resumeInfo.personal.name,
+          cvValue: personal.name,
           portfolioValue: portfolioPersonal.name,
           suggestion: 'Ensure consistent name formatting across CV and portfolio',
         });
@@ -140,15 +141,15 @@ async function validateConsistency(resumeInfo: any) {
     }
 
     // Check email consistency
-    if (resumeInfo.personal.email && portfolioPersonal.email) {
-      if (resumeInfo.personal.email !== portfolioPersonal.email) {
+    if (personal?.email && portfolioPersonal.email) {
+      if (personal.email !== portfolioPersonal.email) {
         issues.push({
           type: 'personal_info',
           severity: 'high' as const,
           projectSlug: 'general',
           field: 'email',
           message: 'Email address differs between CV and portfolio',
-          cvValue: resumeInfo.personal.email,
+          cvValue: personal.email,
           portfolioValue: portfolioPersonal.email,
           suggestion: 'Update email address to match across both platforms',
         });
@@ -156,15 +157,15 @@ async function validateConsistency(resumeInfo: any) {
     }
 
     // Check LinkedIn consistency
-    if (resumeInfo.personal.linkedin && portfolioPersonal.linkedin) {
-      if (resumeInfo.personal.linkedin !== portfolioPersonal.linkedin) {
+    if (personal?.linkedin && portfolioPersonal.linkedin) {
+      if (personal.linkedin !== portfolioPersonal.linkedin) {
         issues.push({
           type: 'personal_info',
           severity: 'medium' as const,
           projectSlug: 'general',
           field: 'linkedin',
           message: 'LinkedIn URL differs between CV and portfolio',
-          cvValue: resumeInfo.personal.linkedin,
+          cvValue: personal.linkedin,
           portfolioValue: portfolioPersonal.linkedin,
           suggestion: 'Ensure LinkedIn URL is consistent',
         });
@@ -172,15 +173,15 @@ async function validateConsistency(resumeInfo: any) {
     }
 
     // Check location consistency
-    if (resumeInfo.personal.location && portfolioPersonal.location) {
-      if (resumeInfo.personal.location !== portfolioPersonal.location) {
+    if (personal?.location && portfolioPersonal.location) {
+      if (personal.location !== portfolioPersonal.location) {
         issues.push({
           type: 'personal_info',
           severity: 'low' as const,
           projectSlug: 'general',
           field: 'location',
           message: 'Location format differs between CV and portfolio',
-          cvValue: resumeInfo.personal.location,
+          cvValue: personal.location,
           portfolioValue: portfolioPersonal.location,
           suggestion: 'Consider using consistent location format',
         });
@@ -189,9 +190,9 @@ async function validateConsistency(resumeInfo: any) {
 
     // Check for missing portfolio projects in CV experience
     if (siteContent.defaultPortfolioContent.projects && resumeInfo.experience) {
-      const portfolioProjects = siteContent.defaultPortfolioContent.projects.map((p: any) => p.title.toLowerCase());
-      const cvHighlights = resumeInfo.experience
-        .flatMap((job: any) => job.highlights || [])
+      const portfolioProjects = siteContent.defaultPortfolioContent.projects.map((p: Record<string, unknown>) => (p.title as string).toLowerCase());
+      const cvHighlights = (resumeInfo.experience as Array<{ highlights?: string[] }>)
+        .flatMap((job) => job.highlights || [])
         .join(' ')
         .toLowerCase();
 

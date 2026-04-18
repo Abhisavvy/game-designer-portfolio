@@ -16,7 +16,7 @@ export async function GET() {
     const siteContent = await import('@/features/portfolio/data/site-content');
     
     // Extract projects data
-    const projects = siteContent.defaultPortfolioContent.projects.map((project: any) => ({
+    const projects = siteContent.defaultPortfolioContent.projects.map((project: Record<string, unknown>) => ({
       slug: project.slug,
       title: project.title,
       tag: project.tag,

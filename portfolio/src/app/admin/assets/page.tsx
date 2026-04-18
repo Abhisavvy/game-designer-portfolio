@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ImageUploader } from '@/features/admin/components/ImageUploader';
 import { AdminBreadcrumb } from '@/features/admin/components/AdminBreadcrumb';
-import { Image as ImageIcon, Trash2, Download, Filter, Search, Copy, Check } from 'lucide-react';
+import { Image as ImageIcon, Trash2, Download, Filter, Search, Copy, Check, AlertCircle, RefreshCw } from 'lucide-react';
 import { defaultPortfolioContent } from '@/features/portfolio/data/site-content';
+import { fetchWithErrorHandling, createAppError, ErrorMessages, safeAsync } from '@/utils/error-handling';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 // Component to show actual project images from site-content.ts
 function ProjectImagesOverview({ onResetPlaceholder }: { onResetPlaceholder: (slug: string) => void }) {
@@ -117,6 +119,7 @@ interface Asset {
 export default function AssetsManagementPage() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [copiedPath, setCopiedPath] = useState<string | null>(null);
   const [filter, setFilter] = useState<{
     projectSlug: string;
@@ -126,54 +129,64 @@ export default function AssetsManagementPage() {
     search: '',
   });
 
-  useEffect(() => {
-    loadAssets();
+  const loadAssets = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    await safeAsync(
+      async () => {
+        const params = new URLSearchParams();
+        if (filter.projectSlug) {
+          params.append('projectSlug', filter.projectSlug);
+        }
+        
+        const response = await fetchWithErrorHandling(`/api/admin/assets/list?${params}`);
+        const data = await response.json();
+        setAssets(data.assets || []);
+      },
+      undefined,
+      (error) => {
+        setError(error.userMessage);
+        setAssets([]); // Clear assets on error
+      }
+    );
+
+    setLoading(false);
   }, [filter.projectSlug]);
 
-  const loadAssets = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (filter.projectSlug) {
-        params.append('projectSlug', filter.projectSlug);
-      }
-      
-      const response = await fetch(`/api/admin/assets/list?${params}`);
-      if (response.ok) {
-        const data = await response.json();
-        setAssets(data.assets);
-      }
-    } catch (error) {
-      console.error('Failed to load assets:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    loadAssets();
+  }, [filter.projectSlug, loadAssets]);
 
   const deleteAsset = async (filename: string, projectSlug?: string) => {
     if (!confirm(`Are you sure you want to delete "${filename}"? This action cannot be undone.`)) {
       return;
     }
 
-    try {
-      const params = new URLSearchParams({ filename });
-      if (projectSlug) {
-        params.append('projectSlug', projectSlug);
-      }
+    const success = await safeAsync(
+      async () => {
+        const params = new URLSearchParams({ filename });
+        if (projectSlug) {
+          params.append('projectSlug', projectSlug);
+        }
 
-      const response = await fetch(`/api/admin/assets/delete?${params}`, {
-        method: 'DELETE',
-      });
+        const response = await fetchWithErrorHandling(`/api/admin/assets/delete?${params}`, {
+          method: 'DELETE',
+        });
 
-      if (response.ok) {
         setAssets(prev => prev.filter(asset => asset.filename !== filename));
-      } else {
-        alert('Failed to delete asset');
+        return true;
+      },
+      false,
+      (error) => {
+        alert(error.retryable 
+          ? `${ErrorMessages.DELETE_FAILED('asset')} ${error.userMessage}`
+          : error.userMessage
+        );
       }
-    } catch (error) {
-      console.error('Failed to delete asset:', error);
-      alert('Failed to delete asset');
-    }
+    );
+
+    return success;
   };
 
   const resetPlaceholder = async (projectSlug: string) => {
@@ -355,22 +368,42 @@ export default function AssetsManagementPage() {
     asset.filename.toLowerCase().includes(filter.search.toLowerCase())
   );
 
+  const renderErrorState = () => (
+    <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+      <div className="flex items-center space-x-3">
+        <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+        <div className="flex-1">
+          <h3 className="font-medium text-red-800">Failed to load assets</h3>
+          <p className="text-red-700 text-sm mt-1">{error}</p>
+        </div>
+        <button
+          onClick={loadAssets}
+          className="bg-red-100 hover:bg-red-200 text-red-800 px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2"
+        >
+          <RefreshCw className="w-4 h-4" />
+          <span>Retry</span>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="space-y-8">
-      <AdminBreadcrumb />
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
-            <ImageIcon className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-1">Assets Management</h1>
-            <p className="text-slate-600">
-              Upload and manage images and media files for your portfolio projects.
-            </p>
+    <ErrorBoundary>
+      <div className="space-y-8">
+        <AdminBreadcrumb />
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+              <ImageIcon className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 mb-1">Assets Management</h1>
+              <p className="text-slate-600">
+                Upload and manage images and media files for your portfolio projects.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Current Project Images Overview */}
       <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg p-6">
@@ -441,11 +474,17 @@ export default function AssetsManagementPage() {
           </div>
         </div>
 
+        {/* Error State */}
+        {error && renderErrorState()}
+
         {/* Assets Grid */}
         {loading ? (
           <div className="flex items-center justify-center h-64">
             <div className="text-lg text-gray-600">Loading assets...</div>
           </div>
+        ) : error ? (
+          // Error state is handled above
+          null
         ) : filteredAssets.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
@@ -542,6 +581,7 @@ export default function AssetsManagementPage() {
           <li>• Use consistent naming conventions (e.g., &quot;project-hero-image.webp&quot;)</li>
         </ul>
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, User, MessageCircle, Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { announcer } from '@/utils/accessibility';
 
 interface ContactFormData {
   name: string;

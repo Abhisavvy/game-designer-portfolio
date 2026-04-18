@@ -8,8 +8,8 @@ import type { ConsistencyIssue } from '@/features/admin/types/admin';
 export default function ResumeManagementPage() {
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
-  const [importedData, setImportedData] = useState<any>(null);
-  const [exportedData, setExportedData] = useState<any>(null);
+  const [importedData, setImportedData] = useState<Record<string, unknown> | null>(null);
+  const [exportedData, setExportedData] = useState<Record<string, unknown> | null>(null);
   const [consistencyIssues, setConsistencyIssues] = useState<ConsistencyIssue[]>([]);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -92,8 +92,8 @@ export default function ResumeManagementPage() {
       setExporting(true);
       
       // Load current personal info and any approved bullets
-      let bullets: any[] = [];
-      let personalInfo: any = {};
+      let bullets: Array<{ content: string; approved: boolean }> = [];
+      let personalInfo: Record<string, unknown> = {};
       
       try {
         const personalResponse = await fetch('/api/admin/content/personal');
@@ -127,7 +127,7 @@ export default function ResumeManagementPage() {
     }
   };
 
-  const copyToClipboard = async (data: any) => {
+  const copyToClipboard = async (data: Record<string, unknown>) => {
     try {
       await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
       setMessage({ type: 'success', text: 'JSON copied to clipboard!' });
@@ -136,7 +136,7 @@ export default function ResumeManagementPage() {
     }
   };
 
-  const downloadJSON = (data: any, filename: string) => {
+  const downloadJSON = (data: Record<string, unknown>, filename: string) => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

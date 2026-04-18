@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
           summary: "Game design and development work showcased in portfolio",
           highlights: Array.isArray(bullets) 
             ? bullets
-                .filter((bullet: any) => bullet.approved)
-                .map((bullet: any) => bullet.content)
+                .filter((bullet: { approved: boolean }) => bullet.approved)
+                .map((bullet: { content: string }) => bullet.content)
             : [],
         },
       ],
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
           keywords: ["C#", "JavaScript", "TypeScript", "Next.js"],
         },
       ],
-      projects: siteContent.defaultPortfolioContent.projects?.map((project: any) => ({
+      projects: siteContent.defaultPortfolioContent.projects?.map((project: Record<string, unknown>) => ({
         name: project.title,
         description: project.blurb,
         highlights: [],

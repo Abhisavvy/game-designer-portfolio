@@ -51,8 +51,8 @@ export function GalleryManager({ projectSlug, initialItems, onItemsChange }: Gal
     const newItem: GalleryItem = {
       thumb: asset.publicUrl,
       full: asset.publicUrl,
-      alt: asset.metadata.altText,
-      label: asset.metadata.usageContext,
+      alt: asset.metadata?.altText || asset.filename,
+      label: asset.metadata?.usageContext || 'Gallery Image',
     };
     
     const newItems = [...items, newItem];
