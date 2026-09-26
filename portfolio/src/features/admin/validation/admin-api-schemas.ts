@@ -3,7 +3,13 @@ import { z } from "zod";
 /** Metadata JSON for POST /api/admin/assets/upload (must stay aligned with ImageUploader form). */
 export const adminAssetUploadMetadataSchema = z.object({
   category: z.enum(["hero", "gallery", "process", "profile"]),
-  projectSlug: z.string().optional(),
+  // Becomes a folder name under public/assets, so no dots or slashes (path traversal).
+  projectSlug: z
+    .union([
+      z.literal(""),
+      z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "Invalid project slug"),
+    ])
+    .optional(),
   altText: z.string().min(1, "Alt text is required"),
   caption: z.string().optional(),
   usageContext: z.string().min(1, "Usage context is required"),

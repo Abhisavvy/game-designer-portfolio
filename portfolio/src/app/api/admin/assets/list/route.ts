@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readdir, stat } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
+import { isSafeSlug } from '@/features/admin/utils/safe-paths';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const projectSlug = searchParams.get('projectSlug');
     const category = searchParams.get('category');
+
+    if (projectSlug && !isSafeSlug(projectSlug)) {
+      return NextResponse.json({ error: 'Invalid project slug' }, { status: 400 });
+    }
 
     const assetsDir = path.join(process.cwd(), 'public', 'assets');
     

@@ -10,6 +10,7 @@ import {
   buildAssetPublicUrl,
   resolveUploadedFilename,
 } from '@/app/api/admin/assets/upload/upload-helpers';
+import { resolveInside } from '@/features/admin/utils/safe-paths';
 
 export async function POST(request: NextRequest) {
   try {
@@ -82,10 +83,12 @@ export async function POST(request: NextRequest) {
       originalFileName: file.name,
     });
 
-    // Determine upload path
-    const uploadDir = validatedMetadata.projectSlug
-      ? path.join(process.cwd(), 'public', 'assets', validatedMetadata.projectSlug)
-      : path.join(process.cwd(), 'public', 'assets', 'general');
+    // Determine upload path (must stay inside public/assets)
+    const assetsDir = path.join(process.cwd(), 'public', 'assets');
+    const uploadDir = resolveInside(assetsDir, validatedMetadata.projectSlug || 'general');
+    if (!uploadDir) {
+      return NextResponse.json({ error: 'Invalid upload path' }, { status: 400 });
+    }
 
     // Create directory if it doesn't exist
     if (!existsSync(uploadDir)) {

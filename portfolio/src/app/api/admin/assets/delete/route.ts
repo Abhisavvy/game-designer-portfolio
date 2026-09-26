@@ -4,6 +4,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import { ASTManipulator } from '@/features/admin/utils/ast-manipulator';
 import { triggerHotReloadAndDeploy } from '@/features/admin/utils/hot-reload';
+import { isSafeFilename, isSafeSlug, resolveInside } from '@/features/admin/utils/safe-paths';
 
 const SITE_CONTENT_PATH = path.join(process.cwd(), 'src/features/portfolio/data/site-content.ts');
 
@@ -20,16 +21,18 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Construct file path
-    const assetsDir = path.join(process.cwd(), 'public', 'assets');
-    const targetDir = projectSlug ? path.join(assetsDir, projectSlug) : path.join(assetsDir, 'general');
-    const filePath = path.join(targetDir, filename);
+    if (!isSafeFilename(filename) || (projectSlug && !isSafeSlug(projectSlug))) {
+      return NextResponse.json(
+        { error: 'Invalid file path' },
+        { status: 400 }
+      );
+    }
 
-    // Security check: ensure the file is within the assets directory
-    const normalizedPath = path.normalize(filePath);
-    const normalizedAssetsDir = path.normalize(assetsDir);
-    
-    if (!normalizedPath.startsWith(normalizedAssetsDir)) {
+    // Construct file path; resolveInside rejects anything outside public/assets
+    const assetsDir = path.join(process.cwd(), 'public', 'assets');
+    const filePath = resolveInside(assetsDir, projectSlug || 'general', filename);
+
+    if (!filePath) {
       return NextResponse.json(
         { error: 'Invalid file path' },
         { status: 400 }

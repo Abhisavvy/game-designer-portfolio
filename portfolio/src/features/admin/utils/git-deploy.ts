@@ -1,50 +1,64 @@
 /**
  * Utility to automatically commit and push changes for Vercel deployment
  */
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 
-const execAsync = promisify(exec);
+// execFile passes arguments straight to git without a shell, so request-derived
+// text (commit messages, slugs) can never be interpreted as shell syntax.
+const execFileAsync = promisify(execFile);
+
+const SAFE_BRANCH = /^[A-Za-z0-9][A-Za-z0-9._/-]*$/;
 
 export interface DeployOptions {
   message?: string;
   branch?: string;
 }
 
+function git(args: string[], cwd: string) {
+  return execFileAsync('git', args, { cwd });
+}
+
+async function getWorkspaceRoot(): Promise<string> {
+  const { stdout } = await git(['rev-parse', '--show-toplevel'], process.cwd());
+  return stdout.trim();
+}
+
 export async function deployToVercel(options: DeployOptions = {}): Promise<void> {
   const { message = 'Admin panel update', branch = 'main' } = options;
-  
+
+  if (!SAFE_BRANCH.test(branch)) {
+    throw new Error(`Invalid branch name: ${branch}`);
+  }
+
   try {
     console.log('Starting auto-deployment process...');
-    
-    // Change to the workspace root directory for git operations
-    const workspaceRoot = process.cwd().includes('/portfolio') 
-      ? process.cwd().replace('/portfolio', '') 
-      : process.cwd();
-    
+
+    const workspaceRoot = await getWorkspaceRoot();
+
     // Check if there are any changes to commit
-    const { stdout: statusOutput } = await execAsync('git status --porcelain', { cwd: workspaceRoot });
+    const { stdout: statusOutput } = await git(['status', '--porcelain'], workspaceRoot);
     if (!statusOutput.trim()) {
       console.log('No changes to commit, skipping deployment');
       return;
     }
-    
+
     console.log('Changes detected:', statusOutput.trim());
-    
+
     // Add all changes
-    await execAsync('git add .', { cwd: workspaceRoot });
+    await git(['add', '.'], workspaceRoot);
     console.log('Files staged for commit');
-    
+
     // Commit with timestamp
     const timestamp = new Date().toISOString();
-    const commitMessage = `${message} - ${timestamp}`;
-    await execAsync(`git commit -m "${commitMessage}"`, { cwd: workspaceRoot });
+    const commitMessage = `${String(message).slice(0, 200)} - ${timestamp}`;
+    await git(['commit', '-m', commitMessage], workspaceRoot);
     console.log(`Committed with message: ${commitMessage}`);
-    
+
     // Push to remote
-    await execAsync(`git push origin ${branch}`, { cwd: workspaceRoot });
+    await git(['push', 'origin', branch], workspaceRoot);
     console.log(`Pushed to ${branch} branch - Vercel deployment triggered`);
-    
+
   } catch (error) {
     console.error('Auto-deployment failed:', error);
     throw new Error(`Deployment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -53,12 +67,8 @@ export async function deployToVercel(options: DeployOptions = {}): Promise<void>
 
 export async function getGitStatus(): Promise<{ hasChanges: boolean; files: string[] }> {
   try {
-    // Change to the workspace root directory for git operations
-    const workspaceRoot = process.cwd().includes('/portfolio') 
-      ? process.cwd().replace('/portfolio', '') 
-      : process.cwd();
-      
-    const { stdout } = await execAsync('git status --porcelain', { cwd: workspaceRoot });
+    const workspaceRoot = await getWorkspaceRoot();
+    const { stdout } = await git(['status', '--porcelain'], workspaceRoot);
     const files = stdout.trim().split('\n').filter(line => line.trim());
     return {
       hasChanges: files.length > 0,

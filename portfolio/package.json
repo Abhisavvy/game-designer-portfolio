@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 127.0.0.1",
     "build": "next build",
     "test:admin-stubs": "node webpack/scripts/verify-admin-stub-loader.mjs",
     "verify:ast-manipulator": "npx --yes tsx ./src/features/admin/utils/run-ast-verify.ts",
