@@ -83,6 +83,12 @@ export function CaseStudyClient({ slug }: { slug: string }) {
   const refUrl = defaultPortfolioContent.siteMeta.referencePortfolioUrl;
   const [activeSection, setActiveSection] = useState('');
 
+  const isPersonalProject = defaultPortfolioContent.personalProjects.some(
+    (p) => p.slug === slug
+  );
+  const backHref = isPersonalProject ? "/#projects" : "/#work";
+  const backLabel = isPersonalProject ? "← Back to projects" : "← Back to work";
+
   // Define sections for table of contents (memoized to prevent useEffect re-runs)
   const sections = useMemo(() => [
     { id: 'overview', title: 'Overview' },
@@ -149,10 +155,10 @@ export function CaseStudyClient({ slug }: { slug: string }) {
         {/* Main Content */}
         <div className="flex-1 max-w-3xl">
           <Link
-            href="/#work"
+            href={backHref}
             className="text-sm text-amber-400/90 transition hover:text-amber-300"
           >
-            ← Back to work
+            {backLabel}
           </Link>
 
           {media?.hero ? <CaseStudyHero hero={media.hero} /> : null}
@@ -216,10 +222,10 @@ export function CaseStudyClient({ slug }: { slug: string }) {
 
           <footer className="mt-16 pt-8 border-t border-zinc-700/50">
             <Link
-              href="/#work"
+              href={backHref}
               className="text-sm text-amber-400/90 transition hover:text-amber-300"
             >
-              ← Back to work
+              {backLabel}
             </Link>
           </footer>
         </div>

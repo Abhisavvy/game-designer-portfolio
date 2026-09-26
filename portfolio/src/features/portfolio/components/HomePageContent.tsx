@@ -13,6 +13,10 @@ const WorkSection = dynamic(() => import("./sections/WorkSection").then(mod => (
   ssr: true
 });
 
+const ProjectsSection = dynamic(() => import("./sections/ProjectsSection").then(mod => ({ default: mod.ProjectsSection })), {
+  ssr: true
+});
+
 const AboutSection = dynamic(() => import("./sections/AboutSection").then(mod => ({ default: mod.AboutSection })), {
   ssr: true
 });
@@ -36,6 +40,7 @@ export function HomePageContent() {
       {/* Below-the-fold sections - Code split for better performance */}
       <StickySkillsSection />
       <WorkSection />
+      <ProjectsSection />
       <AboutSection />
       <ContactSection />
     </>

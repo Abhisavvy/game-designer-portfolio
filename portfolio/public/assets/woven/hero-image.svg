@@ -1,0 +1,48 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Segoe UI, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgw" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0b0f"/>
+      <stop offset="55%" stop-color="#1a1108"/>
+      <stop offset="100%" stop-color="#3a1a06"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="900" fill="url(#bgw)"/>
+
+  <!-- grid -->
+  <g stroke="#3f3f46" stroke-width="1.5" opacity="0.55">
+    <line x1="980" y1="140" x2="980" y2="780"/>
+    <line x1="1060" y1="140" x2="1060" y2="780"/>
+    <line x1="1140" y1="140" x2="1140" y2="780"/>
+    <line x1="1220" y1="140" x2="1220" y2="780"/>
+    <line x1="1300" y1="140" x2="1300" y2="780"/>
+    <line x1="1380" y1="140" x2="1380" y2="780"/>
+    <line x1="1460" y1="140" x2="1460" y2="780"/>
+    <line x1="920" y1="180" x2="1520" y2="180"/>
+    <line x1="920" y1="260" x2="1520" y2="260"/>
+    <line x1="920" y1="340" x2="1520" y2="340"/>
+    <line x1="920" y1="420" x2="1520" y2="420"/>
+    <line x1="920" y1="500" x2="1520" y2="500"/>
+    <line x1="920" y1="580" x2="1520" y2="580"/>
+    <line x1="920" y1="660" x2="1520" y2="660"/>
+    <line x1="920" y1="740" x2="1520" y2="740"/>
+  </g>
+
+  <!-- crossing threads -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M 940 200 C 1100 200, 1160 420, 1320 420 S 1500 640, 1500 760" stroke="#f97316" stroke-width="10" opacity="0.9"/>
+    <path d="M 940 760 C 1120 760, 1160 500, 1320 340 S 1460 200, 1500 200" stroke="#38bdf8" stroke-width="10" opacity="0.85"/>
+    <path d="M 940 480 C 1080 380, 1240 580, 1380 480 S 1460 480, 1500 480" stroke="#a78bfa" stroke-width="10" opacity="0.85"/>
+    <path d="M 1000 220 L 1000 740" stroke="#fbbf24" stroke-width="8" opacity="0.7"/>
+  </g>
+
+  <!-- overlap node dots -->
+  <g fill="#fafafa">
+    <circle cx="1320" cy="420" r="9"/>
+    <circle cx="1320" cy="340" r="9"/>
+    <circle cx="1240" cy="480" r="9" fill="#fed7aa"/>
+  </g>
+
+  <g transform="translate(112,512)">
+  </g>
+</svg>

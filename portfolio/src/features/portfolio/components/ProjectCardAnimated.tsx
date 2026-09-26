@@ -20,7 +20,10 @@ import {
   RefreshCcw,
   ArrowRight,
   Bot,
-  Workflow
+  Workflow,
+  Gamepad2,
+  MessageSquare,
+  Puzzle
 } from "lucide-react";
 
 interface ProjectCardAnimatedProps {
@@ -41,6 +44,9 @@ function getProjectIcon(slug: string) {
     case "tiles": return Palette;
     case "ai-innovation": return Bot;
     case "kinoa-integration": return Workflow;
+    case "habiteer": return Gamepad2;
+    case "xfactor": return MessageSquare;
+    case "woven": return Puzzle;
     default: return Target;
   }
 }
@@ -366,6 +372,9 @@ function getFallbackBadges(project: ProjectItem): string[] {
     "food-fiesta": ["Event Design", "Player Engagement", "Feature Innovation"],
     "wotd": ["Daily Engagement", "Word Game Design", "Player Retention"],
     "ticket-mania": ["Reward Systems", "Player Motivation", "Game Economy"],
+    "habiteer": ["Streaks", "Economy", "React Native"],
+    "xfactor": ["Narrative Systems", "PvP", "React"],
+    "woven": ["Puzzle Design", "Rules Engine", "Unity"],
   };
   
   return fallbacks[project.slug] || ["Game Design", "Player Experience", "System Innovation"];
