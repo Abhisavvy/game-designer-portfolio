@@ -12,3 +12,7 @@ portfolio/out
 
 # Reactive Resume (separate git repo)
 reactive-resume/
+
+# Local-only: archived files removed from the public repo, Python virtualenv
+_archive/
+.venv/

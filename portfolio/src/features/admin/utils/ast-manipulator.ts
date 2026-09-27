@@ -18,7 +18,11 @@ import * as fs from "fs";
 import * as ts from "typescript";
 
 import type { AdminPersonalInfo } from "../types/admin";
-import type { ProjectItem } from "@/features/portfolio/data/site-content";
+import type {
+  ProjectItem,
+  ProjectStat,
+  SkillThreadId,
+} from "@/features/portfolio/data/site-content";
 
 const DEFAULT_CONTENT_VAR = "defaultPortfolioContent";
 
@@ -29,6 +33,18 @@ const PROJECT_ITEM_STRING_KEYS = [
   "blurb",
   "href",
   "externalUrl",
+] as const satisfies readonly (keyof ProjectItem)[];
+
+/** Non-string `ProjectItem` fields: array literals (of string literals / object literals). */
+const PROJECT_ITEM_ARRAY_KEYS = [
+  "skills",
+  "stats",
+] as const satisfies readonly (keyof ProjectItem)[];
+
+/** Every key `updateProject`/`addProject` know how to (de)serialise, in canonical order. */
+const PROJECT_ITEM_ALL_KEYS = [
+  ...PROJECT_ITEM_STRING_KEYS,
+  ...PROJECT_ITEM_ARRAY_KEYS,
 ] as const satisfies readonly (keyof ProjectItem)[];
 
 const PERSON_SCALAR_KEYS = [
@@ -81,24 +97,6 @@ function readObjectStringFields(
   return out;
 }
 
-function readProjectItemFieldsFromLiteral(
-  el: ts.ObjectLiteralExpression,
-  slugForErrors: string,
-): Partial<ProjectItem> {
-  const raw = readObjectStringFields(el, {
-    strictKeys: PROJECT_ITEM_STRING_KEYS as readonly string[],
-    strictContext: `projects[] entry (slug "${slugForErrors}")`,
-  });
-  const out: Partial<ProjectItem> = {};
-  for (const k of PROJECT_ITEM_STRING_KEYS) {
-    const v = raw[k];
-    if (v !== undefined) {
-      out[k] = v;
-    }
-  }
-  return out;
-}
-
 function createStringProp(
   factory: ts.NodeFactory,
   key: string,
@@ -143,31 +141,152 @@ export type CaseStudyDraftForAst = {
   links?: { label: string; href: string }[];
 };
 
-function projectDataToObjectLiteral(
+function createSkillsArrayLiteral(
   factory: ts.NodeFactory,
-  data: ProjectItem,
-): ts.ObjectLiteralExpression {
-  return factory.createObjectLiteralExpression(
-    PROJECT_ITEM_STRING_KEYS.map((k) => createStringProp(factory, k, data[k])),
+  skills: readonly SkillThreadId[],
+): ts.ArrayLiteralExpression {
+  // Short tag list: keep it on one line, matching the hand-authored fixture style.
+  return factory.createArrayLiteralExpression(
+    skills.map((skill) => factory.createStringLiteral(skill)),
+    false,
+  );
+}
+
+function createStatsArrayLiteral(
+  factory: ts.NodeFactory,
+  stats: readonly ProjectStat[],
+): ts.ArrayLiteralExpression {
+  return factory.createArrayLiteralExpression(
+    stats.map((stat) =>
+      factory.createObjectLiteralExpression(
+        [
+          createStringProp(factory, "value", stat.value),
+          createStringProp(factory, "label", stat.label),
+        ],
+        true,
+      ),
+    ),
     true,
   );
 }
 
-function mergeProject(
+function projectDataToObjectLiteral(
+  factory: ts.NodeFactory,
+  data: ProjectItem,
+): ts.ObjectLiteralExpression {
+  const props: ts.ObjectLiteralElementLike[] = PROJECT_ITEM_STRING_KEYS.map((k) =>
+    createStringProp(factory, k, data[k]),
+  );
+  if (data.skills !== undefined) {
+    props.push(
+      factory.createPropertyAssignment(
+        "skills",
+        createSkillsArrayLiteral(factory, data.skills),
+      ),
+    );
+  }
+  if (data.stats !== undefined) {
+    props.push(
+      factory.createPropertyAssignment(
+        "stats",
+        createStatsArrayLiteral(factory, data.stats),
+      ),
+    );
+  }
+  return factory.createObjectLiteralExpression(props, true);
+}
+
+function isProjectItemKey(key: string): key is keyof ProjectItem {
+  return PROJECT_ITEM_ALL_KEYS.includes(
+    key as (typeof PROJECT_ITEM_ALL_KEYS)[number],
+  );
+}
+
+/**
+ * Converts one patch value to the AST expression `updateProject` should write for `key`,
+ * or `undefined` if `value` is absent / not a shape we know how to serialise (in which case
+ * the caller keeps the existing node rather than silently dropping data).
+ */
+function projectPatchValueToExpression(
+  factory: ts.NodeFactory,
+  key: keyof ProjectItem,
+  value: ProjectItem[keyof ProjectItem],
+): ts.Expression | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value === "string") {
+    return factory.createStringLiteral(value);
+  }
+  if (key === "skills" && Array.isArray(value)) {
+    return createSkillsArrayLiteral(factory, value as SkillThreadId[]);
+  }
+  if (key === "stats" && Array.isArray(value)) {
+    return createStatsArrayLiteral(factory, value as ProjectStat[]);
+  }
+  return undefined;
+}
+
+/**
+ * Merges `patch` onto the existing `projects[]` object literal matched by `slug`. Unlike a
+ * "read fields into a plain object, then re-serialise a fixed key list" approach, this
+ * walks the *existing* AST properties and:
+ *  - copies every property the patch doesn't set unchanged (same node instance) — this is
+ *    what preserves `skills`, `stats`, and any future/unknown keys instead of silently
+ *    dropping them;
+ *  - replaces only the properties the patch actually sets, in place, so existing key order
+ *    is kept;
+ *  - appends any patch keys that don't already exist on the object (e.g. adding `skills`/
+ *    `stats` to a project that never had them), in canonical `ProjectItem` field order.
+ */
+function mergeProjectLiteral(
+  factory: ts.NodeFactory,
   existingLiteral: ts.ObjectLiteralExpression,
   slug: string,
   patch: Partial<ProjectItem>,
-): ProjectItem {
-  const fromFile = readProjectItemFieldsFromLiteral(existingLiteral, slug);
-  const base: ProjectItem = {
-    slug: fromFile.slug ?? slug,
-    title: fromFile.title ?? "",
-    tag: fromFile.tag ?? "",
-    blurb: fromFile.blurb ?? "",
-    href: fromFile.href ?? "",
-    externalUrl: fromFile.externalUrl ?? "",
-  };
-  return { ...base, ...patch, slug };
+): ts.ObjectLiteralExpression {
+  // `slug` (the matched/target slug) always wins, mirroring the previous merge behavior:
+  // updateProject() never renames a project out from under its own lookup key.
+  const updates: Partial<ProjectItem> = { ...patch, slug };
+
+  const seen = new Set<string>();
+  const newProps: ts.ObjectLiteralElementLike[] = [];
+
+  for (const el of existingLiteral.properties) {
+    if (!ts.isPropertyAssignment(el) || !ts.isIdentifier(el.name)) {
+      // Non-identifier members (computed keys, spreads, methods, …) are never patched.
+      newProps.push(el);
+      continue;
+    }
+    const key = el.name.text;
+    seen.add(key);
+
+    if (!isProjectItemKey(key)) {
+      // Unknown/future field: nothing in the patch surface can target it, so keep as-is.
+      newProps.push(el);
+      continue;
+    }
+    const value = updates[key];
+    if (value === undefined) {
+      // Patch doesn't touch this key: copy the original AST node unchanged.
+      newProps.push(el);
+      continue;
+    }
+    const expr = projectPatchValueToExpression(factory, key, value);
+    newProps.push(expr ? factory.updatePropertyAssignment(el, el.name, expr) : el);
+  }
+
+  // Patch keys that aren't on the existing object at all (e.g. adding `skills`/`stats` to
+  // a project that didn't have them yet) get appended, in canonical field order.
+  for (const key of PROJECT_ITEM_ALL_KEYS) {
+    if (seen.has(key)) continue;
+    const value = updates[key];
+    if (value === undefined) continue;
+    const expr = projectPatchValueToExpression(factory, key, value);
+    if (expr) {
+      newProps.push(factory.createPropertyAssignment(key, expr));
+    }
+  }
+
+  return factory.updateObjectLiteralExpression(existingLiteral, newProps);
 }
 
 function findDefaultPortfolioContentRoot(
@@ -576,8 +695,7 @@ export class ASTManipulator {
         });
         if (fields.slug !== slug) return el;
         found = true;
-        const merged = mergeProject(el, slug, projectData);
-        return projectDataToObjectLiteral(factory, merged);
+        return mergeProjectLiteral(factory, el, slug, projectData);
       });
       if (!found) {
         throw new Error(

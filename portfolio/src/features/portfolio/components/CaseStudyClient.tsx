@@ -1,240 +1,275 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useMemo } from "react";
-import { ChevronRight, Hash } from "lucide-react";
-import { defaultPortfolioContent } from "../data/site-content";
+import { Fragment, useEffect, useMemo, useState, type ReactNode } from "react";
+import { defaultPortfolioContent, type CaseStudy } from "../data/site-content";
 import { CaseStudyHero } from "./media/CaseStudyHero";
 import { ProcessGallery } from "./media/ProcessGallery";
 import { VideoShowcase } from "./media/VideoShowcase";
+import { BlueprintBackground } from "./blueprint/BlueprintBackground";
+import { NoScriptReveal } from "./blueprint/NoScriptReveal";
+import { BlueprintHeader } from "./blueprint/BlueprintHeader";
+import { MetricsStrip } from "./blueprint/MetricsStrip";
+import { LoopDiagram } from "./blueprint/LoopDiagram";
+import { SpecSection, SpecBody, SpecSubBlock } from "./blueprint/SpecSection";
+import { ContentsIndex, CompactContentsIndex, type ContentsEntry } from "./blueprint/ContentsIndex";
+import { MarginNoteAside, MarginNoteQuote, isLongNote } from "./blueprint/MarginNote";
+import { AttachmentsList } from "./blueprint/AttachmentsList";
+import { NextCaseFile } from "./blueprint/NextCaseFile";
+import { getCaseFileMeta } from "./blueprint/case-file";
+import { BP_COLORS, fontMonoStyle } from "./blueprint/tokens";
 
-function Block({
-  title,
-  children,
-  id,
-}: {
-  title: string;
-  children: React.ReactNode;
+/**
+ * Fields the upcoming content rewrite may add to `CaseStudy` — read
+ * defensively (the `site-content.ts` type doesn't declare them yet, and is
+ * being edited concurrently by another workstream). When present these
+ * override the corresponding legacy field's body text; when absent (today,
+ * always) the legacy field is used as-is. `change` has no legacy
+ * equivalent — it's an entirely new, optional trailing section.
+ */
+type FutureCaseStudyFields = Partial<Record<"why" | "whatIDid" | "hard" | "happened" | "change", string>>;
+
+type SpecSectionData = {
   id: string;
-}) {
-  const handleLinkClick = () => {
-    window.history.replaceState(null, '', `#${id}`);
-  };
-
-  return (
-    <section id={id} className="scroll-mt-20">
-      <h2 className="group flex items-center text-lg font-semibold text-zinc-200">
-        <span>{title}</span>
-        <button
-          onClick={handleLinkClick}
-          className="ml-2 opacity-0 transition-opacity group-hover:opacity-50 hover:!opacity-100"
-          aria-label={`Link to ${title} section`}
-        >
-          <Hash className="w-4 h-4" />
-        </button>
-      </h2>
-      <div className="mt-2 whitespace-pre-wrap leading-relaxed text-zinc-400">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-interface TableOfContentsProps {
-  sections: { id: string; title: string }[];
-  activeSection: string;
-}
-
-function TableOfContents({ sections, activeSection }: TableOfContentsProps) {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      window.history.replaceState(null, '', `#${sectionId}`);
-    }
-  };
-
-  return (
-    <nav className="sticky top-20 bg-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4 mb-8">
-      <h3 className="text-sm font-semibold text-zinc-300 mb-3">Contents</h3>
-      <ul className="space-y-1">
-        {sections.map((section) => (
-          <li key={section.id}>
-            <button
-              onClick={() => scrollToSection(section.id)}
-              className={`flex items-center text-sm w-full text-left p-2 rounded transition-colors ${
-                activeSection === section.id
-                  ? 'bg-orange-500/20 text-orange-400'
-                  : 'text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800/50'
-              }`}
-            >
-              <ChevronRight className="w-3 h-3 mr-2 flex-shrink-0" />
-              <span className="truncate">{section.title}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-}
+  number: number;
+  label: string;
+  body: string;
+  extra?: ReactNode;
+  after?: ReactNode;
+  rail?: ReactNode;
+};
 
 export function CaseStudyClient({ slug }: { slug: string }) {
-  const study = defaultPortfolioContent.caseStudies[slug];
-  const refUrl = defaultPortfolioContent.siteMeta.referencePortfolioUrl;
-  const [activeSection, setActiveSection] = useState('');
+  const study = defaultPortfolioContent.caseStudies[slug] as (CaseStudy & FutureCaseStudyFields) | undefined;
+  const meta = getCaseFileMeta(slug);
+  const [activeSection, setActiveSection] = useState("");
 
-  const isPersonalProject = defaultPortfolioContent.personalProjects.some(
-    (p) => p.slug === slug
-  );
-  const backHref = isPersonalProject ? "/#projects" : "/#work";
-  const backLabel = isPersonalProject ? "← Back to projects" : "← Back to work";
+  // Section identity (id/label/number) — the single source of truth for
+  // both the sticky Contents nav and the spec sections rendered below, so
+  // labels are never hard-coded in two places. Numbering comes from this
+  // list's order, not from literals scattered through JSX.
+  const sections = useMemo<ContentsEntry[]>(() => {
+    if (!study) return [];
+    const whyLabel = meta?.isPersonalProject ? "Why I built it" : "Why it mattered";
+    const list: ContentsEntry[] = [
+      { id: "problem", number: 1, label: whyLabel },
+      { id: "approach", number: 2, label: "What I did" },
+      { id: "constraints", number: 3, label: "What made it hard" },
+      { id: "outcome", number: 4, label: "What happened" },
+    ];
+    if (study.change?.trim()) {
+      list.push({ id: "change", number: 5, label: "What I'd change" });
+    }
+    if (study.links.length > 0) {
+      list.push({ id: "attachments", label: "Attachments" });
+    }
+    return list;
+  }, [study, meta]);
 
-  // Define sections for table of contents (memoized to prevent useEffect re-runs)
-  const sections = useMemo(() => [
-    { id: 'overview', title: 'Overview' },
-    { id: 'problem', title: 'Problem Statement' },
-    { id: 'solution', title: 'Solution' },
-    { id: 'constraints', title: 'Context & Constraints' },
-    { id: 'results', title: 'Results' },
-    ...(study?.contributions?.trim() ? [{ id: 'contributions', title: 'My Contributions' }] : []),
-    ...(study?.links?.length > 0 ? [{ id: 'links', title: 'Links' }] : []),
-  ], [study?.contributions, study?.links?.length]);
-
-  // Intersection observer for active section tracking
   useEffect(() => {
-    const observerOptions = {
-      rootMargin: '-20% 0px -60% 0px',
-      threshold: 0
-    };
+    if (!sections.length) return;
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    }, observerOptions);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-20% 0px -60% 0px", threshold: 0 },
+    );
 
-    // Observe all section elements
     sections.forEach(({ id }) => {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
     });
 
-    // Check URL hash on load
     if (window.location.hash) {
-      const sectionId = window.location.hash.slice(1);
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          setActiveSection(sectionId);
+      const id = window.location.hash.slice(1);
+      const timer = window.setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          setActiveSection(id);
         }
       }, 100);
+      return () => {
+        window.clearTimeout(timer);
+        observer.disconnect();
+      };
     }
 
     return () => observer.disconnect();
   }, [sections]);
 
-  if (!study) {
+  if (!study || !meta) {
     return (
-      <div className="mx-auto max-w-3xl px-6 py-24">
-        <p className="text-zinc-400">No case study for &quot;{slug}&quot;.</p>
-        <Link href="/" className="mt-4 inline-block text-purple-400/90">
-          ← Back to home
-        </Link>
+      <div className="relative isolate min-h-screen">
+        <BlueprintBackground />
+        <div className="relative z-10 mx-auto max-w-3xl px-6 py-24">
+          <p style={{ ...fontMonoStyle, color: BP_COLORS.muted }}>
+            No case study for &quot;{slug}&quot;.
+          </p>
+          <Link href="/" className="mt-4 inline-block text-sm" style={{ color: BP_COLORS.accent }}>
+            &larr; Back to home
+          </Link>
+        </div>
       </div>
     );
   }
 
+  const { threadColor, caseFileNumber, backHref, backLabel, nextProject } = meta;
   const media = study.media;
+  const notes = study.notes ?? [];
+  const shortNotes = notes.filter((n) => !isLongNote(n));
+  const longNotes = notes.filter((n) => isLongNote(n));
+  const hasRail = shortNotes.length > 0;
+
+  const approachNotesAfter = notes.length ? (
+    <>
+      {longNotes.map((n, i) => (
+        <MarginNoteQuote key={`long-${i}`} note={n} threadColor={threadColor} />
+      ))}
+      {shortNotes.map((n, i) => (
+        <MarginNoteQuote key={`short-${i}`} note={n} threadColor={threadColor} hideOnRail />
+      ))}
+    </>
+  ) : null;
+
+  const approachRail = hasRail ? (
+    <>
+      {shortNotes.map((n, i) => (
+        <MarginNoteAside key={i} note={n} />
+      ))}
+    </>
+  ) : undefined;
+
+  // Body text (+ any section-specific extras) keyed by section id. Kept
+  // separate from `sections` above because these need `threadColor`/notes
+  // that are only available once `study`/`meta` are known non-null.
+  const bodyById: Record<string, string> = {
+    problem: study.why ?? study.problem,
+    approach: study.whatIDid ?? study.approach,
+    constraints: study.hard ?? study.constraints,
+    outcome: study.happened ?? study.outcome,
+    change: study.change ?? "",
+  };
+  const afterById: Partial<Record<string, ReactNode>> = { approach: approachNotesAfter };
+  const railById: Partial<Record<string, ReactNode>> = { approach: approachRail };
+  // Contributions is no longer its own numbered section — it's folded in
+  // as a second block under "What I did" (and renders nothing once the
+  // content rewrite removes the field, same as any other case study that
+  // never had one).
+  const extraById: Partial<Record<string, ReactNode>> = {
+    approach: study.contributions?.trim() ? (
+      <SpecSubBlock label="My contributions" text={study.contributions} threadColor={threadColor} />
+    ) : undefined,
+  };
+
+  const specSections: SpecSectionData[] = sections
+    .filter((s): s is ContentsEntry & { number: number } => s.id !== "attachments")
+    .map((s) => ({
+      id: s.id,
+      number: s.number,
+      label: s.label,
+      body: bodyById[s.id] ?? "",
+      after: afterById[s.id],
+      rail: railById[s.id],
+      extra: extraById[s.id],
+    }));
 
   return (
-    <article className="mx-auto max-w-6xl px-6 py-24">
-      <div className="flex flex-col lg:flex-row lg:gap-8">
-        {/* Main Content */}
-        <div className="flex-1 max-w-3xl">
-          <Link
-            href={backHref}
-            className="text-sm text-amber-400/90 transition hover:text-amber-300"
-          >
-            {backLabel}
-          </Link>
+    <div className="relative isolate min-h-screen">
+      <BlueprintBackground />
+      <NoScriptReveal />
 
-          {media?.hero ? <CaseStudyHero hero={media.hero} /> : null}
+      <article className="relative z-10 mx-auto max-w-[1440px] px-6 pb-28 pt-10 sm:px-10 sm:pt-14">
+        <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_220px] xl:gap-12">
+          <div className="min-w-0">
+            <CompactContentsIndex sections={sections} activeSection={activeSection} threadColor={threadColor} />
 
-          <div id="overview" className="scroll-mt-20">
-            <p className="mt-8 text-sm font-medium uppercase tracking-widest text-amber-500/80">
-              {study.subtitle}
-            </p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-zinc-100">
-              {study.title}
-            </h1>
-          </div>
+            <BlueprintHeader
+              backHref={backHref}
+              backLabel={backLabel}
+              caseFileNumber={caseFileNumber}
+              subtitle={study.subtitle}
+              title={study.title}
+              skills={meta.project.skills}
+              threadColor={threadColor}
+              slug={slug}
+            />
 
-          <div className="mt-12 space-y-10">
-            <Block title="Problem statement" id="problem">{study.problem}</Block>
-            <Block title="Solution" id="solution">{study.approach}</Block>
-            {media?.processGallery ? (
-              <ProcessGallery
-                groupId={media.processGallery.groupId}
-                heading={media.processGallery.heading}
-                items={media.processGallery.items}
-              />
+            {media?.hero ? (
+              <div className="mt-12">
+                <CaseStudyHero hero={media.hero} title={study.title} slug={slug} />
+              </div>
             ) : null}
-            <Block title="Context & constraints" id="constraints">{study.constraints}</Block>
-            <Block title="Results" id="results">{study.outcome}</Block>
-            {study.contributions?.trim() ? (
-              <Block title="My contributions" id="contributions">{study.contributions}</Block>
+
+            {meta.project.stats?.length ? (
+              <div className="mt-4">
+                <MetricsStrip stats={meta.project.stats} threadColor={threadColor} />
+              </div>
             ) : null}
-            {study.links.length > 0 ? (
-              <section id="links" className="scroll-mt-20">
-                <h2 className="group flex items-center text-lg font-semibold text-zinc-200">
-                  <span>Links</span>
-                  <button
-                    onClick={() => window.history.replaceState(null, '', '#links')}
-                    className="ml-2 opacity-0 transition-opacity group-hover:opacity-50 hover:!opacity-100"
-                    aria-label="Link to Links section"
+
+            {study.loop ? (
+              <div className="mt-16">
+                <LoopDiagram loop={study.loop} threadColor={threadColor} />
+              </div>
+            ) : null}
+
+            <div className="mt-16 space-y-16 sm:mt-20 sm:space-y-20">
+              {specSections.map((section) => (
+                <Fragment key={section.id}>
+                  <SpecSection
+                    id={section.id}
+                    number={section.number}
+                    title={section.label}
+                    threadColor={threadColor}
+                    after={section.after}
+                    rail={section.rail}
                   >
-                    <Hash className="w-4 h-4" />
-                  </button>
-                </h2>
-                <ul className="mt-2 list-inside list-disc text-amber-400/90">
-                  {study.links.map((l) => (
-                    <li key={l.href + l.label}>
-                      <a href={l.href} className="hover:underline">
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+                    <SpecBody text={section.body} threadColor={threadColor} />
+                    {section.extra}
+                  </SpecSection>
+
+                  {section.id === "approach" && media?.processGallery ? (
+                    <ProcessGallery
+                      groupId={media.processGallery.groupId}
+                      heading={media.processGallery.heading}
+                      items={media.processGallery.items}
+                      threadColor={threadColor}
+                    />
+                  ) : null}
+                </Fragment>
+              ))}
+
+              <AttachmentsList links={study.links} threadColor={threadColor} />
+            </div>
+
+            {media?.showcases?.length ? (
+              <div className="mt-16 space-y-10">
+                {media.showcases.map((s) => (
+                  <VideoShowcase key={s.id} item={s} threadColor={threadColor} />
+                ))}
+              </div>
             ) : null}
+
+            <footer className="mt-20 border-t pt-10" style={{ borderColor: "rgba(255,255,255,0.12)" }}>
+              <NextCaseFile project={nextProject} threadColor={threadColor} />
+              <Link
+                href={backHref}
+                className="mt-10 inline-flex min-h-[44px] items-center text-xs uppercase tracking-[0.2em] transition-colors"
+                style={{ ...fontMonoStyle, color: BP_COLORS.muted }}
+              >
+                &larr; {backLabel}
+              </Link>
+            </footer>
           </div>
 
-          {media?.showcases?.length ? (
-            <div className="mt-12 space-y-8">
-              {media.showcases.map((s) => (
-                <VideoShowcase key={s.id} item={s} />
-              ))}
-            </div>
-          ) : null}
-
-          <footer className="mt-16 pt-8 border-t border-zinc-700/50">
-            <Link
-              href={backHref}
-              className="text-sm text-amber-400/90 transition hover:text-amber-300"
-            >
-              {backLabel}
-            </Link>
-          </footer>
+          <div>
+            <ContentsIndex sections={sections} activeSection={activeSection} threadColor={threadColor} />
+          </div>
         </div>
-
-        {/* Table of Contents */}
-        <div className="lg:w-64 lg:flex-shrink-0">
-          <TableOfContents sections={sections} activeSection={activeSection} />
-        </div>
-      </div>
-    </article>
+      </article>
+    </div>
   );
 }

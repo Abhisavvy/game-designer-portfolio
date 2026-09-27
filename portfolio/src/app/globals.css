@@ -3,16 +3,48 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0a0b;
-  --foreground: #f4f4f5;
-  --muted: #a1a1aa;
-  --accent: #ea580c;
+  --ink: #0b0a09;
+  --ink-2: #141210;
+  --paper: #f5f1ea;
+  --muted: #a8a29e;
+  --accent: #f97316;
+
+  --thread-economy: #f97316;
+  --thread-retention: #2dd4bf;
+  --thread-liveops: #a78bfa;
+  --thread-monetization: #fb7185;
+  --thread-systems: #facc15;
+  --thread-ai: #38bdf8;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Framer Motion's `useScroll({ target })` (AboutSection, StickySkillsSection)
+   measures offsets against `document.documentElement` by default and, in dev
+   mode, warns unless that element has a non-static position — harmless here
+   (fixed-position descendants still resolve against the viewport; this only
+   changes the containing block for any absolutely-positioned element that
+   has no positioned ancestor of its own, which this codebase doesn't rely
+   on) and silences a console warning that otherwise fires on every load. */
+html {
+  position: relative;
+}
+
+/* WorkSection and ProjectsSection deal/fan their cards in from an off-canvas
+   transform (translateX up to ~70px, plus rotate/scale) before each section
+   has scrolled into view. Every other top-level section already clips its
+   own horizontal overflow (see HeroAnimated/StickySkillsSection/AboutSection/
+   ContactSection); these two didn't, so that pre-entrance transform — while
+   never visually cut off, since it's below the fold — still registered as
+   page-level horizontal scrollable overflow at narrow widths. Clipped here,
+   scoped by id, rather than editing those (out-of-ownership) section files. */
+#work,
+#projects {
+  overflow-x: hidden;
 }
 
 /* Enhanced keyboard navigation and accessibility */
@@ -20,9 +52,10 @@ body {
   outline: none;
 }
 
-/* Focus styles for interactive elements */
+/* Focus styles for interactive elements — kept strong and highly visible,
+   but only for keyboard focus (`:focus-visible`), not a plain mouse/touch tap. */
 a, button, [tabindex]:not([tabindex="-1"]) {
-  @apply focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-zinc-950;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ink;
 }
 
 /* Skip navigation - screen reader only until focused */
@@ -50,9 +83,35 @@ a, button, [tabindex]:not([tabindex="-1"]) {
   white-space: normal;
 }
 
-/* Smooth scrolling for keyboard navigation */
-html {
-  scroll-behavior: smooth;
+/* Smooth scrolling only for users who haven't asked for reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Anchor targets land below the fixed header instead of underneath it.
+   `:where()` carries zero specificity, so a per-component `scroll-mt-*`
+   Tailwind utility (e.g. the case-study agent's own sections) can still win
+   over this without needing `!important`. */
+:where(section[id]) {
+  scroll-margin-top: calc(88px + env(safe-area-inset-top));
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+/* Subtle fixed film-grain overlay: sits above backgrounds, never intercepts input */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Skeleton shimmer animation */
@@ -62,12 +121,212 @@ html {
   }
 }
 
+/* ---------------------------------------------------------------------
+ * Shared "reveal on view" system (below-the-fold sections only — the hero's
+ * own text never uses this; see HeroAnimated).
+ *
+ * Elements render fully visible by default: on the server, for no-JS
+ * visitors and crawlers, and for anyone with `prefers-reduced-motion`.
+ *
+ * The hidden pose is scoped to `html.js`, a class added by a plain inline
+ * script at the very start of `<body>` (see layout.tsx) — parser-blocking,
+ * so it runs BEFORE the browser ever paints the content. That is what makes
+ * this safe: the hidden pose is present from an element's very first paint,
+ * never applied a moment after a visible frame already rendered (which is
+ * what caused the old hero-flash bug). No-JS visitors never get `.js` at
+ * all, so these rules simply never match for them.
+ *
+ * `useRevealOnView` (ui/useRevealOnView.ts) adds `.reveal-in` to a
+ * container once it should be shown — either instantly (already in view at
+ * hydration, or reduced motion; also paired with `.reveal-instant` to kill
+ * the transition) or, for anything still off-screen, once an
+ * IntersectionObserver reports it has scrolled into view.
+ * ------------------------------------------------------------------- */
+.js .reveal-item {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.js .reveal-mask-word {
+  transform: translateY(115%);
+}
+.js .reveal-hairline {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Hero card-hand entrance (LoomCard.tsx): the SAME "hide from the very
+   first paint, not a later effect" problem as the reveal system above, but
+   for the hero card hand specifically — its entrance pose is driven by
+   Framer Motion (`animate`), which DOES set an inline `opacity`/`transform`
+   matching the SSR-safe "resting" (fully visible) default, so — unlike
+   `.reveal-item` above, which is plain CSS and never fights an inline
+   style — this needs `!important` to actually win over that inline style
+   during the pre-hydration window. Once React hydrates, its own inline
+   style takes over painting the rest of the entrance/idle motion normally;
+   this rule only needs to cover the gap before that. */
+.js .loom-card-entrance {
+  opacity: 0 !important;
+}
+/* Failsafe (layout.tsx's inline script): the bundle never hydrated, so show
+   the cards at rest rather than leave the hero hand invisible. */
+.js-stalled .loom-card-entrance {
+  opacity: 1 !important;
+}
+
+/* Failsafe: if `.js` landed (JS started) but the page never hydrated — a
+   blocked or failed bundle, a thrown error — force hidden elements visible
+   ~2.5s after load rather than leaving them stuck. The timer counts from
+   page load, so once `useRevealOnView` has hydrated and armed an observer
+   it adds `.reveal-armed`, which cancels this (next rule); otherwise every
+   below-the-fold reveal would have fired long before anyone scrolled to it. */
+.js .reveal-item,
+.js .reveal-mask-word,
+.js .reveal-hairline {
+  animation: reveal-failsafe 0.01s 2.5s forwards;
+}
+.reveal-armed .reveal-item,
+.reveal-armed .reveal-mask-word,
+.reveal-armed .reveal-hairline {
+  animation: none;
+}
+
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal-in .reveal-item,
+.reveal-in .reveal-mask-word,
+.reveal-in .reveal-hairline {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--reveal-delay, 0) * 1ms);
+}
+
+/* Already-in-view-at-hydration and reduced-motion reveals: no transition,
+   no animation — it must simply BE in its resting pose, never animate into
+   it (see useRevealOnView). */
+.reveal-instant .reveal-item,
+.reveal-instant .reveal-mask-word,
+.reveal-instant .reveal-hairline {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Decorative underline draw under the hero's italic accent word — a purely
+   ornamental SVG stroke that never hides any text, so unlike the system
+   above it can just autoplay unconditionally via CSS (no JS/observer
+   involved at all; see HeroAnimated/ThreadUnderline). */
+.reveal-underline {
+  stroke-dashoffset: 1;
+  animation: draw-underline 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--reveal-delay, 0) * 1ms);
+}
+
+@keyframes draw-underline {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * Ticker marquee: two identical tracks side by side, animated -50% for a
+ * seamless loop. Paused on hover/focus and while offscreen. Reduced
+ * motion collapses it to a single static line (the clone is hidden so
+ * nothing doubles up).
+ * ------------------------------------------------------------------- */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-track {
+  animation: marquee-scroll 46s linear infinite;
+}
+
+.marquee-viewport:hover .marquee-track,
+.marquee-viewport:focus-within .marquee-track,
+.marquee-viewport[data-paused="true"] .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ---------------------------------------------------------------------
+ * [Perf/QA pass] CSS-driven replacements for main-thread Framer loops that
+ * ran forever and never paused — see scratchpad/qa for before/after
+ * measurements. Each sub-block reproduces the SAME curve/timeline as the
+ * Framer version it replaces; this file is shared with other in-flight
+ * edits, so new rules are appended here rather than interleaved with
+ * unrelated blocks above.
+ * ------------------------------------------------------------------- */
+
+/* "Follow the thread" arrow bob (HeroAnimated.tsx) — same curve as the
+   previous Framer keyframes (y: [0, 4, 0], 2.6s, easeInOut per segment,
+   infinite), now driven by the compositor instead of a JS rAF tick that
+   never paused (even offscreen/tab-hidden). */
+@keyframes thread-arrow-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+.thread-arrow-bob {
+  animation: thread-arrow-bob 2.6s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .thread-arrow-bob {
+    animation: none;
+  }
+}
+
+/* Card "alive" shimmer sweep (CardFaces.tsx ShimmerSweep) — same timeline as
+   the previous Framer `animate={{ x: ["-140%", "340%"] }}` keyframe: a 2.6s
+   easeInOut sweep (cubic-bezier(.42,0,.58,1), matching Framer's "easeInOut")
+   followed by a 5.4s hold at the end position == one 8s cycle, with the
+   sweep itself occupying the first 2.6/8 = 32.5% of it. Translate-only:
+   Framer was overwriting the whole `transform` on every animated frame, so
+   the inline `skewX(-12deg)` it was ALSO given never actually rendered
+   (verified: the rendered matrix had no skew) — this reproduces exactly
+   what was on screen, not the unused inline style. */
+@keyframes card-shimmer-sweep {
+  0% {
+    transform: translateX(-140%);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  32.5%,
+  100% {
+    transform: translateX(340%);
+  }
+}
+.card-shimmer-sweep {
+  transform: translateX(-140%);
+  animation: card-shimmer-sweep 8s linear infinite backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-shimmer-sweep {
+    animation: none;
+  }
+}
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  
   *,
   *::before,
   *::after {
@@ -76,9 +335,91 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   /* Disable shimmer animation for reduced motion */
   .animate-pulse::before {
     animation: none !important;
   }
+
+  .marquee-track {
+    animation: none !important;
+  }
+  [data-marquee-clone="true"] {
+    display: none;
+  }
+
+  /* Defense in depth for the reveal system above: `useRevealOnView` already
+     reveals instantly under reduced motion, but this holds even if that
+     hook never runs (a thrown error, JS disabled after `.js` landed, etc.) —
+     nothing should ever be stuck hidden for a reduced-motion visitor. */
+  .js .reveal-item,
+  .js .reveal-mask-word,
+  .js .reveal-hairline {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Same defense for the hero card-hand entrance: a reduced-motion visitor
+     must see the cards at rest immediately, never hidden (LoomCard.tsx
+     itself also skips the deal-in animation under reduced motion, but this
+     holds even if that JS never runs). */
+  .js .loom-card-entrance {
+    opacity: 1 !important;
+  }
 }
+
+/* ---------------------------------------------------------------------
+ * [Perf/QA pass] content-visibility: auto experiment — below-the-fold home
+ * sections skip layout/paint/style work entirely while off-screen. Each
+ * `contain-intrinsic-size` estimate is the section's REAL measured height at
+ * this codebase's two test widths (390 and 1440; the `lg` breakpoint at
+ * 1024px is where these sections' own responsive layouts actually change),
+ * so a fragment-navigation landing on a still-unmeasured section (the
+ * browser hasn't rendered it even once yet) still lands within a few px of
+ * where it would without this rule — verified with 30 nav-link scenarios
+ * (5 anchors x desktop/mobile x 3 entry pages) against the same measurement
+ * WITHOUT this block; see scratchpad/qa/results/anchor-*.json. `auto` (vs a
+ * bare length) lets the browser remember the real size after the first
+ * render instead of re-guessing every time the section leaves and re-enters
+ * the skipped state. Only the sections that passed every scenario are
+ * listed here — see the QA report for the sections that did NOT make the
+ * cut and why.
+ * ------------------------------------------------------------------- */
+#contact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1600px;
+}
+/* `body > footer` = the site footer only, not the in-article <footer> on case
+   studies (which would get this placeholder size and paint containment). */
+body > footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 798px;
+}
+@media (min-width: 1024px) {
+  #contact {
+    contain-intrinsic-size: auto 905px;
+  }
+  body > footer {
+    contain-intrinsic-size: auto 462px;
+  }
+}
+/* #about, #skills, #projects and #work were each tried in turn (extending
+   upward, per the experiment plan) and each one FAILED the anchor-landing
+   test: with content-visibility:auto, a fragment jump to whatever section
+   comes immediately after it lands 80-190px off on a cross-page navigation
+   (e.g. clicking "Projects" from /resume with #work made auto) — 4/30 to
+   8/30 scenarios over the ±4px budget every time (see
+   scratchpad/qa/results/anchor-cv_{about,skills,projects,work}.json and
+   compare-anchor.cjs). Root cause: each of those four sections' skipped
+   (off-screen) rendered height sampled ~80-190px TALLER than its real,
+   fully-rendered height — reproduced directly via getComputedStyle in
+   scratchpad/qa — which is not an estimate/contain-intrinsic-size problem
+   (the real height is recovered correctly once the section is actually
+   in/near the viewport) but something about THIS Chromium version's
+   content-visibility:auto interacting with these sections' Framer Motion
+   `whileInView` entrance (shared by every section, including #contact,
+   which passed — the difference is that #contact/footer have nothing
+   after them whose landing position such an error could corrupt). Fixing
+   that interaction is out of scope here (it would mean changing how these
+   sections detect their own entrance, not a Part 1 item) — kept to the
+   set that actually measures clean: #contact and the footer. */

@@ -1,0 +1,210 @@
+{
+  "basics": {
+    "name": "ABHISHEK DUTTA",
+    "title": "Game Designer · Systems & LiveOps",
+    "email": "abhishek.dt.97@gmail.com",
+    "phone": "+91 7980700802",
+    "linkedin": {
+      "label": "linkedin.com/in/abhishek-dt97",
+      "href": "http://linkedin.com/in/abhishek-dt97"
+    },
+    "portfolioUrl": {
+      "label": "Portfolio Link",
+      "href": "https://game-designer-portfolio-virid.vercel.app"
+    },
+    "location": "Bengaluru, India"
+  },
+  "summary": "I'm a game designer at PlaySimple, where I've spent four years on Word Roll designing its economy, currencies, live events, leaderboards and cosmetic systems. I play a part in long- and short-range feature planning too, and I'm on the hook for the business results those features deliver. We grew from 4k to 40k+ DAU in that time. I like fixing problems with small rule changes, and outside work I build my own games and tools.",
+  "focus": [
+    {
+      "label": "Systems and economy design",
+      "text": "Took coins out of game wins and into a season for Bon Voyage, made gems the entry currency for game modes, and modelled a paint gacha's odds in Machinations for Tiles."
+    },
+    {
+      "label": "LiveOps and events",
+      "text": "Cut event setup from about 7 days of development to about an hour with Kinoa.io, no app release needed, and shipped 5 cohort-personalised events."
+    },
+    {
+      "label": "Feature planning and specs",
+      "text": "Plan features long- and short-range and write the specs for them: 25+ features shipped, around 25 systems built."
+    },
+    {
+      "label": "Data and player behaviour",
+      "text": "Run A/B tests with product, tune events by cohort (casual P4–P6 versus dedicated P7–P8 players), and track the competition: 50 games analysed in SensorTower and Data.ai."
+    },
+    {
+      "label": "Tools and AI",
+      "text": "Built Meeting Manager and Spec Maker with Cursor, and now pair with Claude Code on my own projects."
+    }
+  ],
+  "technicalProficiency": [
+    { "name": "Unity" },
+    { "name": "Excel" },
+    { "name": "Google Sheets" },
+    { "name": "Figma" },
+    { "name": "SensorTower" },
+    { "name": "Data.ai", "href": "https://data.ai" },
+    { "name": "Google Analytics" },
+    { "name": "A/B Testing" },
+    { "name": "JIRA" },
+    { "name": "Confluence" },
+    { "name": "Kinoa.io", "href": "https://kinoa.io" },
+    { "name": "Cursor" },
+    { "name": "Claude Code" }
+  ],
+  "skills": [
+    {
+      "label": "Design",
+      "text": "systems, economy, LiveOps, progression, gacha, monetization"
+    },
+    {
+      "label": "Data",
+      "text": "A/B testing, cohort analysis, Google Analytics, SensorTower, Data.ai"
+    },
+    {
+      "label": "Tools",
+      "text": "Unity, Figma, Machinations, Excel, Google Sheets, JIRA, Confluence, Kinoa.io"
+    },
+    {
+      "label": "AI and build",
+      "text": "Claude Code, Cursor, React, React Native, TypeScript, Supabase"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Bon Voyage",
+      "bullets": [
+        "Coins came too easily in Word Roll: every win paid out, so the economy kept inflating and nothing pulled players back long-term.",
+        "Built a 60-day, 60-level season: coins now come from unlocking levels with keys earned in the main game, and gems, the entry ticket for game modes, come from progressing the season.",
+        "IAP revenue per user +12%, new payer conversion +90 bps, existing payers bought +3.2% more often and spent +8.6% more per purchase.",
+        "D1 retention +22 bps, session time +1.4%, non-payers held 16% fewer coins."
+      ],
+      "stat": { "value": "+12%", "label": "IAP revenue per user" }
+    },
+    {
+      "title": "Food Fiesta",
+      "year": "2024",
+      "bullets": [
+        "Veteran players had each settled into one mode, so engagement dipped on days without a leaderboard and they only ever saw a slice of the game.",
+        "Ran a Monday-to-Saturday event linking every mode through bonus tiles: finishing a word on a DW or TW tile earns event progress in any mode, gated to players with 150+ lifetime moves.",
+        "Engagement among established players +7.5% (about 2.4 more moves each), rolling retention +50 bps, power-up use +26%.",
+        "Share of players making 30+ moves +200 bps, ad impressions +7–8%."
+      ],
+      "stat": { "value": "+7.5%", "label": "Engagement" }
+    },
+    {
+      "title": "Tiles",
+      "bullets": [
+        "Word Roll gave players no way to express themselves, and nothing on screen felt personal.",
+        "Designed tile skins, the game's first cosmetic system: players earn paints as rewards from Food Fiesta and Bon Voyage, and each paint is a gacha draw I modelled the odds for in Machinations.",
+        "Revenue per DAU +22% (+8 cents), IAP revenue doubled (+100%, +6 cents), ad revenue +5% (+2 cents)."
+      ],
+      "stat": { "value": "+22%", "label": "Revenue per DAU" }
+    },
+    {
+      "title": "Ticket Mania",
+      "year": "2024",
+      "bullets": [
+        "The old leaderboard paid out for finishing games, not for playing well, so whoever played the most climbed it, which made it a weak driver of competition.",
+        "Tied the leaderboard to tickets: every completed row on the gameboard pays one, adding a small risk-or-reward tension to every turn and giving swaps a real purpose. Redesigned the entry flow too, and flagged a booster/swap pricing clash without holding up the launch.",
+        "Revenue per user +7% (about 3 cents, mostly IAP), D7 LTV +10%, D1 retention +300 bps overall (+170 bps for organic D2+ players).",
+        "Rolling retention +50 bps, new payer conversion +55 bps."
+      ],
+      "stat": { "value": "+300 bps", "label": "D1 retention" }
+    },
+    {
+      "title": "Word of the Day",
+      "year": "2024",
+      "bullets": [
+        "Word of the Day used to be a popup with nothing to do on it: you saw the word and its definition, and your only option was to close it.",
+        "Turned it into a two-step collection game: collect the day's letters just by playing normally, then play the word once you have them all, and only then see what it means. Set the rules for picking each day's word and worked with our UX team to make it feel native to the game.",
+        "D30 LTV +9.4%, D1 retention +140 bps, engagement +3%.",
+        "55% of daily players collected letters, and 34% went on to complete the word."
+      ],
+      "stat": { "value": "+9.4%", "label": "D30 LTV" }
+    },
+    {
+      "title": "Meeting Manager + Spec Maker",
+      "year": "2026",
+      "bullets": [
+        "Writing a spec meant reformatting the same meeting notes over and over: pulling out the problem, goals and user flows, then writing it all again for a stakeholder email, and some of what we'd decided got lost along the way.",
+        "Built two tools that hand off to each other: Meeting Manager sorts raw Granola meeting notes into our spec sections, and Spec Maker turns those sections into a full markdown feature spec. Built both with Cursor.",
+        "Adopted as the standard workflow by our 8-person dev team, documentation efficiency +25%.",
+        "One meeting now feeds the spec and the stakeholder email, and people joining a project halfway through get full context from the spec without a handover session."
+      ],
+      "stat": { "value": "+25%", "label": "Documentation efficiency" }
+    },
+    {
+      "title": "Kinoa LiveOps",
+      "bullets": [
+        "Every new LiveOps event took about 7 days of development and had to ship in an app release, with no way to aim it at a specific group of players.",
+        "Wrote the design doc for integrating the Kinoa.io SDK, then set up our LiveOps flows and in-app configuration once engineering had it in, and tested and tuned events live.",
+        "Event setup went from about 7 days of development to about an hour, no app release needed, targeting players by spend, engagement and usage habits.",
+        "Shipped 5 cohort-personalised events this way."
+      ],
+      "stat": { "value": "7 days → 1 hour", "label": "Event setup" }
+    }
+  ],
+  "experience": [
+    {
+      "role": "Game Designer",
+      "company": "PlaySimple Games",
+      "dates": "August 2022 – Present",
+      "duration": "4 years",
+      "bullets": [
+        "Played a key role in long- and short-range feature planning, and was directly responsible for the business uplift those features delivered.",
+        "Wrote the specs for 25+ shipped features and built around 25 systems, including seasonal events, battle pass mechanics and competitive leaderboards.",
+        "Analysed 50 mobile games in SensorTower and Data.ai to find opportunities for our roadmap.",
+        "Ran A/B tests with product to check design decisions and tune features.",
+        "Worked with our UX team to make Word of the Day's letter-collection loop feel native to the game.",
+        "Wrote the design doc for integrating the Kinoa.io SDK, so engineering knew exactly what to build, then ran the LiveOps pipeline: configuring, testing and tuning events live.",
+        "Traced a pricing clash back to its cause in Ticket Mania and turned it into a design recommendation for product, without holding up the launch."
+      ]
+    }
+  ],
+  "personalProjects": [
+    {
+      "title": "Habiteer",
+      "year": "2026",
+      "text": "For my partner and friends: a habit tracker built like a game economy. Habits pay XP and coins; tasks pay coins but no XP. Only habits carry a streak multiplier (×1.2 at 3 days, up to ×3 at 30), and it only ever boosts XP, never coins, so a reward's price stays a fixed target. XP levels you up and moves you through weekly leagues, coins buy rewards, and groups can pool coins toward a shared one. All game logic runs server-side, and an Android home-screen widget keeps logging a habit to one tap. React Native, Supabase.",
+      "link": { "label": "GitHub repository", "href": "https://github.com/Abhisavvy/habiteer" },
+      "caseStudy": "/work/habiteer"
+    },
+    {
+      "title": "XFactor",
+      "year": "2026",
+      "text": "A game jam project inspired by Reigns: I wanted it bizarre on purpose, and to show how social media pushes real-world politics around, so I put the Cold War on Twitter. Two players, USA and USSR, pick a tweet tone each round, and a story memory tracks how heated things get and escalates the next headline, across 13 scenarios with several endings. React, TypeScript.",
+      "link": { "label": "GitHub repository", "href": "https://github.com/Abhisavvy/XFactor" },
+      "caseStudy": "/work/xfactor"
+    },
+    {
+      "title": "Woven",
+      "year": "2026",
+      "text": "My take on LinkedIn's Zip, with multiple threads and colour merging. I built the rules engine first in C# for Unity, keeping it free of engine code so it's tested on its own: 65 automated tests cover adjacency, walls, gates and checkpoint order, so a move is either fully legal or rejected with a reason. A separate 117-level browser playtest, its own build, where each early tier adds one idea, with hints, undo, star ratings, and a \"How did that feel?\" difficulty prompt after every solve.",
+      "link": { "label": "Play the playtest", "href": "https://abhisavvy.github.io/woven-playtest/" },
+      "caseStudy": "/work/woven"
+    }
+  ],
+  "education": [
+    {
+      "degree": "PG Diploma in Game Design",
+      "institution": "ICAT Design & Media College",
+      "years": "2021–2022"
+    },
+    {
+      "degree": "BA LLB",
+      "institution": "Department of Law, Calcutta University",
+      "years": "2015–2020"
+    }
+  ],
+  "additionalStrengths": [
+    {
+      "label": "Mobile-first design",
+      "text": "I design for short sessions and small screens first, not as an afterthought."
+    },
+    {
+      "label": "Business sense",
+      "text": "I think about monetization, LTV and economy health in every design decision, not just after launch."
+    }
+  ]
+}

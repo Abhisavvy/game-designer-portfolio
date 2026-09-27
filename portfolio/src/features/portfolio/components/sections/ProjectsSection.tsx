@@ -1,51 +1,83 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
-import { ProjectCardAnimated } from "../ProjectCardAnimated";
 import { defaultPortfolioContent } from "../../data/site-content";
+import { SectionHeading } from "../ui/SectionHeading";
+import { CardGrid } from "../cards/CardGrid";
+import { CollectibleCard } from "../cards/CollectibleCard";
+import { BoosterPack } from "../cards/BoosterPack";
+import { formatCardIndex } from "../cards/card-content";
+import { useInstantSectionInView } from "../ui/useInstantSectionInView";
+import { usePrefersReducedMotion } from "../media/useMediaPreferences";
+
+const FAN_SPREAD_PX = 70;
 
 export function ProjectsSection() {
   const { personalProjects, caseStudies } = defaultPortfolioContent;
+  const gridRef = useRef<HTMLDivElement>(null);
+  // See WorkSection / useInstantSectionInView: owns the entire entrance
+  // decision — skip it instantly if the grid is already on screen, or the
+  // URL hash already targets "#projects", at mount; otherwise the normal
+  // scroll-triggered reveal.
+  const entranceDecision = useInstantSectionInView(gridRef, "projects");
+  const reducedMotion = usePrefersReducedMotion();
+  const count = personalProjects.length;
 
   return (
     <section
       id="projects"
-      className="relative bg-gradient-to-b from-zinc-950 to-black py-20"
-      style={{ scrollMarginTop: '3.5rem' }}
+      className="relative bg-gradient-to-b from-zinc-950 to-black py-20 sm:py-24"
     >
-      <div className="mx-auto max-w-6xl px-6">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 1, y: 0 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-orange-400/80 mb-4">
-            Personal Projects
-          </p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-orange-400 to-orange-300 bg-clip-text text-transparent">
-              Games &amp; Tools I Build on My Own
-            </span>
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Side projects where I design and build the systems myself
-          </p>
-        </motion.div>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mx-auto mb-12 max-w-6xl sm:mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="bp-reveal"
+          >
+            <SectionHeading
+              index="02"
+              eyebrow="Personal Projects"
+              title={
+                <>
+                  Games &amp; tools I <em>build on my own</em>
+                </>
+              }
+              subtitle="Games and tools I build outside work, for fun and for the people around me."
+            />
+          </motion.div>
+        </div>
 
-        <div className="flex flex-wrap -mx-3 lg:-mx-4">
-          {personalProjects.map((project, index) => (
-              <div key={project.slug} className="w-full md:w-1/2 lg:w-1/3 px-3 lg:px-4 mb-6 lg:mb-8">
-                <ProjectCardAnimated
+        <div className="relative">
+          {/* Not on the instant path (landing on /#projects): the cards are
+              already dealt at rest there, so a pack tearing open over them
+              would be out of order. */}
+          <BoosterPack play={entranceDecision.play && !entranceDecision.instant} reducedMotion={reducedMotion} />
+
+          <CardGrid ref={gridRef}>
+            {personalProjects.map((project, index) => {
+              const centeredOffset = index - (count - 1) / 2;
+              return (
+                <CollectibleCard
+                  key={project.slug}
                   project={project}
-                  index={index}
-                  listingPosterSrc={
-                    caseStudies[project.slug]?.media?.hero?.posterSrc
-                  }
+                  displayIndex={formatCardIndex(index + 1)}
+                  posterSrc={caseStudies[project.slug]?.media?.hero?.posterSrc}
+                  reducedMotion={reducedMotion}
+                  entrance={{
+                    mode: "fan",
+                    order: index,
+                    play: entranceDecision.play,
+                    instant: entranceDecision.instant,
+                    fanOffset: -centeredOffset * FAN_SPREAD_PX,
+                  }}
                 />
-              </div>
-            ))}
+              );
+            })}
+          </CardGrid>
         </div>
       </div>
     </section>

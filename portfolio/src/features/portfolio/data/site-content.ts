@@ -3,6 +3,16 @@
  * Live site + /edit use PortfolioEditorProvider (localStorage).
  */
 import { mergeCaseStudyMedia, type CaseStudyMedia, } from "./case-study-media";
+export type SkillThreadId = "economy" | "retention" | "liveops" | "monetization" | "systems" | "ai";
+export const SKILL_THREADS: { id: SkillThreadId; label: string; color: string }[] = [
+    { id: "economy", label: "Economy Design", color: "#F97316" },
+    { id: "retention", label: "Retention & Engagement", color: "#2DD4BF" },
+    { id: "liveops", label: "LiveOps & Events", color: "#A78BFA" },
+    { id: "monetization", label: "Monetization", color: "#FB7185" },
+    { id: "systems", label: "Systems & Puzzles", color: "#FACC15" },
+    { id: "ai", label: "AI & Tools", color: "#38BDF8" },
+];
+export type ProjectStat = { value: string; label: string };
 export type ProjectItem = {
     slug: string;
     title: string;
@@ -10,6 +20,10 @@ export type ProjectItem = {
     blurb: string;
     href: string;
     externalUrl: string;
+    /** Optional skill-thread tags shown on the project card. */
+    skills?: SkillThreadId[];
+    /** Optional headline stats; first entry is shown on the card front. */
+    stats?: ProjectStat[];
 };
 export type CaseStudy = {
     title: string;
@@ -18,7 +32,9 @@ export type CaseStudy = {
     approach: string;
     constraints: string;
     outcome: string;
-    /** Optional “My contributions” block . */
+    /** Optional "What I'd change" block. So far: bon-voyage only. */
+    change?: string;
+    /** @deprecated Content now merges into `approach` ("What I did"). Kept optional so admin tooling still typechecks. */
     contributions?: string;
     links: {
         label: string;
@@ -26,6 +42,10 @@ export type CaseStudy = {
     }[];
     /** Hero video, process gallery, optional demo clips — see `docs/portfolio-visual-media.md`. */
     media?: CaseStudyMedia;
+    /** Optional core-loop diagram data. */
+    loop?: { title: string; steps: string[]; cycles: boolean };
+    /** Optional verbatim design-insight sentences pulled from this case study's own text. */
+    notes?: string[];
 };
 export type PortfolioHero = {
     headline: string;
@@ -127,36 +147,36 @@ export function mergeWithDefaultPortfolio(raw: Partial<PortfolioContentState> | 
 /** Default portfolio content (you can edit in /edit). */
 export const defaultPortfolioContent: PortfolioContentState = {
     siteMeta: {
-        siteName: "Abhishek Dutta - Systems Designer",
-        title: "Abhishek — Systems & Feature Designer | LiveOps Expert",
-        description: "Systems & Feature Designer specializing in LiveOps, retention mechanics, and economy design. 4 years driving measurable impact through data-driven mobile game design.",
+        siteName: "Abhishek Dutta",
+        title: "Abhishek Dutta · Game Designer, Systems & LiveOps",
+        description: "Game designer at PlaySimple working on Word Roll's economy, live events and daily loops. Case studies, personal projects and CV.",
     },
     hero: {
-        headline: "Building Systems That Keep Players Engaged",
-        subline: "I design retention mechanics, LiveOps events, and economy systems for mobile games. At PlaySimple, I've helped scale Word Roll from 4k to 40k+ DAU through targeted feature design and data-driven iteration.",
+        headline: "Building systems that keep players engaged.",
+        subline: "I design the economies, events and daily loops behind Word Roll, a word game with millions of downloads. In four years at PlaySimple we grew from 4k to 40k+ daily players. When I'm not tuning coin economies, I'm building games of my own.",
         statPills: [
-            "Data driven",
-            "Mobile First Approach",
-            "25+ Features shipped",
+            "4k → 40k+ DAU · Word Roll",
+            "25+ features shipped",
+            "4 years at PlaySimple",
         ],
     },
     about: {
         title: "How I Approach Systems Design",
-        body: "I start every project by understanding player motivations and pain points through data analysis and user research.\n\nWhen designing LiveOps events or economy systems, I focus on three principles: clarity (players immediately understand the value), progression (meaningful advancement that respects their time), and sustainability (systems that enhance rather than exploit engagement).\n\nThe best game systems feel invisible \u2014 they create natural opportunities for discovery, social connection, and mastery. This approach has delivered both engagement and monetization gains across my projects at PlaySimple Games.",
+        body: "I'm a game designer at PlaySimple, where I've spent the last four years on Word Roll. I work on the systems underneath the game: the economy, the live events, and the daily loops that decide whether someone opens the app again tomorrow.\n\nI start every project by understanding player motivations and pain points through data analysis and user research.\n\nWhen designing LiveOps events or economy systems, I focus on three principles: clarity (players immediately understand the value), progression (meaningful advancement that respects their time), and sustainability (systems that enhance rather than exploit engagement).\n\nThe best game systems feel invisible \u2014 they create natural opportunities for discovery, social connection, and mastery. This approach has delivered both engagement and monetization gains across my projects at PlaySimple Games.",
         image: "/assets/general/img-20250802-224439-1776525391803.jpg"
     },
     workSection: {
-        eyebrow: "Featured Work",
-        title: "Game Systems That Drive Results",
+        eyebrow: "Selected Work",
+        title: "What I've shipped at PlaySimple",
     },
     footerCta: {
-        title: "Let’s build the next hit game",
-        body: "Have a mobile game idea or want to collaborate? Reach out — I’m happy to chat about process, portfolio, or design.",
+        title: "Let's talk",
+        body: "Hiring, building something, or just want to talk game design? My inbox is open.",
     },
     person: {
         name: "Abhishek Dutta",
-        role: "Game Designer & AI Tools Developer",
-        tagline: "Game designer who ships AI/tools work when relevant",
+        role: "Game Designer · Systems & LiveOps",
+        tagline: "Small rule changes. Big changes in how people play.",
         email: "abhishek.dt.97@gmail.com",
         phone: "+91 7980700802",
         location: "Bengaluru, India",
@@ -170,57 +190,101 @@ export const defaultPortfolioContent: PortfolioContentState = {
             slug: "bon-voyage",
             title: "Bon Voyage",
             tag: "Long-term Retention \u00B7 Economy Design",
-            blurb: "Built a 60-day seasonal event with secondary currency that increased retention 22 basis points and IAP revenue per user 12%.",
+            blurb: "Took coins out of game wins and put them into a 60-day season, with gems as the ticket into game modes.",
             href: "/work/bon-voyage",
-            externalUrl: ""
+            externalUrl: "",
+            skills: ["retention", "economy", "monetization"],
+            stats: [
+                { value: "+12%", label: "IAP revenue per user" },
+                { value: "+90 bps", label: "New payer conversion" },
+                { value: "+22 bps", label: "D1 retention" },
+                { value: "\u221216%", label: "Non-payer coin balance" },
+            ],
         },
         {
             slug: "food-fiesta",
             title: "Food Fiesta",
             tag: "Cross-mode Events · Engagement",
-            blurb: "Connected all game modes through bonus tile collection, boosting engagement 7.5% in veteran players without disrupting preferred play styles.",
+            blurb: "A Monday-to-Saturday event that gave veteran players a gentle reason to try modes beyond their favourite.",
             href: "/work/food-fiesta",
             externalUrl: "",
+            skills: ["liveops", "retention"],
+            stats: [
+                { value: "+7.5%", label: "Engagement (veteran players)" },
+                { value: "+50 bps", label: "Rolling retention" },
+                { value: "+26%", label: "Power-up usage" },
+                { value: "+7–8%", label: "Ad impressions" },
+            ],
         },
         {
             slug: "tiles",
             title: "Tiles",
             tag: "Cosmetic Systems · Gacha Design",
-            blurb: "Created the first cosmetic system using gacha mechanics, driving revenue +22% while giving players meaningful customization choices.",
+            blurb: "Word Roll's first cosmetic system: tile skins from a paint gacha, earned through events.",
             href: "/work/tiles",
             externalUrl: "",
+            skills: ["economy", "monetization"],
+            stats: [
+                { value: "+22%", label: "Rev/DAU" },
+                { value: "+100%", label: "IAP revenue" },
+                { value: "+5%", label: "Ad revenue" },
+            ],
         },
         {
             slug: "ticket-mania",
             title: "Ticket Mania",
             tag: "Leaderboards · Monetization",
-            blurb: "Redesigned leaderboards with ticket collection mechanics, increasing revenue 7% and retention 170 basis points through active competition.",
+            blurb: "Rebuilt the leaderboard so you climb by playing well, not just by playing a lot.",
             href: "/work/ticket-mania",
             externalUrl: "",
+            skills: ["monetization", "retention"],
+            stats: [
+                { value: "+300 bps", label: "D1 retention" },
+                { value: "+10%", label: "D7 LTV" },
+                { value: "+7%", label: "Revenue per user" },
+                { value: "+55 bps", label: "New payer conversion" },
+            ],
         },
         {
             slug: "wotd",
             title: "Word of the Day",
             tag: "Feature Optimization · Engagement",
-            blurb: "Turned daily word definitions into interactive collection gameplay, boosting D30 LTV 9.4% and D1 retention 140 basis points.",
+            blurb: "Turned a popup you could only close into a daily word you collect and play.",
             href: "/work/wotd",
             externalUrl: "",
+            skills: ["retention"],
+            stats: [
+                { value: "+9.4%", label: "D30 LTV" },
+                { value: "+140 bps", label: "D1 retention" },
+                { value: "+3%", label: "Engagement" },
+                { value: "55%", label: "Daily players collecting letters" },
+            ],
         },
         {
             slug: "ai-innovation",
             title: "AI & Innovation",
             tag: "Productivity Tools · Workflow Automation",
-            blurb: "Built AI tools that turn messy meeting notes into structured feature specs, eliminating manual reformatting for 8-person dev team.",
+            blurb: "Two tools that turn raw meeting notes into finished specs and stakeholder emails.",
             href: "/work/ai-innovation",
             externalUrl: "",
+            skills: ["ai"],
+            stats: [
+                { value: "+25%", label: "Documentation efficiency" },
+                { value: "8", label: "Person team adopted it" },
+            ],
         },
         {
             slug: "kinoa-integration",
             title: "Kinoa LiveOps Integration",
             tag: "Platform Integration · LiveOps",
-            blurb: "Wrote the Kinoa.io SDK integration design doc, then configured and tuned 5 cohort-personalised LiveOps events in real time.",
+            blurb: "Cut event setup from about seven days of development to about an hour, with no app release.",
             href: "/work/kinoa-integration",
             externalUrl: "",
+            skills: ["liveops"],
+            stats: [
+                { value: "7 days → 1 hour", label: "Event setup, no app release" },
+                { value: "5", label: "Cohort-personalised LiveOps events" },
+            ],
         }
     ],
     personalProjects: [
@@ -228,36 +292,56 @@ export const defaultPortfolioContent: PortfolioContentState = {
             slug: "habiteer",
             title: "Habiteer",
             tag: "Gamification Design",
-            blurb: "Designed and built a full XP, coin, and streak economy for a habit tracker end-to-end — solo, from Postgres schema to a device-tested Android widget.",
+            blurb: "A habit tracker built like a game economy, for my partner and my friends.",
             href: "/work/habiteer",
             externalUrl: "https://github.com/Abhisavvy/habiteer",
+            skills: ["economy", "retention"],
+            stats: [
+                { value: "×3", label: "Max streak XP multiplier" },
+                { value: "500", label: "Coins for the first reward" },
+                { value: "1 tap", label: "Widget habit logging" },
+            ],
         },
         {
             slug: "xfactor",
             title: "XFactor",
             tag: "Systems Design",
-            blurb: "Built a turn-based Twitter-diplomacy simulator with a story-memory engine that tracks escalation and steers events, favor swings, and endings across a full playthrough.",
+            blurb: "A bizarre game-jam take on Reigns: Cold War diplomacy fought through tweets.",
             href: "/work/xfactor",
             externalUrl: "https://github.com/Abhisavvy/XFactor",
+            skills: ["systems"],
+            stats: [
+                { value: "13", label: "Scenario premises" },
+                { value: "5", label: "Rounds per match" },
+                { value: "4", label: "Tweet tones" },
+            ],
         },
         {
             slug: "woven",
             title: "Woven",
             tag: "Puzzle Systems Design",
-            blurb: "Designed and built the deterministic rules engine for a checkpoint-ordered thread-weaving puzzle, with 65 automated tests covering move legality, gate state, and win/dead-end detection.",
+            blurb: "My take on LinkedIn's Zip with multiple threads and colour merging: a tested rules engine (65 tests) plus a separate 117-level browser slice.",
             href: "/work/woven",
-            externalUrl: "https://github.com/Abhisavvy/Woven",
+            externalUrl: "https://abhisavvy.github.io/woven-playtest/",
+            skills: ["systems"],
+            stats: [
+                { value: "117", label: "Playtest levels" },
+                { value: "11", label: "Level tiers" },
+                { value: "65", label: "Rules-engine tests" },
+            ],
         },
     ],
     caseStudies: {
         "bon-voyage": {
             title: "Bon Voyage",
             subtitle: "Long-term Retention · Economy Design · Word Roll",
-            problem: "Word Roll had strong daily engagement but weak long-term retention. Players would complete daily goals then leave, and the coin-only economy was inflating without enough meaningful sinks. We needed extended progression that felt rewarding, not grindy.",
-            approach: "I designed a 60-day seasonal event with 60 levels, each unlocked by keys earned from completing games. This created natural pacing — players couldn't rush through by spending money, only by playing consistently.\n\nThe key innovation was introducing gems as a secondary currency. Players still earned coins for immediate purchases, but gems provided delayed rewards that felt more valuable. This solved the inflation problem while giving players a new reason to engage long-term.\n\nI tuned the progression curve using player data, ensuring casual players (P4-P6) could complete 40-50 levels while dedicated players (P7-P8) could reach the full 60.",
-            constraints: "This was a live game with millions of players who had established spending patterns. Any new currency couldn't feel punitive or confusing. The 60-day timeline was also risky — too slow and players lose interest, too fast and casual players can't keep up. I had to ensure the event enhanced existing modes rather than replacing them.",
-            outcome: "The gems-based progression drove significant long-term engagement improvements. IAP revenue per user increased +12% as players found gems more valuable than coins, leading to higher conversion rates. The 60-day structure improved D1 retention by 22 basis points because players had clear progression goals beyond daily tasks.\n\nSession time grew +1.4% as players stayed longer to earn keys for progression. New payer conversion improved +7 basis points while existing payers increased both purchase frequency (+3.2%) and amount per purchase (+8.6%) due to gems' perceived value.\n\nThe event reduced non-payer coin accumulation by 16%, successfully addressing economy inflation while maintaining player satisfaction. Event completion reached 7% vs. 9% target, revealing that progression pacing needed adjustment for future iterations.",
-            contributions: "This was Word Roll's first secondary currency, which became the template for future economic features. I designed the entire 60-level progression curve, balancing key requirements against actual player behavior data rather than theoretical models.\n\nI created the gems concept as 'effort tokens' that reward time investment over money spending. When I noticed the event was cannibalizing solo series engagement, I identified the root cause (key earning differential) and proposed fixes.\n\nThe gem onboarding flow I designed improved new player conversion by 190 basis points. Most surprisingly, the progression appealed across all player segments, not just our P4-P8 target.",
+            problem: "Coins came too easily in Word Roll. Every game win paid out coins, so players had more than they could use and the economy kept inflating. Nothing pulled people back over the long run either: they'd finish their daily goals and leave. And we had no real control over how much people played the side game modes compared with the main game.",
+            approach: "I built Bon Voyage around two currencies.\n\nFirst, I took coins out of game wins and moved them into the season. You earn coins by unlocking Bon Voyage levels one at a time, with keys you get from playing the main game. So coin supply now grows with progress, not with every win.\n\nSecond, I introduced gems as the entry ticket for the game modes. To get gems you progress in Bon Voyage, and to progress you play the main game. That gave us a lever on how much the modes get played, and it always leads players back to the main game first.\n\nThe season runs for 60 days across 60 levels. I built the level curve from real player behaviour: casual players (P4–P6) should reach 40–50 levels, and our most dedicated players (P7–P8) should finish all 60.",
+            constraints: "Word Roll has millions of downloads, and players were used to earning coins on every win. Now coins came from the season and modes cost gems. That could easily feel like we were taking things away. Sixty days is also a long time to hold attention: too slow and people drift off, too fast and casual players fall behind.",
+            outcome: "- IAP revenue per user went up 12%.\n- New payer conversion rose 90 bps. With coins scarcer, more players chose to buy.\n- Existing payers bought more often (+3.2%) and spent more per purchase (+8.6%).\n- D1 retention rose 22 bps and session time 1.4%.\n- Non-payers sat on 16% fewer coins.",
+            change: "Only 7% of players finished the season against the 9% we'd aimed for, so the pacing was too slow at the casual end. The event also pulled play away from Solo Series, because keys were easier to earn in some modes. I'd balance key earning across modes before launch next time.",
+            loop: { title: "Season loop", steps: ["Play the main game", "Earn keys", "Unlock Bon Voyage levels", "Get coins and gems", "Spend gems to enter game modes"], cycles: true },
+            notes: ["You earn coins by unlocking Bon Voyage levels one at a time, with keys you get from playing the main game."],
             links: [],
             media: {
                 hero: {
@@ -298,11 +382,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
         "food-fiesta": {
             title: "Food Fiesta",
             subtitle: "Cross-mode Event · Word Roll",
-            problem: "Veteran players were getting stuck in single game modes. They'd master Classic or Daily Hunt, then ignore other modes entirely. This created engagement drops on non-leaderboard days and limited their overall experience with the game.",
-            approach: "I created a Monday-Saturday event that connected all game modes through bonus tile collection. When players formed words ending with DW or TW bonus tiles, they'd earn event progress regardless of which mode they were playing.\n\nThis let players stay in their preferred modes while getting gentle nudges to try others. The event was gated at 150 lifetime moves and D7+ cohorts to ensure players understood the basics first.\n\nProgression unlocked through tile collection rather than time, so engaged players could advance faster while casual players weren't left behind. Event progression rewards also included Tiles cosmetic skins.",
-            constraints: "Pre-allocation bias of ~3% in experiment setup. Multi-mode balance — had to ensure no single mode was disproportionately rewarded. Live mobile title coordination with existing events.",
-            outcome: "The cross-mode bonus tile mechanic successfully increased engagement by 7.5% (~2.4 moves) among established players without disrupting their preferred play styles. Rolling retention improved by 50 basis points because players had new goals that kept them coming back across different game modes.\n\nPower-up usage increased 26% as players became more strategic about forming high-value words to collect bonus tiles. The share of highly engaged players (30+ moves) grew by 200 basis points, showing the event attracted deeper engagement rather than just breadth.\n\nAd impressions increased 7-8% as higher engagement naturally led to more ad opportunities. The event successfully bridged different game modes while accounting for experimental bias in early cohorts.",
-            contributions: "1. Designed the cross-mode event structure with DW/TW bonus tile mechanic.\n2. Defined task structures and balanced rewards across progression levels.\n3. Analyzed engagement uplift across all game modes and identified Monday/Tuesday as peak event days.\n4. Monitored early-cohort retention signals and validated experiment bias attribution.",
+            problem: "Our veteran players had each settled into one mode. Someone would master Classic or Daily Bingo Hunt and never touch anything else. That made engagement dip on days without a leaderboard, and it meant they only ever saw a slice of the game.",
+            approach: "Food Fiesta ran Monday to Saturday and connected every mode through one mechanic: bonus tiles. Finish a word on a DW or TW tile and you earn event progress, whichever mode you're in. Players could stay where they were comfortable, and the event gave them a gentle reason to try the rest.\n\nI gated it to players with 150+ lifetime moves in the D7+ cohorts, so everyone already knew the basics. Progress came from collecting tiles rather than from time passing, so engaged players moved faster and casual players weren't locked out. The reward track also carried Word Roll's first cosmetics, the Tiles skins.",
+            constraints: "Rewards had to be balanced across modes so no single mode became the obvious farm. It had to run alongside our other live events. And the experiment itself had about 3% pre-allocation bias, which made the early numbers harder to trust.",
+            outcome: "- Engagement among established players went up 7.5%, about 2.4 more moves each.\n- Rolling retention rose 50 bps.\n- Power-up use jumped 26%, as players got more deliberate about landing words on bonus tiles.\n- The share of players making 30+ moves grew by 200 bps.\n- Ad impressions went up 7–8%.\n\nMonday and Tuesday turned out to be the peak event days.",
+            loop: { title: "Cross-mode event loop", steps: ["Play any mode", "Form words on DW/TW bonus tiles", "Earn event progress", "Rewards, including Tiles skins"], cycles: true },
+            notes: ["Players could stay where they were comfortable, and the event gave them a gentle reason to try the rest."],
             links: [],
             media: {
                 hero: {
@@ -337,11 +422,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
         tiles: {
             title: "Tiles",
             subtitle: "Cosmetic System · Economy Design · Word Roll",
-            problem: "Word Roll had no cosmetics or player expression. Everything was purely functional — players couldn't show personality or achievement. We needed customization that felt meaningful without disrupting the clean, focused gameplay experience.",
-            approach: "I designed tile skins as the first cosmetic system — players could customize the letter tiles they see during gameplay. This enhanced the core experience without changing any mechanics.\n\nI used Machinations to model the gacha acquisition system, balancing excitement with fair odds. Common tiles were easy to get for immediate satisfaction, while rare tiles provided long-term collection goals.\n\nRather than creating a separate cosmetics store, I integrated tiles as rewards within Food Fiesta event progression. This made cosmetics feel earned rather than purchased.",
-            constraints: "First cosmetic system in the game — had to establish visual language and player expectations. Economy de-risking with cosmetics had to feel like genuine ownership, not coin replacement. Gacha mechanics required careful probability tuning for player satisfaction vs. monetization.",
-            outcome: "Rev/DAU +22% (+8 cents) driven by IAP +100% (+6 cents) and ad rev +5% (+2 cents). Payer (earn–spend)/DAU decreased by ~1,200 coins, driving IAP upsides. Established cosmetic system foundation for future content expansions. Player feedback: high satisfaction with tile customization and collection mechanics.",
-            contributions: "I created Word Roll's first cosmetic system and established the design patterns for future player expression features. The modular framework I built supports infinite tile designs while maintaining visual consistency.\n\nI used Machinations probability modeling to balance player satisfaction with monetization, avoiding predatory gacha patterns. The rarity system I designed clearly communicates value through visual hierarchy.\n\nI integrated cosmetics into existing progression rather than creating a separate economy. This became the template for all future cosmetic features.",
+            problem: "Word Roll gave players no way to express themselves and no sense of ownership. Everything on screen did a job, and nothing was personal. We wanted customisation that players actually cared about, without cluttering a clean, focused game.",
+            approach: "I designed tile skins, Word Roll's first cosmetic system. You change the look of the letter tiles you play with, and nothing about the rules changes.\n\nPlayers earn tile paints as rewards from Food Fiesta and Bon Voyage. Each paint is a gacha draw that reveals a tile for your collection. I modelled the odds in Machinations so it felt exciting without feeling unfair: common tiles arrive quickly, and rare ones give you something to chase. Because paints come from event rewards, the collection feels earned rather than bought.",
+            constraints: "It was the game's first cosmetic system, so there was no visual language or player expectation to build on. Tiles had to feel like real ownership, not a stand-in for coins. And the gacha odds needed careful tuning between player satisfaction and revenue.",
+            outcome: "- Revenue per DAU went up 22% (+8 cents).\n- IAP revenue doubled (+100%, +6 cents), and ad revenue rose 5% (+2 cents).\n- The gap between what payers earned and spent in coins moved about 1,200 coins per DAU toward spending, which drove the IAP gain.\n\nEvery cosmetic feature after this was built on the same system.",
+            loop: { title: "Collection loop", steps: ["Play Food Fiesta or Bon Voyage", "Earn tile paints", "Paint gacha reveals a tile", "Tile joins your collection", "Equip it in play"], cycles: true },
+            notes: ["Because paints come from event rewards, the collection feels earned rather than bought."],
             links: [],
             media: {
                 hero: {
@@ -382,11 +468,12 @@ export const defaultPortfolioContent: PortfolioContentState = {
         "ai-innovation": {
             title: "AI & Innovation",
             subtitle: "Productivity Tools · Feature Spec Pipeline",
-            problem: "Meeting discussions generated valuable insights, but turning those into actionable specs required extensive manual processing. This friction slowed feature development and diluted design intent between ideation and implementation.",
-            approach: "I built two connected tools to solve the meeting-to-spec problem. The Meeting Manager takes messy meeting notes from Granola and automatically sorts them into structured sections: problem statements, vision, business goals, design goals, and user flows.\n\nThe second tool, Spec Maker, takes that structured data and generates complete feature specs in markdown format. The beauty is that both tools use the same section headers, so there's no manual reformatting needed.\n\nThe end result: meeting notes go in, polished specs come out, with stakeholder emails generated as a bonus. One input, multiple outputs, zero manual work.",
-            constraints: "Team adoption across 8-person dev team. Meeting note quality varies by source (Granola vs manual). Spec template had to be flexible for different feature types while maintaining consistency. Integration with existing workflows and tools.",
-            outcome: "The tools eliminated manual reformatting entirely — one meeting extraction now feeds both stakeholder emails and the spec pipeline. Team members joining projects mid-stream get full context without knowledge transfer sessions.\n\nThe 8-person dev team adopted this as the standard workflow, with all specs following consistent structure and documentation efficiency improving 25%. We stopped rewriting the same content for emails, specs, and presentations — one input, multiple outputs.",
-            contributions: "I identified the core problem: messy meeting notes were creating bottlenecks in our spec pipeline. So I designed a two-tool solution that automates the entire process.\n\nI built the Meeting Manager as a web app with Granola integration, handling the data sorting and dual output generation. The template system I created uses standard section headers that align perfectly with our spec format.\n\nI also built Spec Maker as a local tool that generates complete markdown specs, with PPTX export planned for presentations. I drove adoption across the entire 8-person dev team, making this our standard workflow.",
+            problem: "It started as my own headache. The thinking happened in the meeting, and everything after that was reformatting: pulling out the problem, the goals and the user flows, then writing the same points again for stakeholder emails. It was slow, and some of what we'd decided got lost on the way to the spec. I soon found out plenty of people around me had the same problem.",
+            approach: "I built two tools that hand off to each other. Meeting Manager takes raw meeting notes from Granola and sorts them into the sections our specs use: problem, vision, business goals, design goals and user flows. Spec Maker takes those sections and writes the full feature spec in markdown.\n\nBoth tools use the same section headers, so nothing needs reformatting in between, and the same extraction also drafts the stakeholder email. Meeting Manager runs as a web app and Spec Maker runs locally. I built both with Cursor. PPTX export for presentations is next.",
+            constraints: "Meeting notes vary a lot depending on whether they come from Granola or someone typing by hand. The spec template had to flex across very different features and still stay consistent. And none of it mattered unless the whole team actually used it.",
+            outcome: "- The 8-person dev team adopted it as our standard spec workflow.\n- Documentation efficiency went up 25%.\n- One meeting now feeds the spec and the stakeholder email, so we stopped rewriting the same content for emails, specs and presentations.\n- People joining a project halfway through get the full context from the spec, without a handover session.",
+            loop: { title: "Meeting-to-spec pipeline", steps: ["Meeting notes (Granola)", "Meeting Manager sorts sections", "Spec Maker generates the spec", "Specs + stakeholder emails"], cycles: false },
+            notes: ["The thinking happened in the meeting, and everything after that was reformatting: pulling out the problem, the goals and the user flows, then writing the same points again for stakeholder emails."],
             links: [
                 { label: "Meeting Manager", href: "https://abhishekdutta1-project.vercel.app/" }
             ],
@@ -429,33 +516,61 @@ export const defaultPortfolioContent: PortfolioContentState = {
         woven: {
             title: "Woven",
             subtitle: "Puzzle Systems Design · Personal Project",
-            problem: "A thread-weaving puzzle needs a rules engine that can enforce complex spatial constraints — ordered checkpoints, crossing paths, and conditional gates — without any single rule silently overriding another. The design question: how do you let threads cross, share cells, and gate each other's progress while keeping every move either strictly legal or strictly rejected, with no ambiguous states?",
-            approach: "I designed Woven around a grid of colored threads that must be dragged from a start cell through an ordered sequence of checkpoints, filling every cell on the board before the level counts as solved. Getting there needed a few interlocking systems: weave cells let two threads cross the same cell on independent horizontal/vertical lanes without colliding; overlap nodes let exactly two threads share a single cell as a deliberate junction; and one-way cells and walls constrain which direction a thread can enter from.\n\nGates layer conditional logic on top of that: a gate opens and closes based on AND/OR combinations of other threads' checkpoint progress, and that open/closed state is derived live from progress rather than stored as a flag, so a future undo/replay can reconstruct it exactly. I specified the legality predicate as a single ordered checklist — adjacency, walls, gate state, one-way entry, cell/lane occupancy, checkpoint order — so every move is either fully legal or rejected with a specific reason, never partially applied.\n\nWin and dead-end detection both build on the same primitives: solved requires every lane-unit on the board filled (weave cells need both lanes) and every thread at its final checkpoint; dead-end is a cheap local check for any legal extension on any thread, deliberately not a full solvability search, so a level can look locally fine yet still be unsolvable — the player undoes or restarts rather than being warned in advance.",
-            constraints: "Solo project, built engine-first: the Core layer (grid, threads, rules engine) is deliberately Unity-independent so it can be unit-tested without the editor and kept free of engine-specific dependencies. Scope for this pass was the deterministic rules layer only — board/thread data model and the legality, gate-state, and win/dead-end logic — with UI, level authoring, and content out of scope for now.",
-            outcome: "Built the deterministic Core: grid/cell/thread data model, board elements (walls, one-way cells, weave lanes, overlap nodes), lane-unit coverage accounting, and a rules engine covering move legality, derived gate state, and win/dead-end detection. Backed the engine with 65 automated Edit Mode tests (all passing).",
-            contributions: "The project is built on the open-source Claude Code Game Studios template; I wrote the game Core on top of it, with Claude as an AI pair (the commit is co-authored by Claude). I designed and implemented the full Core layer: the board/thread data model, the lane-unit coverage system used to verify a level is completely filled, the gate derivation logic (open/close triggers with AND/OR combination), and the rules engine's legality checks and terminal-state (win/dead-end) evaluation. I wrote the 65-test Edit Mode suite covering board elements, thread progress, gate state, and move legality.",
+            problem: "I love puzzles where the rules fit in one sentence and the levels do the talking. Woven is my take on LinkedIn's Zip, with a twist. Zip gives you one line to draw through numbered checkpoints until the grid is full. Woven gives you several lines at once and uses colour merging as a mechanic.",
+            approach: "Each level has two or more threads with numbered checkpoints. You drag each thread from its start through its checkpoints in order, and the level is solved when every cell is filled and no threads cross.\n\nI built the rules engine first, in C# for Unity, and kept it free of engine code so it can be tested on its own. Every move goes through one ordered checklist (adjacency, walls, gates, one-way entry, occupancy, checkpoint order), so a move is either fully legal or rejected with a reason. Gates open and close based on the other threads' progress, and that state is always recalculated, never stored, so a future undo or replay can rebuild it exactly. 65 automated tests cover it. I set the project up on the open-source Claude Code Game Studios template and wrote the engine with Claude as my pair.\n\nSeparately, I put a playable browser slice online: 117 levels across 11 tiers, where each early tier adds one idea. Gates block the edges between cells, and Crossings add weave cells where two threads are allowed to cross. There's undo, hints that cost coins, and a 1–3 star rating.",
+            constraints: "Puzzle rules have to be airtight. If a move is half-applied or a gate falls out of sync, the level breaks. Knowing when a player is stuck was a trade-off too: a full solvability check is expensive, so the engine only checks whether any thread still has a legal move.",
+            outcome: "The browser slice is live for playtesting. After every solve it asks \"How did that feel?\" (Easy, Just right or Hard), so difficulty feedback comes straight from players.",
+            loop: { title: "Puzzle loop", steps: ["Drag a thread from its start", "Hit checkpoints in order", "Fill every cell", "Solve for coins and stars", "Spend coins on hints"], cycles: true },
+            notes: ["I love puzzles where the rules fit in one sentence and the levels do the talking."],
             links: [
+                { label: "Play the playtest", href: "https://abhisavvy.github.io/woven-playtest/" },
                 { label: "GitHub repository", href: "https://github.com/Abhisavvy/Woven" }
             ],
             media: {
                 hero: {
-                    posterSrc: "/assets/woven/hero-image.png"
+                    posterSrc: "/assets/woven/hero-playtest.png"
                 },
                 processGallery: {
                     groupId: "woven-process",
                     heading: "Design process",
-                    items: []
+                    items: [
+                        {
+                            thumb: "/assets/woven/woven-playtest-menu.png",
+                            full: "/assets/woven/woven-playtest-menu.png",
+                            alt: "Woven playtest title screen menu",
+                            label: "Title Screen"
+                        },
+                        {
+                            thumb: "/assets/woven/woven-playtest-start.png",
+                            full: "/assets/woven/woven-playtest-start.png",
+                            alt: "Woven playtest level start screen",
+                            label: "Level Start"
+                        },
+                        {
+                            thumb: "/assets/woven/woven-playtest-midsolve.png",
+                            full: "/assets/woven/woven-playtest-midsolve.png",
+                            alt: "Woven playtest mid-solve screen showing a weave crossing",
+                            label: "Weave Crossing Mid-Solve"
+                        },
+                        {
+                            thumb: "/assets/woven/woven-playtest-solved.png",
+                            full: "/assets/woven/woven-playtest-solved.png",
+                            alt: "Woven playtest solved screen with the difficulty feedback prompt",
+                            label: "Solved + Difficulty Prompt"
+                        }
+                    ]
                 }
             }
         },
         xfactor: {
             title: "XFactor",
             subtitle: "Systems Design · Narrative Systems · Personal Project",
-            problem: "XFactor is a turn-based Twitter-diplomacy simulator built around one design question: how do you make a short, turn-based game feel like it's reacting to the players — where tone choices in round one shape what's possible by round five — without turning it into a branching-dialogue tree that would be impossible to author and balance solo?",
-            approach: "The core loop is a 5-round, pass-and-play simulator: two factions (USA and USSR) each pick a tweet response — Diplomatic, Covert, Aggressive, or Unhinged in tone — to a Cold-War-flavored headline, then see the fallout as a shifting \"Global Favor\" meter and simulated engagement metrics (likes, retweets, replies). Cooperative pairings nudge favor gently; one side going aggressive against a cooperative opponent swings it hard; mutual aggression risks a public \"Ratioed\" penalty for whoever loses the exchange.\n\nThe key system underneath is a StoryMemory object that tracks escalation (0-100), world state (stable → tense → crisis → chaos), and content-based triggers pulled from the actual text of each choice (mentions of \"nuclear,\" \"hack,\" \"moon,\" \"alien,\" and so on). Escalation feeds back into event selection: a shared event-pool system (GENERIC_POOLS and per-scenario SCENARIO_POOLS, tagged realistic / heightened / absurd) picks the next headline based on how heated the last exchange was, with deduplication so players don't see repeat events in a single run.\n\nThirteen scenario premises (a laser-carved Moon crisis, a cloned-president conspiracy, a Roswell tech race, an AI overlord, a time-machine malfunction, and others) share this same engine, so new content is additive — new event pools and endings plug into the existing escalation/favor math rather than requiring new logic per scenario. A live Twitter-style feed panel (TweetFeed) generates contextual reaction tweets alongside the main round flow, and all sound (click, pop, tick, whoosh, per-tone stingers) is synthesized at runtime via the Web Audio API rather than sourced from audio files.",
-            constraints: "Solo project, built and iterated in two authoring passes. All game content — headlines, tone options, ending text, feed tweets — is static and hand-authored. Built as a web app (React + TypeScript + Vite) for local pass-and-play use.",
-            outcome: "The result is a local pass-and-play web game where escalation compounds: the same tone choice produces different favor swings and unlocks different event pools depending on how chaotic the run has already become, and a \"point of no return\" state locks in apocalyptic endings once escalation and story triggers (e.g. repeated nuclear references) cross a threshold. The second development pass added a Twitter-style feed, an X-style restyle and event deduplication, and fixed a bug that stopped play after round 1.",
-            contributions: "I'm the sole author across both commits in the repository's history. The game started as a Google AI Studio prototype; in the first commit I added the narrative/consequence engine — story memory, escalation-driven event selection, content-trigger analysis, adaptive difficulty scaling, and the branching-ending system — using Cursor as an AI-assisted coding tool. In the second pass I layered on the Twitter-style feed component, contextual feed-tweet generation, and UI/audio fixes.",
+            problem: "XFactor started at a game jam. I'd been wanting to build a reactive story system inspired by Reigns, where your choices keep piling up into consequences. I wanted mine to be bizarre, and I wanted it to show how social media pushes real-world politics around. So I put the Cold War on Twitter.",
+            approach: "XFactor is a two-player, pass-and-play game. One of you is the USA, the other the USSR. Each round a headline drops, and you both pick a tweet in a tone: diplomatic, covert, aggressive or unhinged. The Global Favor meter swings depending on how your tones clash, and if you both go aggressive, whoever loses the exchange gets ratioed.\n\nUnder the hood, a story memory tracks how heated things are getting and picks up on what you actually tweeted about, like nukes, hacking, the moon or aliens. The hotter it gets, the more absurd the next headline. Thirteen scenarios run on the same engine, from a Moon laser crisis to a cloned president, with several endings, including mutually assured destruction.\n\nThe first version was a Google AI Studio prototype. I added the story engine with Cursor, then a feed of reaction tweets and a restyle.",
+            constraints: "Everything is hand-written: headlines, tweet options, endings, reaction tweets. So the system had to get a lot of variety out of a fixed pool, and every new scenario had to plug into the same escalation maths instead of needing its own logic.",
+            outcome: "It's a playable web game with 13 scenarios and five rounds a match. The second pass added the reaction feed and removed repeat events, and fixed a bug that stopped play after round 1.",
+            loop: { title: "Round loop", steps: ["A headline drops", "Both players pick a tweet tone", "Global Favor and engagement shift", "Escalation picks the next event"], cycles: true },
+            notes: ["I wanted mine to be bizarre, and I wanted it to show how social media pushes real-world politics around."],
             links: [
                 { label: "GitHub repository", href: "https://github.com/Abhisavvy/XFactor" }
             ],
@@ -492,37 +607,118 @@ export const defaultPortfolioContent: PortfolioContentState = {
         habiteer: {
             title: "Habiteer",
             subtitle: "Gamification Design · Systems Engineering · Personal Project",
-            problem: "Habit trackers are easy to abandon because the payoff for showing up is invisible — a checked box, nothing more. The design question: could a habit/task tracker apply real game-economy thinking (XP, streak multipliers, a spendable currency, a mascot that reacts to progress) so that consistency itself feels like the winning move, without letting the economy become exploitable or the app become another dead tracker after a week of novelty.",
-            approach: "The core loop is a closed economy: complete a habit or task, earn XP and coins, XP levels you up and moves you on a weekly league board, coins buy a reward you actually want. Habits and tasks are deliberately unequal — only habits carry streaks and a combo multiplier (tiers at 3, 7, 14, and 30 consecutive satisfied periods), and the multiplier only ever touches XP, never coins, so a reward's coin cost stays a stable, predictable target instead of drifting as players get better. Levels are earned status (cosmetics, capability unlocks, freeze tokens) rather than more currency, which keeps the coin economy from inflating.\n\nRecurrence and streaks run on one shared model — period (day/week/month) + quota — rather than special-cased rules per schedule type, so a streak means the same thing everywhere in the app. A mascot companion (\"Ember\") gives the economy a face: its expression shifts with streak state (neutral, celebrating at 7+ streaks and on level-up, sleepy when idle), reused across the level-up overlay, empty states, and the Android home-screen widgets, so the emotional feedback loop isn't just numbers going up.\n\nTo keep the economy honest, every mutating action (complete, undo, redeem, contribute) runs as an atomic Postgres RPC function, with the client-side TypeScript lib used only for display projections (\"completing this now pays +40 XP / +20 coins\"). The server recomputes and wins on every write, so the game logic can't be tampered with from the client. Tuning constants (difficulty payouts, combo tiers, the level curve) live in one shared module mirrored into generated SQL, so the client's projection and the server's authoritative result can't drift apart.",
-            constraints: "Solo project, built entirely on free-tier infrastructure — Supabase's free Postgres/Auth/Realtime tier, Android sideloading instead of a paid Play Store listing, no server cron (the weekly league rollover runs as a lazy, idempotent-per-week RPC triggered on screen mount instead). An Android home-screen widget was a hard requirement, which ruled out a web app and forced a React Native/Expo client with a custom native module — Expo Go can't run it, so testing required a local Android dev-client build. iOS was explicitly deferred: a real iOS widget needs App Groups, which need Apple's paid developer program.",
-            outcome: "PLAN.md marks v1 and the numbered v2 roadmap done, and the first batch of v3 features has shipped: auth and cross-device sync, the gamification core (XP/coins/combo/streaks) built test-first in Vitest, trackables, the completion economy, personal rewards, a weekly leaderboard, the Android widget (light + dark, device-verified), shared rewards and groups, week/month recurrence, a gamified stats page, five-tier leagues, a level-gated cosmetics catalog, a \"reduce\" mode for breaking habits, reminders, sound/haptic feedback, and a group shared-streak mechanic.\n\nA device-testing pass caught real bugs — add/edit forms opening below the fold on longer lists, hard shadows not rendering on Android, a dev-build reliability issue mistaken for an app bug — each diagnosed and fixed. A later UX pass added one-tap starter habit presets after identifying that a new account's first screen asked for six decisions before the first completion.",
-            contributions: "I'm the sole author of all 56 commits, built with Claude Code as an AI pair, spanning July–August 2026. I designed and built the full stack: the gamification design itself (XP/coin split, combo tiers, level curve, league structure), the Postgres schema and RLS security model, the RPC-based anti-tamper architecture, the React Native/Expo client, the Android home-screen widget suite, and the test-first Vitest suite covering the gamification core.",
+            problem: "Habit trackers die fast. You tick a box, nothing happens, and a week later you've stopped opening the app. I built Habiteer for my partner and my friends, to see what happens when a tracker is built like a game economy instead: every habit pays out, streaks multiply your XP, and the coins buy a reward you actually want. In my plan that reward was a 500-coin dinner, about three weeks of showing up.",
+            approach: "Habiteer is an Android app I designed and built on my own, with React Native (Expo) and Supabase. The loop: do a habit or task, earn XP and coins, XP levels you up and moves you through weekly leagues, and coins buy your rewards. Groups can pool coins toward shared rewards and keep a group streak going.\n\nA few rules keep the economy honest:\n- Only habits carry streaks, and the streak multiplier (×1.2 at 3 days, up to ×3 at 30) only boosts XP, never coins, so a reward's price stays a fixed target.\n- Tasks pay coins but no XP.\n- Levels give status, cosmetics and unlocks, never coins, so nothing inflates.\n\nAll the game logic runs on the server, so nobody can fake their XP from the app. There's a home-screen widget too, because the whole idea falls apart if logging a habit takes more than one tap. I built it with Claude Code as my pair programmer.",
+            constraints: "I wanted it to cost nothing to run: Supabase's free tier, installed directly on Android instead of through the Play Store, and no server cron, so the weekly league reset happens when you open the leaderboard. The widget needs a custom native module, so I had to test on a real phone with a dev build. iOS is on hold because widgets there need a paid Apple developer account.",
+            outcome: "v1 and the full v2 roadmap shipped, plus the first v3 features: reminders, sounds and haptics, group streaks and weekly quests. Testing on my phone caught real bugs, like forms opening below the fold on long lists and shadows not rendering on Android. And setting up a brand-new account showed me a new user had to make six decisions before completing anything, so I added one-tap starter habits.",
+            loop: { title: "Core loop", steps: ["Do a habit or task", "Earn XP + coins", "XP levels you up and climbs the league", "Coins buy a reward you want"], cycles: true },
+            notes: ["You tick a box, nothing happens, and a week later you've stopped opening the app."],
             links: [
                 { label: "GitHub repository", href: "https://github.com/Abhisavvy/habiteer" }
             ],
             media: {
                 hero: {
-                    posterSrc: "/assets/habiteer/hero-image.png"
+                    posterSrc: "/assets/habiteer/hero-app.png"
                 },
                 processGallery: {
                     groupId: "habiteer-process",
-                    heading: "Design process",
-                    items: []
+                    heading: "App screens (sample data)",
+                    items: [
+                        {
+                            thumb: "/assets/habiteer/habiteer-today.png",
+                            full: "/assets/habiteer/habiteer-today.png",
+                            alt: "Habiteer Today screen with habit streaks and combo multipliers, sample data",
+                            label: "Today"
+                        },
+                        {
+                            thumb: "/assets/habiteer/habiteer-complete.png",
+                            full: "/assets/habiteer/habiteer-complete.png",
+                            alt: "Habiteer habit completion moment showing a +12 XP popup and an undo toast, sample data",
+                            label: "Completing a Habit"
+                        },
+                        {
+                            thumb: "/assets/habiteer/habiteer-levelup.png",
+                            full: "/assets/habiteer/habiteer-levelup.png",
+                            alt: "Habiteer Level 5 level-up overlay with the Ember mascot and confetti, sample data",
+                            label: "Level Up with Ember"
+                        },
+                        {
+                            thumb: "/assets/habiteer/habiteer-league.png",
+                            full: "/assets/habiteer/habiteer-league.png",
+                            alt: "Habiteer Gold League leaderboard with promotion and relegation zones, sample data",
+                            label: "Weekly League"
+                        },
+                        {
+                            thumb: "/assets/habiteer/habiteer-rewards.png",
+                            full: "/assets/habiteer/habiteer-rewards.png",
+                            alt: "Habiteer Rewards screen with a redeemable 500-coin Dinner Out reward, sample data",
+                            label: "Rewards"
+                        },
+                        {
+                            thumb: "/assets/habiteer/habiteer-stats.png",
+                            full: "/assets/habiteer/habiteer-stats.png",
+                            alt: "Habiteer Stats screen with a record streak, an 8-week coin chart, and per-habit completion rates, sample data",
+                            label: "Stats"
+                        },
+                        {
+                            thumb: "/assets/habiteer/widgets/home-screen.webp",
+                            full: "/assets/habiteer/widgets/home-screen.webp",
+                            alt: "Habiteer home-screen widgets arranged together on an Android home screen, sample data",
+                            label: "Home-Screen Widgets"
+                        },
+                        {
+                            thumb: "/assets/habiteer/widgets/widget-daily-strip.webp",
+                            full: "/assets/habiteer/widgets/widget-daily-strip.webp",
+                            alt: "Habiteer Daily Strip home-screen widget showing level progress and today's habit checklist, sample data",
+                            label: "Daily Strip Widget (4×4)"
+                        },
+                        {
+                            thumb: "/assets/habiteer/widgets/widget-habit.webp",
+                            full: "/assets/habiteer/widgets/widget-habit.webp",
+                            alt: "Habiteer Today home-screen widget showing a compact habit checklist, sample data",
+                            label: "Today Widget (3×2)"
+                        },
+                        {
+                            thumb: "/assets/habiteer/widgets/widget-quest.webp",
+                            full: "/assets/habiteer/widgets/widget-quest.webp",
+                            alt: "Habiteer Quest home-screen widget showing weekly quest progress, sample data",
+                            label: "Quest Widget (4×2)"
+                        },
+                        {
+                            thumb: "/assets/habiteer/widgets/widget-companion.webp",
+                            full: "/assets/habiteer/widgets/widget-companion.webp",
+                            alt: "Habiteer Companion home-screen widget showing the Ember mascot and current streak, sample data",
+                            label: "Companion Widget (2×2)"
+                        },
+                        {
+                            thumb: "/assets/habiteer/widgets/widget-streak.webp",
+                            full: "/assets/habiteer/widgets/widget-streak.webp",
+                            alt: "Habiteer Streak home-screen widget showing the current day streak, sample data",
+                            label: "Streak Widget (2×2)"
+                        },
+                        {
+                            thumb: "/assets/habiteer/widgets/widget-combo.webp",
+                            full: "/assets/habiteer/widgets/widget-combo.webp",
+                            alt: "Habiteer Combo home-screen widget showing the current streak combo multiplier, sample data",
+                            label: "Combo Widget (2×2)"
+                        }
+                    ]
                 }
             }
         },
         "kinoa-integration": {
             title: "Kinoa LiveOps Integration",
             subtitle: "LiveOps Platform · SDK Integration",
-            problem: "Needed a LiveOps platform integration to run events personalised to player cohorts.",
-            approach: "1. Wrote the Kinoa.io SDK integration design doc for the development team.\n2. Set up LiveOps flows and in-app configurations for each event.\n3. Ran event testing and real-time tuning across cohorts.",
-            constraints: "SDK integration complexity, existing codebase compatibility, event testing and optimization timelines.",
-            outcome: "Deployed 5 cohort-personalised LiveOps events via Kinoa.io.",
-            contributions: "1. Wrote the Kinoa.io SDK integration design doc for the development team.\n2. Configured LiveOps flows and in-app settings for each event.\n3. Ran event testing and real-time tuning across 5 cohort-personalised LiveOps events.",
+            problem: "Every new event used to take about seven days of development, and it had to go out in an app release. That made LiveOps slow, and there was no easy way to aim an event at a particular group of players.",
+            approach: "I wrote the design doc for integrating the Kinoa.io SDK, so engineering knew exactly what to build. Once it was in, I set up the LiveOps flows and in-app configurations for our events, then tested and tuned them live.\n\nKinoa let us target players by spend, engagement and usage habits. An event stopped being a development task and became a modular setup.",
+            constraints: "The SDK had to fit into a codebase that was already live, and testing and tuning events ran on tight timelines.",
+            outcome: "- Setting up an event went from about 7 days of development to about an hour, with no app release needed.\n- We could target specific cohorts by spend, engagement and usage habits.\n- We shipped 5 cohort-personalised events this way.\n- The modular setup made us very fast to execute, with very few trade-offs.",
+            loop: { title: "LiveOps loop", steps: ["Pick a cohort (spend, engagement, habits)", "Configure the event in Kinoa", "Live in game within an hour", "Test and tune"], cycles: true },
+            notes: ["An event stopped being a development task and became a modular setup."],
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/kinoa-integration/screenshot-2026-04-13-at-12-23-57-am-1776020099651.png"
+                    posterSrc: "/assets/kinoa-integration/kinoa-poster.webp"
                 },
                 processGallery: {
                     groupId: "kinoa-integration-process",
@@ -534,15 +730,16 @@ export const defaultPortfolioContent: PortfolioContentState = {
         wotd: {
             title: "Word of the Day (WOTD)",
             subtitle: "Feature optimization · Word Roll",
-            problem: "Daily educational content felt disconnected from core gameplay — players encountered word definitions as passive interruptions rather than meaningful discoveries. The design challenge: integrate learning moments that enhance rather than disrupt the game experience, creating genuine curiosity without breaking player flow.",
-            approach: "I redesigned WOTD as a two-step collection game. First, players collect letters for the daily word while playing normally — the letters appear naturally during gameplay, so it feels serendipitous rather than forced.\n\nOnce they collect all letters, players can use that word in their game. Only after they've actively engaged with the word do they see its definition. This creates investment before the educational payoff.\n\nThe key insight: learning feels better when it comes after achievement, not before.",
-            constraints: "UX clarity, session fit, collaboration with UX and engineering.",
-            outcome: "The collection-based approach transformed educational content into engaging gameplay, driving D30 LTV +9.4% as players found the learning experience rewarding rather than disruptive. D1 retention improved by 140 basis points because the letter collection created clear daily goals.\n\nOverall engagement increased 3% as players actively sought letters during gameplay. The two-step design showed strong adoption: 55% of daily players collected letters (step 1) and 34% completed words (step 2), indicating healthy funnel conversion.\n\nThe feature's targeted design worked as intended — it enhanced active modes without impacting players in DBH mode where it was inactive, proving the integration achieved the original goal.",
-            contributions: "I turned WOTD from a passive popup into an integrated gameplay mechanic. The two-phase design I created builds emotional investment before delivering educational content — players earn the right to learn.\n\nI developed the daily word selection criteria, balancing difficulty and relevance to keep players engaged long-term. I also worked closely with the UX team to ensure the educational moments felt native to the game rather than like interruptions.",
+            problem: "Word of the Day used to be a popup with nothing to do on it. You saw a word and its definition, and your only option was to close it. We wanted the daily word to be something players went looking for and could actually play with.",
+            approach: "I turned it into a two-step collection game. First, you collect the day's letters just by playing normally; they turn up on the board as you go. Once you have them all, you can play the word in your game, and only then do you see what it means.\n\nThe idea was simple: a definition lands better after you've earned the word. I also set the rules for picking each day's word, balancing difficulty and relevance, and worked closely with our UX team so it felt native to the game.",
+            constraints: "It had to make sense without a tutorial, fit inside a normal session, and stay out of the way in modes where it didn't belong.",
+            outcome: "- D30 LTV went up 9.4%.\n- D1 retention rose 140 bps against the control group.\n- Overall engagement went up 3%.\n- 55% of daily players collected letters, and 34% went on to complete the word.\n\nIt was switched off in Daily Bingo Hunt (DBH), and players there saw no impact.",
+            loop: { title: "Daily discovery loop", steps: ["Play normally", "Collect the day's letters", "Complete and use the word", "Definition revealed"], cycles: true },
+            notes: ["The idea was simple: a definition lands better after you've earned the word."],
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/wotd/screenshot-2026-04-13-at-12-00-17-am-1776018645254.png"
+                    posterSrc: "/assets/wotd/wotd-poster.webp"
                 },
                 processGallery: {
                     groupId: "wotd-process",
@@ -579,15 +776,16 @@ export const defaultPortfolioContent: PortfolioContentState = {
         "ticket-mania": {
             title: "Ticket Mania",
             subtitle: "Leaderboard Redesign · Monetization · Word Roll",
-            problem: "Leaderboards created spectator experiences rather than active engagement — players watched their ranking change based on others' performance rather than feeling direct agency over their competitive position. The design challenge: transform passive competition into active gameplay while maintaining the social dynamics that make leaderboards compelling.",
-            approach: "I redesigned leaderboards around ticket collection. Instead of passive ranking, players now earn tickets by completing rows on the gameboard. This gives them direct control over their competitive progress.\n\nThe mechanic creates interesting micro-decisions — players balance making the best word versus collecting tickets, adding tactical depth to familiar gameplay. Ticket collection also creates natural demand for swaps without feeling forced.\n\nI also redesigned the entry flow to eliminate barriers between wanting to compete and actually playing, reducing drop-off when players are most motivated.",
-            constraints: "Fairness in leaderboard bucketing. Bot chase logic imported from control was suboptimal for new mechanic. FTUE landed on leaderboard screen (navigational dead end). Booster price-to-reward conflict with swap pricing.",
-            outcome: "The ticket collection mechanic turned passive leaderboard watching into active competitive gameplay, driving revenue per user +7% (~3 cents) primarily through increased IAP purchases. D7 LTV improved +10% as players found the direct control over rankings more engaging than traditional position-based systems.\n\nRetention improved significantly — D1 retention for organic users increased 170 basis points for D2+ players and 300 basis points overall because ticket collection gave players clear competitive goals. Rolling retention improved 50 basis points as the mechanic created sustained engagement loops.\n\nThe design successfully increased swap usage by 100 coins per user as players balanced word optimization with ticket collection. However, the economy shift from +50 to -5 coins per user required careful monitoring to ensure balanced progression. New payer conversion increased 55 basis points as competitive mechanics drove monetization.",
-            contributions: "I created the first active competition mechanic in Word Roll that enhanced rather than replaced existing gameplay. The ticket collection system I designed integrates cleanly with word formation without disrupting established player patterns.\n\nWhen I noticed the mechanic was hurting booster purchases, I identified the root cause: pricing conflicts between swaps and other boosters. I also diagnosed onboarding friction points that were causing drop-off at critical moments.\n\nI flagged issues with inherited bot logic and proposed improvements while maintaining the launch timeline. Throughout the process, I translated complex performance metrics into clear design recommendations for the product team.",
+            problem: "The old leaderboard gave you points for finishing games. There was no skill in it: whoever played the most games climbed. That made it a weak driver of competition. We wanted a leaderboard you win by playing well, not just by playing a lot.",
+            approach: "I tied the leaderboard to tickets. Every row you complete on the gameboard pays a ticket, and completing rows takes skill.\n\nThat added a small tension to every turn: play your best word, or go for the row that pays a ticket? It also gave swaps a real purpose without us having to push them.\n\nI redesigned the entry flow too, so there was less standing between \"I want to compete\" and actually playing.",
+            constraints: "Bucketing had to feel fair to everyone. The bot-chase logic we'd inherited from the old leaderboard didn't suit the new mechanic. The first-time flow dropped players onto the leaderboard screen, which was a dead end. And booster prices clashed with swap prices, which quietly hurt booster sales. I traced that back to pricing and flagged it, along with the bot logic, without holding up the launch.",
+            outcome: "- Revenue per user went up 7% (about 3 cents), mostly from IAP.\n- D7 LTV rose 10%.\n- D1 retention rose 300 bps overall, and 170 bps for organic D2+ players.\n- Rolling retention rose 50 bps, and new payer conversion rose 55 bps.\n- Swap usage went up by 100 coins per user. The flip side: the average coin balance swung from +50 to −5 per user, so we kept a close eye on the economy.",
+            loop: { title: "Competition loop", steps: ["Complete rows on the gameboard", "Earn a ticket per row", "Climb the leaderboard", "Play the next game"], cycles: true },
+            notes: ["That added a small tension to every turn: play your best word, or go for the row that pays a ticket?"],
             links: [],
             media: {
                 hero: {
-                    posterSrc: "/assets/ticket-mania/screenshot-2026-04-12-at-11-26-35-pm-1776017402864.png"
+                    posterSrc: "/assets/ticket-mania/ticket-mania-poster.webp"
                 },
                 processGallery: {
                     groupId: "ticket-mania-process",

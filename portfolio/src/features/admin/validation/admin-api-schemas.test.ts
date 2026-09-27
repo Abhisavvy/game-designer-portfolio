@@ -2,6 +2,7 @@
 import { describe, it, expect } from "vitest";
 import {
   adminAssetUploadMetadataSchema,
+  adminCaseStudyDraftSchema,
   adminCaseStudyScalarSchema,
   adminCreateProjectBodySchema,
   adminProjectItemSchema,
@@ -41,6 +42,80 @@ describe("adminProjectItemSchema", () => {
         blurb: "b",
         href: "/work/ok",
         externalUrl: "not-a-url",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("accepts an https:// href", () => {
+    expect(
+      adminProjectItemSchema.safeParse({
+        slug: "ok",
+        title: "t",
+        tag: "t",
+        blurb: "b",
+        href: "https://example.com/press-coverage",
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rejects a javascript: href (XSS)", () => {
+    expect(
+      adminProjectItemSchema.safeParse({
+        slug: "ok",
+        title: "t",
+        tag: "t",
+        blurb: "b",
+        href: "javascript:alert(1)",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("rejects hrefs outside /work/<slug> and non-https schemes", () => {
+    for (const href of [
+      "/etc/passwd",
+      "//evil.example.com",
+      "http://example.com",
+      "data:text/html,<script>alert(1)</script>",
+      "/work/../admin",
+    ]) {
+      expect(adminProjectItemSchema.safeParse({
+        slug: "ok",
+        title: "t",
+        tag: "t",
+        blurb: "b",
+        href,
+      }).success).toBe(false);
+    }
+  });
+});
+
+describe("adminCaseStudyDraftSchema", () => {
+  const base = {
+    title: "t",
+    subtitle: "s",
+    problem: "p",
+    approach: "a",
+    constraints: "c",
+    outcome: "o",
+  };
+
+  it("accepts internal /work/<slug> and https:// link hrefs", () => {
+    expect(
+      adminCaseStudyDraftSchema.safeParse({
+        ...base,
+        links: [
+          { label: "Related case study", href: "/work/other-project" },
+          { label: "Press", href: "https://example.com/article" },
+        ],
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rejects a javascript: link href", () => {
+    expect(
+      adminCaseStudyDraftSchema.safeParse({
+        ...base,
+        links: [{ label: "Bad", href: "javascript:alert(document.cookie)" }],
       }).success,
     ).toBe(false);
   });

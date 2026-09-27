@@ -1,12 +1,21 @@
+<!--
+  GENERATED FILE — do not edit directly.
+
+  This preview is generated from src/features/portfolio/data/resume.json by
+  portfolio/scripts/build-resume-pdf.mjs (via resume-template.mjs). Edit the
+  JSON data file and re-run "npm run resume:pdf" from portfolio/ to update
+  both this preview and the PDF.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Abhishek Dutta - Resume</title>
+<title>ABHISHEK DUTTA - Resume</title>
 <style>
+
   @page {
     size: A4;
-    margin: 0.45in 0.5in;
+    margin: 0.35in 0.5in;
   }
 
   :root {
@@ -27,8 +36,8 @@
 
   body {
     font-family: Calibri, "Segoe UI", Arial, sans-serif;
-    font-size: 9.8pt;
-    line-height: 1.3;
+    font-size: 10pt;
+    line-height: 1.16;
     color: var(--text);
     -webkit-font-smoothing: antialiased;
   }
@@ -48,7 +57,7 @@
 
   header.resume-header {
     text-align: center;
-    margin-bottom: 10pt;
+    margin-bottom: 8pt;
   }
 
   header.resume-header h1 {
@@ -66,7 +75,7 @@
   }
 
   .contact-line {
-    font-size: 8.8pt;
+    font-size: 9pt;
     color: var(--muted);
   }
 
@@ -76,11 +85,11 @@
   }
 
   section {
-    margin-bottom: 6pt;
+    margin-bottom: 4pt;
   }
 
   h2.section-title {
-    font-size: 11pt;
+    font-size: 11.5pt;
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.4pt;
@@ -98,7 +107,7 @@
 
   ul.plain-list {
     margin: 0;
-    padding-left: 14pt;
+    padding-left: 15pt;
   }
 
   ul.plain-list li {
@@ -110,18 +119,13 @@
     color: var(--text);
   }
 
-  .tech-prof {
-    margin: 0;
-  }
-
-  .tech-prof .label {
-    font-weight: bold;
-    color: var(--text);
+  .nowrap {
+    white-space: nowrap;
   }
 
   ul.achievements {
     margin: 0;
-    padding-left: 14pt;
+    padding-left: 15pt;
   }
 
   ul.achievements > li {
@@ -138,6 +142,10 @@
     padding-left: 14pt;
   }
 
+  ul.achievements ul li {
+    margin-bottom: 1pt;
+  }
+
   .job {
     break-inside: avoid;
     margin-bottom: 4pt;
@@ -152,7 +160,7 @@
 
   .job ul {
     margin: 0;
-    padding-left: 14pt;
+    padding-left: 15pt;
   }
 
   .job ul li {
@@ -161,7 +169,8 @@
   }
 
   .edu-item {
-    margin-bottom: 2pt;
+    margin-bottom: 3pt;
+    break-inside: avoid;
   }
 
   .edu-item .degree {
@@ -173,7 +182,7 @@
 
 <header class="resume-header">
   <h1>ABHISHEK DUTTA</h1>
-  <div class="title-line">Game Designer | Mobile Game Specialist</div>
+  <div class="title-line">Game Designer · Systems &amp; LiveOps</div>
   <div class="contact-line">
     Email: <a href="mailto:abhishek.dt.97@gmail.com">abhishek.dt.97@gmail.com</a>
     <span class="sep">|</span>
@@ -190,73 +199,84 @@
 <section>
   <h2 class="section-title">Professional Summary</h2>
   <p class="summary">
-    Results-driven Game Designer with 4 years designing player-first mobile game systems that drive community
-    engagement and long-term retention. At PlaySimple Games, designed economy and progression systems for Word Roll
-    40k+ DAU that delivered 71% monetization improvements and 35% retention increases through data-driven feature
-    design and social engagement mechanics. Proven expertise in end-to-end feature ownership - from ideation to
-    launch - including LiveOps events, reward systems, and competitive social features that contributed to 10x user
-    growth. Focused on social gaming experiences that bring players together while driving sustainable business
-    metrics through balanced economies and compelling progression loops.
+    I'm a game designer at PlaySimple, where I've spent four years on Word Roll designing its economy, currencies, live events, leaderboards and cosmetic systems. I play a part in long- and short-range feature planning too, and I'm on the hook for the business results those features deliver. We grew from 4k to 40k+ DAU in that time. I like fixing problems with small rule changes, and outside work I build my own games and tools.
   </p>
 </section>
 
 <section>
   <h2 class="section-title">What I Focus On</h2>
   <ul class="plain-list">
-    <li><strong>Feature Design &amp; Documentation:</strong> Comprehensive feature specification writing, technical
-      implementation guidelines, cross-functional communication, quality assurance processes</li>
-    <li><strong>Critical Thinking &amp; Analysis:</strong> Player behavior analysis, competitive intelligence,
-      data-driven decision making, strategic problem-solving</li>
-    <li><strong>Mobile Game Systems:</strong> PvP mechanics design, event-based monetization, economy balancing,
-      progression systems</li>
-    <li><strong>LiveOps Expertise:</strong> Deployed 5 cohort-personalised LiveOps events using <a class="inline-link" href="https://kinoa.io">Kinoa.io</a></li>
-    <li><strong>Tools Creation:</strong> Built Spec Maker and Meeting Manager with Cursor AI, increasing team
-      productivity by 25%</li>
+    <li><strong>Systems and economy design:</strong> Took coins out of game wins and into a season for Bon Voyage, made gems the entry currency for game modes, and modelled a paint gacha's odds in Machinations for Tiles.</li>
+    <li><strong>LiveOps and events:</strong> Cut event setup from about 7 days of development to about an hour with <a class="inline-link" href="https://kinoa.io">Kinoa.io</a>, no app release needed, and shipped 5 cohort-personalised events.</li>
+    <li><strong>Feature planning and specs:</strong> Plan features long- and short-range and write the specs for them: 25+ features shipped, around 25 systems built.</li>
+    <li><strong>Data and player behaviour:</strong> Run A/B tests with product, tune events by cohort (casual P4–P6 versus dedicated P7–P8 players), and track the competition: 50 games analysed in SensorTower and <a class="inline-link" href="https://data.ai">Data.ai</a>.</li>
+    <li><strong>Tools and AI:</strong> Built Meeting Manager and Spec Maker with Cursor, and now pair with Claude Code on my own projects.</li>
   </ul>
-</section>
-
-<section>
-  <h2 class="section-title">Technical Proficiency</h2>
-  <p class="tech-prof">
-    Unity, Excel, Google Sheets, Figma, SensorTower, <a class="inline-link" href="https://data.ai">Data.ai</a>, Google Analytics, A/B Testing, JIRA, Confluence,
-    <a class="inline-link" href="https://kinoa.io">Kinoa.io</a>, Cursor AI
-  </p>
 </section>
 
 <section>
   <h2 class="section-title">Key Achievements</h2>
   <ul class="achievements">
     <li>
-      <span class="achv-title">Social Engagement Leadership - Food Fiesta 2024</span>
+      <span class="achv-title">Bon Voyage</span>
       <ul>
-        <li>Designed Food Fiesta event mechanics, including its Tiles cosmetic rewards, balanced gacha systems and
-          progressive reward tracks, generating 71% monetization increase and establishing a template for future
-          LiveOps events that enhanced community interaction. Created reusable event infrastructure that became
-          standard for our social gaming initiatives.</li>
+        <li>Coins came too easily in Word Roll: every win paid out, so the economy kept inflating and nothing pulled players back long-term.</li>
+        <li>Built a 60-day, 60-level season: coins now come from unlocking levels with keys earned in the main game, and gems, the entry ticket for game modes, come from progressing the season.</li>
+        <li>IAP revenue per user +12%, new payer conversion +90 bps, existing payers bought +3.2% more often and spent +8.6% more per purchase.</li>
+        <li>D1 retention +22 bps, session time +1.4%, non-payers held 16% fewer coins.</li>
       </ul>
     </li>
     <li>
-      <span class="achv-title">Community Building Innovation - Ticket Mania 2024</span>
+      <span class="achv-title">Food Fiesta 2024</span>
       <ul>
-        <li>Redesigned Ticket Mania leaderboard architecture with skill-based matchmaking and dynamic rewards,
-          creating organic social groups around competitive goals that increased player LTV by 10% and improved
-          D1 retention rate by 300 basis points.</li>
+        <li>Veteran players had each settled into one mode, so engagement dipped on days without a leaderboard and they only ever saw a slice of the game.</li>
+        <li>Ran a Monday-to-Saturday event linking every mode through bonus tiles: finishing a word on a DW or TW tile earns event progress in any mode, gated to players with 150+ lifetime moves.</li>
+        <li>Engagement among established players +7.5% (about 2.4 more moves each), rolling retention +50 bps, power-up use +26%.</li>
+        <li>Share of players making 30+ moves +200 bps, ad impressions +7–8%.</li>
       </ul>
     </li>
     <li>
-      <span class="achv-title">Player Experience Optimization - Word of the Day 2024</span>
+      <span class="achv-title">Tiles</span>
       <ul>
-        <li>Transformed Word of the Day from passive feature to interactive collection mechanic that fostered
-          daily engagement habits, achieving 140 basis points D1 retention improvement and 3% overall engagement
-          increase.</li>
+        <li>Word Roll gave players no way to express themselves, and nothing on screen felt personal.</li>
+        <li>Designed tile skins, the game's first cosmetic system: players earn paints as rewards from Food Fiesta and Bon Voyage, and each paint is a gacha draw I modelled the odds for in Machinations.</li>
+        <li>Revenue per DAU +22% (+8 cents), IAP revenue doubled (+100%, +6 cents), ad revenue +5% (+2 cents).</li>
       </ul>
     </li>
     <li>
-      <span class="achv-title">AI Innovation &amp; Team Productivity 2026</span>
+      <span class="achv-title">Ticket Mania 2024</span>
       <ul>
-        <li>Built AI-assisted Spec Maker and Meeting Manager tools that became standard workflow for 8-person
-          development team, improving documentation efficiency by 25% and establishing a culture of productivity
-          innovation.</li>
+        <li>The old leaderboard paid out for finishing games, not for playing well, so whoever played the most climbed it, which made it a weak driver of competition.</li>
+        <li>Tied the leaderboard to tickets: every completed row on the gameboard pays one, adding a small risk-or-reward tension to every turn and giving swaps a real purpose. Redesigned the entry flow too, and flagged a booster/swap pricing clash without holding up the launch.</li>
+        <li>Revenue per user +7% (about 3 cents, mostly IAP), D7 LTV +10%, D1 retention +300 bps overall (+170 bps for organic D2+ players).</li>
+        <li>Rolling retention +50 bps, new payer conversion +55 bps.</li>
+      </ul>
+    </li>
+    <li>
+      <span class="achv-title">Word of the Day 2024</span>
+      <ul>
+        <li>Word of the Day used to be a popup with nothing to do on it: you saw the word and its definition, and your only option was to close it.</li>
+        <li>Turned it into a two-step collection game: collect the day's letters just by playing normally, then play the word once you have them all, and only then see what it means. Set the rules for picking each day's word and worked with our UX team to make it feel native to the game.</li>
+        <li>D30 LTV +9.4%, D1 retention +140 bps, engagement +3%.</li>
+        <li>55% of daily players collected letters, and 34% went on to complete the word.</li>
+      </ul>
+    </li>
+    <li>
+      <span class="achv-title">Meeting Manager + Spec Maker 2026</span>
+      <ul>
+        <li>Writing a spec meant reformatting the same meeting notes over and over: pulling out the problem, goals and user flows, then writing it all again for a stakeholder email, and some of what we'd decided got lost along the way.</li>
+        <li>Built two tools that hand off to each other: Meeting Manager sorts raw Granola meeting notes into our spec sections, and Spec Maker turns those sections into a full markdown feature spec. Built both with Cursor.</li>
+        <li>Adopted as the standard workflow by our 8-person dev team, documentation efficiency +25%.</li>
+        <li>One meeting now feeds the spec and the stakeholder email, and people joining a project halfway through get full context from the spec without a handover session.</li>
+      </ul>
+    </li>
+    <li>
+      <span class="achv-title">Kinoa LiveOps</span>
+      <ul>
+        <li>Every new LiveOps event took about 7 days of development and had to ship in an app release, with no way to aim it at a specific group of players.</li>
+        <li>Wrote the design doc for integrating the <a class="inline-link" href="https://kinoa.io">Kinoa.io</a> SDK, then set up our LiveOps flows and in-app configuration once engineering had it in, and tested and tuned events live.</li>
+        <li>Event setup went from about 7 days of development to about an hour, no app release needed, targeting players by spend, engagement and usage habits.</li>
+        <li>Shipped 5 cohort-personalised events this way.</li>
       </ul>
     </li>
   </ul>
@@ -269,14 +289,57 @@
       <span>Game Designer | PlaySimple Games | August 2022 – Present (4 years)</span>
     </div>
     <ul>
-      <li>Wrote detailed feature specifications for 25+ features and built ~25 systems, including seasonal events,
-        battle pass mechanics, and competitive leaderboards with complete technical requirements</li>
-      <li>Conducted competitive analysis of 50 mobile games using SensorTower and <a class="inline-link" href="https://data.ai">Data.ai</a>, identifying market
-        opportunities that influenced product roadmap</li>
-      <li>Established data-driven feedback loops, partnered with product, and used A/B testing frameworks to
-        validate design decisions and optimize feature performance</li>
+      <li>Played a key role in long- and short-range feature planning, and was directly responsible for the business uplift those features delivered.</li>
+      <li>Wrote the specs for 25+ shipped features and built around 25 systems, including seasonal events, battle pass mechanics and competitive leaderboards.</li>
+      <li>Analysed 50 mobile games in SensorTower and <a class="inline-link" href="https://data.ai">Data.ai</a> to find opportunities for our roadmap.</li>
+      <li>Ran A/B tests with product to check design decisions and tune features.</li>
+      <li>Worked with our UX team to make Word of the Day's letter-collection loop feel native to the game.</li>
+      <li>Wrote the design doc for integrating the <a class="inline-link" href="https://kinoa.io">Kinoa.io</a> SDK, so engineering knew exactly what to build, then ran the LiveOps pipeline: configuring, testing and tuning events live.</li>
+      <li>Traced a pricing clash back to its cause in Ticket Mania and turned it into a design recommendation for product, without holding up the launch.</li>
     </ul>
   </div>
+</section>
+
+<section>
+  <h2 class="section-title">Personal Projects</h2>
+  <ul class="achievements">
+    <li>
+      <span class="achv-title">Habiteer 2026</span>
+      <ul>
+        <li>For my partner and friends: a habit tracker built like a game economy. Habits pay XP and coins; tasks pay coins but no XP. Only habits carry a streak multiplier (×1.2 at 3 days, up to ×3 at 30), and it only ever boosts XP, never coins, so a reward's price stays a fixed target. XP levels you up and moves you through weekly leagues, coins buy rewards, and groups can pool coins toward a shared one. All game logic runs server-side, and an Android home-screen widget keeps logging a habit to one tap. React Native, Supabase. <a href="https://github.com/Abhisavvy/habiteer">GitHub repository</a></li>
+      </ul>
+    </li>
+    <li>
+      <span class="achv-title">XFactor 2026</span>
+      <ul>
+        <li>A game jam project inspired by Reigns: I wanted it bizarre on purpose, and to show how social media pushes real-world politics around, so I put the Cold War on Twitter. Two players, USA and USSR, pick a tweet tone each round, and a story memory tracks how heated things get and escalates the next headline, across 13 scenarios with several endings. React, TypeScript. <a href="https://github.com/Abhisavvy/XFactor">GitHub repository</a></li>
+      </ul>
+    </li>
+    <li>
+      <span class="achv-title">Woven 2026</span>
+      <ul>
+        <li>My take on LinkedIn's Zip, with multiple threads and colour merging. I built the rules engine first in C# for Unity, keeping it free of engine code so it's tested on its own: 65 automated tests cover adjacency, walls, gates and checkpoint order, so a move is either fully legal or rejected with a reason. A separate 117-level browser playtest, its own build, where each early tier adds one idea, with hints, undo, star ratings, and a &quot;How did that feel?&quot; difficulty prompt after every solve. <a href="https://abhisavvy.github.io/woven-playtest/">Play the playtest</a></li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2 class="section-title">Skills &amp; Tools</h2>
+  <ul class="plain-list">
+    <li><strong>Design:</strong> systems, economy, LiveOps, progression, gacha, monetization</li>
+    <li><strong>Data:</strong> A/B testing, cohort analysis, Google Analytics, SensorTower, <a class="inline-link" href="https://data.ai">Data.ai</a></li>
+    <li><strong>Tools:</strong> Unity, Figma, Machinations, Excel, Google Sheets, JIRA, Confluence, <a class="inline-link" href="https://kinoa.io">Kinoa.io</a></li>
+    <li><strong>AI and build:</strong> Claude Code, Cursor, React, React Native, TypeScript, Supabase</li>
+  </ul>
+</section>
+
+<section>
+  <h2 class="section-title">Additional Strengths</h2>
+  <ul class="plain-list">
+    <li><strong>Mobile-first design:</strong> I design for short sessions and small screens first, not as an afterthought.</li>
+    <li><strong>Business sense:</strong> I think about monetization, LTV and economy health in every design decision, not just after launch.</li>
+  </ul>
 </section>
 
 <section>
@@ -287,16 +350,6 @@
   <div class="edu-item">
     <span class="degree">BA LLB</span> | Department of Law, Calcutta University | 2015–2020
   </div>
-</section>
-
-<section>
-  <h2 class="section-title">Additional Strengths</h2>
-  <ul class="plain-list">
-    <li><strong>Mobile-First Approach:</strong> Expert in mobile-optimized feature design and session-based
-      gameplay optimization</li>
-    <li><strong>Business Acumen:</strong> Strong understanding of F2P monetization, LTV optimization, and mobile
-      game economics</li>
-  </ul>
 </section>
 
 </body>

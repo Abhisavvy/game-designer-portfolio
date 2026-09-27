@@ -1,10 +1,88 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { ContactForm } from "@/components/ContactForm";
+import { SectionHeading } from "../ui/SectionHeading";
 import { defaultPortfolioContent } from "../../data/site-content";
+
+/**
+ * Renders a value with a sensible wrap point. Plain text wraps naturally
+ * at its spaces; an email (one unbroken token) gets an explicit `<wbr>`
+ * right before the `@` so a forced line break lands between the local
+ * part and the domain instead of splitting the domain mid-word.
+ */
+function renderValue(value: string): ReactNode {
+  const at = value.indexOf("@");
+  if (at === -1 || value.includes(" ")) return value;
+  return (
+    <>
+      {value.slice(0, at)}
+      <wbr />
+      {value.slice(at)}
+    </>
+  );
+}
+
+/**
+ * One contact info box. Every box shares the same fixed height (rather
+ * than sizing to content) so Email/Phone/Location/LinkedIn read as a
+ * uniform grid regardless of value length — long values wrap within the
+ * box instead of growing it.
+ */
+function ContactInfoBox({
+  icon,
+  label,
+  value,
+  href,
+  external,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  href?: string;
+  external?: boolean;
+}) {
+  const className =
+    "group flex h-[116px] items-center gap-2.5 overflow-hidden rounded-lg border border-paper/10 bg-paper/[0.04] p-4 transition-colors duration-300 hover:border-accent/40 hover:bg-paper/[0.07]";
+
+  const inner = (
+    <>
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 transition-colors group-hover:bg-accent/20">
+        {icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="font-medium text-paper">{label}</div>
+        {/* Plain block text (not -webkit-line-clamp): normal flow respects
+            the <wbr> break hint correctly. The fixed-height, overflow-hidden
+            box above clips anything past ~2 lines as a safety net. */}
+        <div className="mt-0.5 text-[13px] leading-snug text-muted">{renderValue(value)}</div>
+      </div>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        className={className}
+        data-testid="contact-box"
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <div className={className} data-testid="contact-box">
+      {inner}
+    </div>
+  );
+}
 
 export function ContactSection() {
   const { person, footerCta } = defaultPortfolioContent;
@@ -12,8 +90,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative bg-gradient-to-br from-black via-orange-950/15 to-black py-20"
-      style={{ scrollMarginTop: '3.5rem' }}
+      className="relative overflow-x-hidden bg-gradient-to-br from-black via-orange-950/15 to-black py-20"
     >
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
@@ -21,16 +98,14 @@ export function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12"
+          className="bp-reveal mb-12"
         >
-          <h2 className="text-4xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-orange-400 to-orange-300 bg-clip-text text-transparent">
-              {footerCta.title}
-            </span>
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto whitespace-pre-wrap">
-            {footerCta.body}
-          </p>
+          <SectionHeading
+            index="05"
+            eyebrow="Get In Touch"
+            title={footerCta.title}
+            subtitle={footerCta.body}
+          />
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
@@ -40,8 +115,9 @@ export function ContactSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
+            className="bp-reveal"
           >
-            <h3 className="text-2xl font-semibold text-white mb-6">Send a Message</h3>
+            <h3 className="text-2xl font-semibold text-paper mb-6">Send a Message</h3>
             <ContactForm recipientEmail={person.email} />
           </motion.div>
 
@@ -51,69 +127,34 @@ export function ContactSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-8"
+            className="bp-reveal"
           >
-            <div>
-              <h3 className="text-2xl font-semibold text-white mb-6">Get in Touch</h3>
-              <div className="space-y-4">
-                <a
-                  href={`mailto:${person.email}`}
-                  className="flex items-center space-x-3 p-4 bg-zinc-800/50 border border-zinc-700/50 rounded-lg 
-                           hover:border-orange-500/50 hover:bg-zinc-800/80 transition-all duration-300 group"
-                >
-                  <div className="p-2 bg-orange-500/10 rounded-lg group-hover:bg-orange-500/20 transition-colors">
-                    <Mail className="w-5 h-5 text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-white">Email</div>
-                    <div className="text-sm text-gray-400">{person.email}</div>
-                  </div>
-                </a>
-
-                <a
-                  href={`tel:${person.phone}`}
-                  className="flex items-center space-x-3 p-4 bg-zinc-800/50 border border-zinc-700/50 rounded-lg 
-                           hover:border-orange-500/50 hover:bg-zinc-800/80 transition-all duration-300 group"
-                >
-                  <div className="p-2 bg-orange-500/10 rounded-lg group-hover:bg-orange-500/20 transition-colors">
-                    <Phone className="w-5 h-5 text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-white">Phone</div>
-                    <div className="text-sm text-gray-400">{person.phone}</div>
-                  </div>
-                </a>
-
-                <div className="flex items-center space-x-3 p-4 bg-zinc-800/50 border border-zinc-700/50 rounded-lg">
-                  <div className="p-2 bg-orange-500/10 rounded-lg">
-                    <MapPin className="w-5 h-5 text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-white">Location</div>
-                    <div className="text-sm text-gray-400">{person.location}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Social Links */}
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">Connect</h4>
-              <a
+            <h3 className="text-2xl font-semibold text-paper mb-6">Get in Touch</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <ContactInfoBox
+                icon={<Mail className="h-5 w-5 text-accent" />}
+                label="Email"
+                value={person.email}
+                href={`mailto:${person.email}`}
+              />
+              <ContactInfoBox
+                icon={<Phone className="h-5 w-5 text-accent" />}
+                label="Phone"
+                value={person.phone}
+                href={`tel:${person.phone}`}
+              />
+              <ContactInfoBox
+                icon={<MapPin className="h-5 w-5 text-accent" />}
+                label="Location"
+                value={person.location}
+              />
+              <ContactInfoBox
+                icon={<FaLinkedin className="h-5 w-5 text-accent" />}
+                label="LinkedIn"
+                value="Professional profile"
                 href={person.links.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-3 p-4 bg-zinc-800/50 border border-zinc-700/50 rounded-lg 
-                         hover:border-blue-500/50 hover:bg-zinc-800/80 transition-all duration-300 group"
-              >
-                <div className="p-2 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-colors">
-                  <FaLinkedin className="w-5 h-5 text-blue-400" />
-                </div>
-                <div>
-                  <div className="font-medium text-white">LinkedIn</div>
-                  <div className="text-sm text-gray-400">Professional profile</div>
-                </div>
-              </a>
+                external
+              />
             </div>
           </motion.div>
         </div>

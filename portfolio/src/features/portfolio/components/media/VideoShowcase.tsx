@@ -7,8 +7,11 @@ import {
   useState,
   type MouseEvent,
 } from "react";
+import { motion } from "framer-motion";
 import type { CaseStudyMedia } from "../../data/case-study-media";
 import { useViewportMinMd } from "./useMediaPreferences";
+import { CornerMarks, FigureCaption } from "../blueprint/PinnedFrame";
+import { BP_COLORS, cssVars } from "../blueprint/tokens";
 
 type Showcase = NonNullable<CaseStudyMedia["showcases"]>[number];
 
@@ -19,7 +22,7 @@ function formatTime(seconds: number) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export function VideoShowcase({ item }: { item: Showcase }) {
+export function VideoShowcase({ item, threadColor }: { item: Showcase; threadColor: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -113,12 +116,19 @@ export function VideoShowcase({ item }: { item: Showcase }) {
   const hasVideo = Boolean(item.videoSrc);
 
   return (
-    <div className="my-10">
+    <motion.div
+      className="bp-reveal my-10"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.55, ease: "easeOut" }}
+    >
       <div
         ref={containerRef}
-        className={`relative overflow-hidden rounded-lg border border-zinc-800 bg-black shadow-lg shadow-black/40 ${
+        className={`relative overflow-hidden rounded-[3px] border bg-black shadow-lg shadow-black/40 ${
           playing ? "playing" : ""
         }`}
+        style={{ borderColor: BP_COLORS.drawLine }}
       >
         <video
           ref={videoRef}
@@ -158,11 +168,16 @@ export function VideoShowcase({ item }: { item: Showcase }) {
         {hasVideo ? (
           <button
             type="button"
-            className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full bg-black/80 text-white transition hover:scale-110 hover:bg-emerald-600/90 md:h-20 md:w-20 h-16 w-16"
-            style={{ display: playing ? "none" : "flex" }}
+            className="group absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full bg-black/80 text-white transition hover:scale-110 md:h-20 md:w-20"
+            style={cssVars({ display: playing ? "none" : "flex", "--play-thread": threadColor })}
             aria-label={item.ariaLabel}
             onClick={togglePlay}
           >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity group-hover:opacity-100"
+              style={{ background: "var(--play-thread)" }}
+            />
             <span className="pl-1 text-2xl md:text-3xl" aria-hidden>
               ▶
             </span>
@@ -183,13 +198,15 @@ export function VideoShowcase({ item }: { item: Showcase }) {
               md ? "opacity-0 hover:opacity-100 [.playing_&]:opacity-100" : "opacity-100"
             }`}
           >
+            {/* Extra vertical padding widens the tap/click target well
+                past the thin 4px visual bar, without changing its look. */}
             <div
               role="slider"
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={Math.round(progress)}
               tabIndex={0}
-              className="h-1 w-full cursor-pointer rounded bg-white/30"
+              className="-my-3 flex min-h-[44px] w-full cursor-pointer items-center py-3"
               onClick={onSeek}
               onKeyDown={(e) => {
                 const v = videoRef.current;
@@ -204,16 +221,18 @@ export function VideoShowcase({ item }: { item: Showcase }) {
                 }
               }}
             >
-              <div
-                className="h-full rounded bg-emerald-500"
-                style={{ width: `${progress}%` }}
-              />
+              <div className="h-1 w-full rounded bg-white/30">
+                <div
+                  className="h-full rounded"
+                  style={{ width: `${progress}%`, background: threadColor }}
+                />
+              </div>
             </div>
             <div className="mt-2 flex items-center justify-between text-xs text-white">
               <span>{remaining}</span>
               <button
                 type="button"
-                className="rounded px-2 py-1 hover:bg-white/10"
+                className="flex h-11 w-11 items-center justify-center rounded hover:bg-white/10"
                 aria-label="Fullscreen"
                 onClick={requestFs}
               >
@@ -222,7 +241,9 @@ export function VideoShowcase({ item }: { item: Showcase }) {
             </div>
           </div>
         ) : null}
+        <CornerMarks />
       </div>
-    </div>
+      <FigureCaption label="DEMO" caption={item.ariaLabel} className="mt-3" />
+    </motion.div>
   );
 }

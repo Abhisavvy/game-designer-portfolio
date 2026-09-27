@@ -1,5 +1,28 @@
 import { z } from "zod";
 
+/** Lowercase letters, numbers, and hyphens only — same rule as
+ * `adminProjectItemSchema.slug` below; kept as one constant so the two
+ * can't silently drift apart. */
+const SLUG_PATTERN = /^[a-z0-9-]+$/;
+const INTERNAL_WORK_HREF_PATTERN = new RegExp(`^/work/${SLUG_PATTERN.source.slice(1, -1)}$`);
+
+/**
+ * Admin-authored hrefs (the project card's own link, and case-study
+ * attachment/reference links) are restricted to same-origin `/work/<slug>`
+ * routes or plain `https://` URLs — anything else (`javascript:`, `data:`,
+ * protocol-relative `//host`, plain `http://`, etc.) is rejected. The admin
+ * API is localhost-only, so this is defence in depth rather than a hard
+ * security boundary: nothing downstream should ever trust an arbitrary
+ * stored href enough to render it as a clickable link unchecked.
+ */
+const adminHrefSchema = z
+  .string()
+  .min(1, "Href is required")
+  .refine(
+    (href) => INTERNAL_WORK_HREF_PATTERN.test(href) || /^https:\/\//.test(href),
+    "Href must be an internal /work/<slug> path or an https:// URL",
+  );
+
 /** Metadata JSON for POST /api/admin/assets/upload (must stay aligned with ImageUploader form). */
 export const adminAssetUploadMetadataSchema = z.object({
   category: z.enum(["hero", "gallery", "process", "profile"]),
@@ -15,6 +38,20 @@ export const adminAssetUploadMetadataSchema = z.object({
   usageContext: z.string().min(1, "Usage context is required"),
 });
 
+export const adminSkillThreadIdSchema = z.enum([
+  "economy",
+  "retention",
+  "liveops",
+  "monetization",
+  "systems",
+  "ai",
+]);
+
+export const adminProjectStatSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+});
+
 export const adminProjectItemSchema = z.object({
   slug: z
     .string()
@@ -26,10 +63,12 @@ export const adminProjectItemSchema = z.object({
   title: z.string().min(1, "Title is required"),
   tag: z.string().min(1, "Tag is required"),
   blurb: z.string().min(1, "Blurb is required"),
-  href: z.string().min(1, "Href is required"),
+  href: adminHrefSchema,
   externalUrl: z
     .union([z.literal(""), z.string().url("Valid external URL required")])
     .optional(),
+  skills: z.array(adminSkillThreadIdSchema).optional(),
+  stats: z.array(adminProjectStatSchema).optional(),
 });
 
 export const adminCaseStudyDraftSchema = z.object({
@@ -44,7 +83,7 @@ export const adminCaseStudyDraftSchema = z.object({
     .array(
       z.object({
         label: z.string().min(1),
-        href: z.string().min(1),
+        href: adminHrefSchema,
       }),
     )
     .optional(),

@@ -1,6 +1,14 @@
-// Builds the public resume PDF from the maintainable HTML source.
+// Builds the public resume PDF from the single source of truth:
+// src/features/portfolio/data/resume.json.
 //
-// Source:  career-content/resume/resume.html
+// This script renders that data into HTML (scripts/resume-template.mjs),
+// writes the result to career-content/resume/resume.html as a generated
+// preview (open it in a browser to check the PDF's design without
+// re-running the build), then prints that HTML to the public PDF with
+// Playwright + msedge.
+//
+// Source:  src/features/portfolio/data/resume.json
+// Preview: career-content/resume/resume.html (generated — do not edit)
 // Output:  portfolio/public/ABHISHEK DUTTA RESUME.pdf
 //
 // Usage (from the portfolio/ directory):
@@ -10,24 +18,42 @@ import { chromium } from "@playwright/test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
+import { renderResumeHtml } from "./resume-template.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // scripts/ -> portfolio/ -> repo root -> career-content/resume/resume.html
 const repoRoot = path.resolve(__dirname, "..", "..");
-const sourceHtmlPath = path.join(repoRoot, "career-content", "resume", "resume.html");
+const resumeDataPath = path.join(__dirname, "..", "src", "features", "portfolio", "data", "resume.json");
+const generatedHtmlPath = path.join(repoRoot, "career-content", "resume", "resume.html");
 const outputPdfPath = path.join(__dirname, "..", "public", "ABHISHEK DUTTA RESUME.pdf");
 
+const GENERATED_FILE_NOTICE = `<!--
+  GENERATED FILE — do not edit directly.
+
+  This preview is generated from src/features/portfolio/data/resume.json by
+  portfolio/scripts/build-resume-pdf.mjs (via resume-template.mjs). Edit the
+  JSON data file and re-run "npm run resume:pdf" from portfolio/ to update
+  both this preview and the PDF.
+-->
+`;
+
 async function main() {
-  if (!fs.existsSync(sourceHtmlPath)) {
-    console.error(`Resume source not found at: ${sourceHtmlPath}`);
+  if (!fs.existsSync(resumeDataPath)) {
+    console.error(`Resume data not found at: ${resumeDataPath}`);
     process.exit(1);
   }
 
-  const fileUrl = pathToFileURL(sourceHtmlPath).href;
+  const data = JSON.parse(fs.readFileSync(resumeDataPath, "utf-8"));
+  const html = renderResumeHtml(data);
 
-  console.log(`Loading resume source: ${sourceHtmlPath}`);
+  fs.writeFileSync(generatedHtmlPath, GENERATED_FILE_NOTICE + html, "utf-8");
+  console.log(`Wrote generated preview: ${generatedHtmlPath}`);
+
+  const fileUrl = pathToFileURL(generatedHtmlPath).href;
+
+  console.log(`Loading resume source: ${generatedHtmlPath}`);
   const browser = await chromium.launch({ channel: "msedge" });
 
   try {

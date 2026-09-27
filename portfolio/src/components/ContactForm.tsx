@@ -136,7 +136,7 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
         {/* Name and Email Row */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="name" className="block text-sm font-medium text-paper/90 mb-2">
               <User className="w-4 h-4 inline mr-2" />
               Name *
             </label>
@@ -145,11 +145,11 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
               id="name"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              className={`w-full px-4 py-3 bg-zinc-800/50 border rounded-lg text-white placeholder-zinc-400 
+              className={`w-full min-h-[44px] px-4 py-3 bg-ink-2/60 border rounded-lg text-paper placeholder-muted
                          focus:outline-none focus:ring-2 transition-colors
-                         ${hasFieldError('name') 
-                           ? 'border-red-500 focus:ring-red-500/50' 
-                           : 'border-zinc-600 focus:ring-orange-500/50 focus:border-orange-500'}`}
+                         ${hasFieldError('name')
+                           ? 'border-red-500 focus:ring-red-500/50'
+                           : 'border-paper/15 focus:ring-accent/50 focus:border-accent'}`}
               placeholder="Your name"
               disabled={status === 'loading'}
             />
@@ -169,7 +169,7 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-paper/90 mb-2">
               <Mail className="w-4 h-4 inline mr-2" />
               Email *
             </label>
@@ -178,11 +178,11 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
               id="email"
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
-              className={`w-full px-4 py-3 bg-zinc-800/50 border rounded-lg text-white placeholder-zinc-400 
+              className={`w-full min-h-[44px] px-4 py-3 bg-ink-2/60 border rounded-lg text-paper placeholder-muted
                          focus:outline-none focus:ring-2 transition-colors
-                         ${hasFieldError('email') 
-                           ? 'border-red-500 focus:ring-red-500/50' 
-                           : 'border-zinc-600 focus:ring-orange-500/50 focus:border-orange-500'}`}
+                         ${hasFieldError('email')
+                           ? 'border-red-500 focus:ring-red-500/50'
+                           : 'border-paper/15 focus:ring-accent/50 focus:border-accent'}`}
               placeholder="your.email@example.com"
               disabled={status === 'loading'}
             />
@@ -204,7 +204,7 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
 
         {/* Subject */}
         <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="subject" className="block text-sm font-medium text-paper/90 mb-2">
             <MessageCircle className="w-4 h-4 inline mr-2" />
             Subject *
           </label>
@@ -213,11 +213,11 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
             id="subject"
             value={formData.subject}
             onChange={(e) => handleInputChange('subject', e.target.value)}
-            className={`w-full px-4 py-3 bg-zinc-800/50 border rounded-lg text-white placeholder-zinc-400 
+            className={`w-full min-h-[44px] px-4 py-3 bg-ink-2/60 border rounded-lg text-paper placeholder-muted
                        focus:outline-none focus:ring-2 transition-colors
-                       ${hasFieldError('subject') 
-                         ? 'border-red-500 focus:ring-red-500/50' 
-                         : 'border-zinc-600 focus:ring-orange-500/50 focus:border-orange-500'}`}
+                       ${hasFieldError('subject')
+                         ? 'border-red-500 focus:ring-red-500/50'
+                         : 'border-paper/15 focus:ring-accent/50 focus:border-accent'}`}
             placeholder="Game design collaboration, project inquiry, etc."
             disabled={status === 'loading'}
           />
@@ -238,7 +238,7 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
 
         {/* Message */}
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="message" className="block text-sm font-medium text-paper/90 mb-2">
             <MessageCircle className="w-4 h-4 inline mr-2" />
             Message *
           </label>
@@ -247,11 +247,11 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
             value={formData.message}
             onChange={(e) => handleInputChange('message', e.target.value)}
             rows={5}
-            className={`w-full px-4 py-3 bg-zinc-800/50 border rounded-lg text-white placeholder-zinc-400 
+            className={`w-full px-4 py-3 bg-ink-2/60 border rounded-lg text-paper placeholder-muted
                        focus:outline-none focus:ring-2 transition-colors resize-vertical
-                       ${hasFieldError('message') 
-                         ? 'border-red-500 focus:ring-red-500/50' 
-                         : 'border-zinc-600 focus:ring-orange-500/50 focus:border-orange-500'}`}
+                       ${hasFieldError('message')
+                         ? 'border-red-500 focus:ring-red-500/50'
+                         : 'border-paper/15 focus:ring-accent/50 focus:border-accent'}`}
             placeholder="Tell me about your project, collaboration ideas, or any questions you have..."
             disabled={status === 'loading'}
           />
@@ -274,12 +274,13 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
         <motion.button
           type="submit"
           disabled={status === 'success'}
-          className={`w-full px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 
-                     ${status === 'success' 
-                       ? 'bg-green-600 text-white' 
+          className={`w-full min-h-[44px] px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-300
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-ink
+                     ${status === 'success'
+                       ? 'bg-green-600 text-white'
                        : status === 'error'
                        ? 'bg-red-600 text-white'
-                       : 'bg-gradient-to-r from-orange-600 to-orange-500 text-black hover:shadow-2xl hover:shadow-orange-500/25'
+                       : 'bg-accent text-ink hover:bg-accent/90'
                      } disabled:cursor-not-allowed`}
           whileHover={status === 'idle' ? { scale: 1.02, y: -2 } : {}}
           whileTap={status === 'idle' ? { scale: 0.98 } : {}}
@@ -303,10 +304,10 @@ export function ContactForm({ recipientEmail }: ContactFormProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className={`text-center p-4 rounded-lg ${
-                status === 'success' ? 'bg-green-600/20 text-green-400' :
-                status === 'error' ? 'bg-red-600/20 text-red-400' :
-                'bg-zinc-700/50 text-zinc-300'
+              className={`text-center p-4 rounded-lg border ${
+                status === 'success' ? 'bg-green-600/20 border-green-500/30 text-green-400' :
+                status === 'error' ? 'bg-red-600/20 border-red-500/30 text-red-400' :
+                'bg-ink-2/60 border-paper/10 text-paper/80'
               }`}
             >
               {statusMessage}
